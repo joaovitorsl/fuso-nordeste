@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verificar consulta e alternativa salva
+        run: node scripts/test-live.mjs
       - name: Consultar a contagem oficial
         id: collect
         continue-on-error: true

@@ -80,6 +80,49 @@ function drawHistory(){
 }
 async function loadHistory(){try{const r=await fetch('/api/historico',{cache:'no-store'});if(!r.ok)throw Error();const d=await r.json();if(!Array.isArray(d.pontos))throw Error();historyPoints=d.pontos.filter(p=>Number.isSafeInteger(p.count)&&Number.isSafeInteger(p.observed_at));drawHistory()}catch(e){historyEmpty.textContent='Histórico temporariamente indisponível.';historySummary.textContent='Não foi possível carregar os registros.'}}
 document.querySelectorAll('[data-range]').forEach(button=>button.addEventListener('click',()=>{historyRange=button.dataset.range;document.querySelectorAll('[data-range]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));drawHistory()}));
-let timer,lastCount=null,inFlight=false;async function update(){if(inFlight)return;inFlight=true;let count=document.querySelector('#count'),status=document.querySelector('#status'),remain=document.querySelector('#remaining'),pill=document.querySelector('#watch-pill');try{let r=await fetch('/api/apoios',{cache:'no-store'});if(!r.ok)throw Error();let d=await r.json();if(!Number.isSafeInteger(d.apoios)||d.apoios<0)throw Error();let n=d.apoios,p=n/20000*100;if(lastCount===null)activity.textContent='Monitoramento iniciado em '+n.toLocaleString('pt-BR')+' apoios.';else if(n>lastCount)showIncrease(n-lastCount,n);else if(n<lastCount)activity.textContent='O total divulgado pelo Senado foi ajustado para '+n.toLocaleString('pt-BR')+'.';lastCount=n;count.textContent=n.toLocaleString('pt-BR');document.querySelector('#percent').textContent=p.toLocaleString('pt-BR',{maximumFractionDigits:2})+'%';remain.textContent=n>=20000?'Meta alcançada':'Faltam '+(20000-n).toLocaleString('pt-BR')+' apoios';document.querySelector('#bar').style.width=Math.min(100,p)+'%';document.querySelector('#progress').setAttribute('aria-valuenow',Math.min(n,20000));status.className='status';status.textContent='Consultado em '+new Date(d.consultadoEm).toLocaleString('pt-BR',{timeZone:'America/Fortaleza',dateStyle:'short',timeStyle:'short'})+' · Consulta aproximadamente a cada minuto';pill.textContent='● Acompanhando';if(d.historicoDisponivel)await loadHistory();else historySummary.textContent='A contagem foi lida, mas não foi possível salvá-la no histórico.';}catch(e){status.className='status error';status.textContent='Não foi possível atualizar. Confira no Senado.';pill.textContent='● Conexão indisponível';if(count.textContent==='—')remain.textContent='Contagem indisponível';}finally{inFlight=false;clearTimeout(timer);timer=setTimeout(update,60000)}}document.querySelector('#refresh').addEventListener('click',update);loadHistory();update();
+async function readCurrent(){
+  try{
+    const url='https://proxy.cors.dev/https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092';
+    const response=await fetch(url,{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(25000)});
+    if(!response.ok)throw Error('Consulta indisponível');
+    const html=await response.text();
+    const match=html.match(/<span\s+class=["']contabilizacao["'][^>]*>\s*([\d.]+)\s*<\/span>\s*apoios confirmados/i);
+    if(!match)throw Error('Contagem não identificada');
+    const apoios=Number(match[1].replace(/\./g,''));
+    if(!Number.isSafeInteger(apoios)||apoios<0)throw Error('Contagem inválida');
+    return {apoios,consultadoEm:new Date().toISOString(),aoVivo:true};
+  }catch(error){
+    const response=await fetch('./data/current.json',{cache:'no-store'});
+    if(!response.ok)throw error;
+    const snapshot=await response.json();
+    if(!Number.isSafeInteger(snapshot.apoios)||snapshot.apoios<0||!Number.isFinite(Date.parse(snapshot.consultadoEm)))throw error;
+    return {...snapshot,aoVivo:false};
+  }
+}
+let timer,lastCount=null,lastWasLive=false,inFlight=false;
+async function update(){
+  if(inFlight)return;inFlight=true;
+  const count=document.querySelector('#count'),status=document.querySelector('#status'),remain=document.querySelector('#remaining'),pill=document.querySelector('#watch-pill');
+  try{
+    const d=await readCurrent();
+    if(!d.aoVivo&&lastWasLive)throw Error('Consulta ao vivo indisponível');
+    const n=d.apoios,p=n/20000*100;
+    if(lastCount===null)activity.textContent=(d.aoVivo?'Monitoramento iniciado em ':'Último registro salvo: ')+n.toLocaleString('pt-BR')+' apoios.';
+    else if(d.aoVivo&&lastWasLive&&n>lastCount)showIncrease(n-lastCount,n);
+    else if(d.aoVivo&&lastWasLive&&n<lastCount)activity.textContent='O total divulgado pelo Senado foi ajustado para '+n.toLocaleString('pt-BR')+'.';
+    else if(d.aoVivo&&!lastWasLive)activity.textContent='Consulta ao vivo retomada: '+n.toLocaleString('pt-BR')+' apoios.';
+    lastCount=n;lastWasLive=d.aoVivo;
+    count.textContent=n.toLocaleString('pt-BR');document.querySelector('#percent').textContent=p.toLocaleString('pt-BR',{maximumFractionDigits:2})+'%';
+    remain.textContent=n>=20000?'Meta alcançada':'Faltam '+(20000-n).toLocaleString('pt-BR')+' apoios';
+    document.querySelector('#bar').style.width=Math.min(100,p)+'%';document.querySelector('#progress').setAttribute('aria-valuenow',Math.min(n,20000));
+    const when=new Date(d.consultadoEm).toLocaleString('pt-BR',{timeZone:'America/Fortaleza',dateStyle:'short',timeStyle:'short'});
+    status.className=d.aoVivo?'status':'status error';
+    status.textContent=d.aoVivo?'Consultado no Senado em '+when+' · via cors.dev':'Consulta ao vivo indisponível · último registro salvo em '+when;
+    pill.textContent=d.aoVivo?'● Consulta ao vivo':'● Último registro salvo';
+    await loadHistory();
+  }catch(e){status.className='status error';status.textContent=lastCount===null?'Não foi possível consultar o Senado nem o último registro salvo.':'Consulta ao vivo indisponível; mantendo a última leitura exibida.';pill.textContent='● Conexão indisponível';if(lastCount===null)remain.textContent='Contagem indisponível';}
+  finally{inFlight=false;clearTimeout(timer);timer=setTimeout(update,60000)}
+}
+document.querySelector('#refresh').addEventListener('click',update);loadHistory();update();
 })();
 </script></body></html>
