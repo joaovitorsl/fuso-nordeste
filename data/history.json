@@ -1,0 +1,19 @@
+{
+  "pontos": [
+    {
+      "bucket": 29928752,
+      "count": 229,
+      "observed_at": 1795725149
+    },
+    {
+      "bucket": 29928758,
+      "count": 233,
+      "observed_at": 1795725521
+    },
+    {
+      "bucket": 29928762,
+      "count": 235,
+      "observed_at": 1795725741
+    }
+  ]
+}
