@@ -2,8 +2,15 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 
 const url='https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092';
 const file='data/history.json';
-const response=await fetch(url,{headers:{'accept':'text/html','user-agent':'FusoNordeste/1.0 (monitoramento publico de ideia legislativa)'},signal:AbortSignal.timeout(20000)});
-if(!response.ok)throw new Error('Senado indisponível: HTTP '+response.status);
+let response, lastError;
+for(let attempt=1;attempt<=3;attempt++){
+  try{
+    response=await fetch(url,{headers:{'accept':'text/html','user-agent':'FusoNordeste/1.0 (monitoramento publico de ideia legislativa)'},signal:AbortSignal.timeout(20000)});
+    if(!response.ok)throw new Error('Senado indisponível: HTTP '+response.status);
+    break;
+  }catch(error){lastError=error;response=null;console.error('Tentativa '+attempt+' falhou:',error.message);if(attempt<3)await new Promise(resolve=>setTimeout(resolve,5000));}
+}
+if(!response)throw new Error('Não foi possível consultar o Senado após três tentativas.',{cause:lastError});
 const html=await response.text();
 const match=html.match(/<span\s+class=["']contabilizacao["'][^>]*>\s*([\d.]+)\s*<\/span>\s*apoios confirmados/i);
 if(!match)throw new Error('A contagem não foi encontrada na página do Senado.');

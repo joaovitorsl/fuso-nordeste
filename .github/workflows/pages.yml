@@ -24,9 +24,12 @@ jobs:
         with:
           node-version: '22'
       - name: Consultar a contagem oficial
+        id: collect
+        continue-on-error: true
         run: node scripts/update-history.mjs
       - name: Registrar medições novas
         id: save
+        if: steps.collect.outcome == 'success'
         shell: bash
         run: |
           if git diff --quiet -- data/history.json; then
@@ -55,3 +58,8 @@ jobs:
         id: deployment
         if: github.event_name != 'schedule' || steps.save.outputs.changed == 'true'
         uses: actions/deploy-pages@v4
+      - name: Sinalizar falha de consulta ao Senado
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo 'O Senado não respondeu; nenhuma medição foi alterada.'
+          exit 1
