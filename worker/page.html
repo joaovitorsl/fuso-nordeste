@@ -60,7 +60,26 @@ button{font:inherit;color:inherit}
 .bar-cta:hover{background:#ffc56e}
 .bar-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:rgb(255 255 255 / .05)}
 .bar-progress span{display:block;height:100%;width:0;background:var(--glow);box-shadow:0 0 8px var(--glow);transition:width .8s ease}
-@media (max-width:520px){.bar-count .of{display:none}.bar{gap:12px}}
+@media (max-width:520px){.bar-count .of{display:none}.bar{gap:10px}}
+.bar-cta{animation:cta-glow 4s ease-in-out infinite}
+@keyframes cta-glow{0%,100%{box-shadow:0 0 0 0 rgb(255 179 71 / 0)}50%{box-shadow:0 0 22px 2px rgb(255 179 71 / .35)}}
+.bar-count{position:relative}
+.bar-count b{display:inline-block}
+.bar-count b.bump{animation:bump .9s cubic-bezier(.2,.8,.2,1)}
+@keyframes bump{0%{transform:none}25%{transform:scale(1.35);color:var(--glow);text-shadow:0 0 14px var(--glow)}100%{transform:none}}
+.plus{position:absolute;right:0;top:-2px;font-weight:700;font-size:14px;color:var(--glow);pointer-events:none;animation:float-up 1.6s ease-out forwards}
+@keyframes float-up{0%{opacity:0;transform:translateY(8px)}20%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
+.bell{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgb(255 255 255 / .18);background:none;display:grid;place-items:center;cursor:pointer;color:var(--ink-2);transition:color .25s,border-color .25s,background .25s}
+.bell:hover{color:var(--ink);border-color:rgb(255 255 255 / .45)}
+.bell svg{width:17px;height:17px;transform-origin:50% 10%}
+.bell[aria-pressed=true]{color:#1b1206;background:var(--glow);border-color:var(--glow)}
+.bell.ring svg{animation:ring .9s ease}
+@keyframes ring{0%,100%{transform:none}15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.toast{position:fixed;left:50%;width:max-content;bottom:max(20px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);padding:13px 18px 13px 14px;border-radius:999px;background:rgb(18 21 34 / .82);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgb(255 179 71 / .35);box-shadow:0 18px 50px rgb(0 0 0 / .5),0 0 30px rgb(255 179 71 / .15);font-size:15px;transform:translate(-50%,0);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.8,.2,1)}
+.toast[hidden]{display:flex;opacity:0;transform:translate(-50%,24px);pointer-events:none;visibility:hidden;transition:opacity .35s ease,transform .45s ease,visibility 0s .45s}
+.toast i{flex:none;width:10px;height:10px;border-radius:50%;background:var(--glow);box-shadow:0 0 0 0 rgb(255 179 71 / .7);animation:ping 1.4s ease-out infinite}
+@keyframes ping{to{box-shadow:0 0 0 12px rgb(255 179 71 / 0)}}
+.toast b{font-weight:700}
 
 /* ---------- Céu ---------- */
 /* Três faixas: texto, céu livre e mar. O horizonte é sempre o início da faixa de baixo,
@@ -73,9 +92,21 @@ button{font:inherit;color:inherit}
 .sea{grid-area:3/1/4/2;position:relative;overflow:hidden}
 .sea:before{content:'';position:absolute;inset:0 0 auto;height:1px;background:rgb(255 255 255 / .18)}
 .glint{position:absolute;top:0;width:90px;height:85%;margin-left:-45px;filter:blur(10px);pointer-events:none}
-.ripples{position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none}
+.ripples{position:absolute;inset:-20px 0 0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none;animation:swell 7s ease-in-out infinite alternate}
+@keyframes swell{to{transform:translateY(10px)}}
+.glint{animation:shimmer 3.2s ease-in-out infinite alternate}
+@keyframes shimmer{0%{transform:scaleX(.8)}50%{transform:scaleX(1.12)}100%{transform:scaleX(.9)}}
+.sun:after{content:'';position:absolute;inset:-35%;border-radius:50%;background:radial-gradient(circle,rgb(255 226 168 / .22),transparent 62%);animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.18);opacity:.6}}
+.stars{animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{to{filter:brightness(.65)}}
 
 .hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(16px,4.5svh,64px))}
+.hero-top>*{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+.hero-top>:nth-child(2){animation-delay:.12s}
+.hero-top>:nth-child(3){animation-delay:.24s}
+.hero-bottom{animation:rise 1.1s .3s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
 .hero-top h1{margin:0;font-weight:600;font-size:clamp(30px,min(7.6vw,7.4svh),76px);line-height:1.02;letter-spacing:-.035em;max-width:13em;text-wrap:balance;text-shadow:0 2px 24px rgb(0 0 0 / .25)}
 .hero-top p{margin:clamp(10px,2svh,18px) 0 0;max-width:34em;font-size:clamp(15px,min(4vw,2.5svh),20px);color:rgb(244 241 234 / .86);text-shadow:0 1px 12px rgb(0 0 0 / .3);text-wrap:pretty}
 .finder{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:clamp(14px,3svh,26px)}
@@ -91,6 +122,9 @@ button{font:inherit;color:inherit}
 .near svg{width:18px;height:18px}
 .options{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:6;margin:0;padding:6px;list-style:none;background:#121522;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgb(0 0 0 / .5);max-height:min(320px,46svh);overflow-y:auto}
 .options[hidden]{display:none}
+.options:not([hidden]){animation:drop .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes drop{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+.options li{transition:background .15s}
 .options li{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:16px}
 .options li small{color:var(--ink-3);font-size:14px}
 .options li[aria-selected=true]{background:rgb(255 255 255 / .1)}
@@ -101,7 +135,8 @@ button{font:inherit;color:inherit}
 
 /* Botões segmentados */
 .seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
-.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:14px;color:var(--ink-2);cursor:pointer}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:14px;color:var(--ink-2);cursor:pointer;transition:background .3s ease,color .3s ease,transform .15s}
+.seg button:active,.play:active,.cta:active,.bar-cta:active,.bell:active{transform:scale(.95)}
 .seg button:hover:not(:disabled){color:var(--ink)}
 .seg button[aria-pressed=true]{background:var(--ink);color:#0b0d16;font-weight:600}
 .seg button:disabled{opacity:.35;cursor:default}
@@ -127,14 +162,22 @@ button{font:inherit;color:inherit}
 .r-key.on{fill:rgb(244 241 234 / .95)}
 .sim-foot{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:10px}
 .play{display:inline-flex;align-items:center;gap:8px;border:1px solid rgb(255 255 255 / .28);background:rgb(8 9 15 / .3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
-.play:hover{border-color:rgb(255 255 255 / .6)}
+.sim-cta{display:inline-flex;align-items:center;gap:8px;background:var(--glow);color:#1b1206;text-decoration:none;font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;box-shadow:0 0 28px rgb(255 179 71 / .45);animation:cta-in .7s cubic-bezier(.2,.8,.2,1),cta-glow 3s ease-in-out .7s infinite}
+.sim-cta[hidden]{display:none}
+.sim-cta:hover{background:#ffc56e}
+@keyframes cta-in{from{opacity:0;transform:translateY(10px) scale(.9)}}
+.play{transition:border-color .25s,background .25s,transform .15s}
+.play:hover{border-color:rgb(255 255 255 / .6);background:rgb(255 255 255 / .08)}
 .play i{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
 .play[aria-pressed=true] i{width:8px;height:10px;border:0;border-left:3px solid;border-right:3px solid}
 .clock-side .scene{color:var(--glow);font-weight:600;font-size:15px;min-height:1.4em}
+.scene.in{animation:scene-in .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes scene-in{from{opacity:0;transform:translateX(-10px);filter:blur(4px)}}
+.clock-side .state,.clock-side .other{transition:color .3s}
 .sim-foot .hint{margin-left:auto;font-size:13px;color:rgb(244 241 234 / .6)}
 .sim-foot .hint button{background:none;border:0;padding:0;color:var(--glow);font-size:13px;font-weight:600;cursor:pointer}
 @media (max-width:760px){.clock-side .state{font-size:16px}.clock-side .other{font-size:14px}}
-@media (max-width:640px){.sim-foot .hint{margin-left:0}#hint-text{display:none}}
+@media (max-width:640px){.sim-foot .hint{margin-left:0}#hint-text{display:none}.sim-foot.ended>.seg{display:none}.sim-foot.ended .play{padding:10px 13px}.sim-foot.ended .play span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 
 /* ---------- Seções ---------- */
 .sec{padding:120px 0 40px}
@@ -149,6 +192,14 @@ button{font:inherit;color:inherit}
 
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
+.reveal:nth-child(2){transition-delay:.08s}.reveal:nth-child(3){transition-delay:.16s}.reveal:nth-child(4){transition-delay:.24s}
+.faq details[open] p{animation:open .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes open{from{opacity:0;transform:translateY(-8px)}}
+.cta{position:relative;overflow:hidden}
+.cta:after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgb(255 255 255 / .45) 50%,transparent 65%);transform:translateX(-120%);animation:shine 5s ease-in-out 2s infinite}
+@keyframes shine{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.versus .b{display:inline-block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.versus div:hover .b{transform:translateX(4px)}
 
 
 /* Ideias anteriores */
@@ -254,9 +305,12 @@ footer p{margin:0}
 <header class="bar" id="bar" data-live="">
   <a class="brand" href="#topo">fuso <span>nordeste</span></a>
   <div class="bar-count" role="status" aria-live="off"><i class="pulse"></i><b id="bar-count">—</b><span class="of">de 20.000 apoios</span></div>
+  <button class="bell" id="bell" type="button" aria-pressed="false" aria-label="Avisar quando entrar um apoio novo" title="Avisar quando entrar um apoio novo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5a5 5 0 0 0-5 5v3.2L3.5 13.5h13L15 10.7V7.5a5 5 0 0 0-5-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   <a class="bar-cta" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Apoiar <span aria-hidden="true">↗</span></a>
   <span class="bar-progress" aria-hidden="true"><span id="bar-fill"></span></span>
 </header>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden><i aria-hidden="true"></i><span id="toast-text"></span></div>
 
 <main>
 <section class="hero" id="topo" aria-labelledby="h1">
@@ -302,6 +356,7 @@ footer p{margin:0}
         <button type="button" data-day="dez" aria-pressed="false">21 dez</button>
       </div>
       <button type="button" class="play" id="play" aria-pressed="false"><i aria-hidden="true"></i><span>Ver o dia passar</span></button>
+      <a class="sim-cta" id="sim-cta" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer" hidden>Apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
       <span class="hint"><span id="hint-text">Arraste a régua para mudar a hora</span><button type="button" id="now-btn" hidden>Voltar para agora</button></span>
     </div>
   </div>
@@ -391,6 +446,7 @@ footer p{margin:0}
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
       <details><summary>Por que a minha cidade dá horários diferentes da capital?</summary><p>O sol nasce mais tarde quanto mais a oeste. Entre Recife e Petrolina, a diferença passa de 20 minutos. A página calcula cada uma das 751 sedes municipais dos cinco estados, com as coordenadas da base de localidades do IBGE (2022). O horário é o da sede; em outras partes do município ele pode variar alguns minutos.</p></details>
     </div>
+    <a class="cta reveal" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Ler e apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
   </div>
 </section>
 </main>
@@ -557,7 +613,7 @@ function drawRuler(){
   svg.append(node('line',{x1:cx,x2:cx,y1:4,y2:50,stroke:'#fff','stroke-width':1.5}));
   svg.append(node('circle',{cx,cy:zone?36:16,r:8,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':2}));
 }
-function manual(){stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
+function manual(){$('.sim-foot').classList.remove('ended');stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
 function glideTo(to){const from=clockMin;tween(700,t=>{clockMin=from+(to-from)*t;renderHero()},()=>{clockMin=to;renderHero()})}
 scrub.addEventListener('input',()=>{clockMin=Number(scrub.value);manual();renderHero()});
 /* Arrastar a régua: toque ou mouse em qualquer ponto, no mesmo eixo desenhado */
@@ -604,12 +660,12 @@ function playStory(){
     clockMin=Math.min(target,clockMin+dt*(target-clockMin>90?.3:.07));renderHero();
     if(clockMin<target){story.raf=requestAnimationFrame(step);return}
     if(story.i<SCENES.length){
-      sceneEl.textContent=SCENES[story.i++][1];
+      sceneEl.textContent=SCENES[story.i++][1];sceneEl.classList.remove('in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
       story.wait=setTimeout(()=>{if(!story)return;sceneEl.textContent='';last=performance.now();story.raf=requestAnimationFrame(step)},2800);
       return;
     }
-    story=null;playLabel('Ver de novo',false);
-    sceneEl.textContent='Com UTC−2, o sol se põe uma hora mais tarde no relógio.';
+    story=null;playLabel('Ver de novo',false);$('#sim-cta').hidden=false;$('.sim-foot').classList.add('ended');
+    sceneEl.textContent='Com UTC−2, o sol se põe 1 hora mais tarde.';
   };
   story.raf=requestAnimationFrame(step);
 }
@@ -698,7 +754,9 @@ async function update(){
   try{
     const d=await readCurrent();
     if(!d.aoVivo&&lastWasLive)throw Error('Consulta ao vivo indisponível');
+    const prev=current&&current.aoVivo?current.apoios:null;
     lastWasLive=d.aoVivo;current=d;renderCount();
+    if(d.aoVivo&&prev!==null&&d.apoios>prev)announce(d.apoios-prev,d.apoios);
     const at=when(new Date(d.consultadoEm));
     if(d.aoVivo){
       if(firstLive===null)firstLive=d.apoios;
@@ -711,6 +769,37 @@ async function update(){
   }finally{inFlight=false;$('#refresh').disabled=false;clearTimeout(timer);timer=setTimeout(update,60000)}
 }
 $('#refresh').addEventListener('click',update);
+
+/* Apoio novo: aviso na página, no título da aba e, se a pessoa ativar, notificação do navegador.
+   Só funciona com a página aberta; a consulta é a cada minuto. */
+const toast=$('#toast'),bell=$('#bell'),baseTitle=document.title;
+let toastTimer,unseen=0,notifyOn=false;
+try{notifyOn=localStorage.getItem('avisos')==='1'&&'Notification' in window&&Notification.permission==='granted'}catch(e){}
+bell.setAttribute('aria-pressed',String(notifyOn));
+function showToast(html){
+  $('#toast-text').replaceChildren(...html);toast.hidden=false;
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,7000);
+}
+function announce(amount,total){
+  const label=amount===1?'1 apoio novo':nf(amount)+' apoios novos',b=document.createElement('b');b.textContent='+'+label;
+  showToast([b,' · agora são '+nf(total)]);
+  const count=$('#bar-count');count.classList.remove('bump');void count.offsetWidth;count.classList.add('bump');
+  const plus=document.createElement('span');plus.className='plus';plus.textContent='+'+nf(amount);plus.setAttribute('aria-hidden','true');
+  count.parentElement.append(plus);setTimeout(()=>plus.remove(),1700);
+  bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');
+  if(document.hidden){unseen+=amount;document.title='(+'+nf(unseen)+') '+baseTitle}
+  if(notifyOn){try{new Notification('Fuso Nordeste',{body:'+'+label+' · agora são '+nf(total)+' de 20.000',tag:'apoios'})}catch(e){}}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){unseen=0;document.title=baseTitle}});
+bell.addEventListener('click',async()=>{
+  if(notifyOn){notifyOn=false;bell.setAttribute('aria-pressed','false');try{localStorage.setItem('avisos','0')}catch(e){}showToast(['Avisos do navegador desligados.']);return}
+  if(!('Notification' in window)){showToast(['Este navegador não mostra notificações. Os avisos de apoio novo aparecem aqui na página.']);return}
+  let perm=Notification.permission;
+  if(perm==='default'){try{perm=await Notification.requestPermission()}catch(e){}}
+  if(perm!=='granted'){showToast(['As notificações estão bloqueadas para este site. Os avisos continuam aparecendo aqui na página.']);return}
+  notifyOn=true;bell.setAttribute('aria-pressed','true');try{localStorage.setItem('avisos','1')}catch(e){}
+  showToast(['Pronto: você recebe um aviso a cada apoio novo enquanto esta página estiver aberta.']);
+});
 
 function rowsInto(tbody,rows){tbody.replaceChildren(...rows.map(r=>{const tr=document.createElement('tr');r.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});return tr}))}
 
@@ -835,7 +924,7 @@ function openList(items,pick=true){
   if(items.length)list.replaceChildren(...items.map(c=>{
     const li=document.createElement('li'),s=document.createElement('small');
     li.id='opt-'+c.code;li.setAttribute('role','option');li.setAttribute('aria-label',c.name+', '+c.uf);li.append(c.name);s.textContent=c.uf;li.append(s);
-    li.addEventListener('pointerdown',e=>{e.preventDefault();choose(c)});
+    li.addEventListener('pointerdown',e=>e.preventDefault());li.addEventListener('click',e=>{e.preventDefault();choose(c)});
     return li}));
   else{const li=document.createElement('li');li.className='none';li.textContent='Nenhuma cidade de RN, PB, PE, AL ou SE com esse nome';list.replaceChildren(li)}
   list.hidden=false;q.setAttribute('aria-expanded','true');paintActive();
