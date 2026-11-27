@@ -6,8 +6,14 @@
 <title>Fuso Nordeste · UTC−2 para RN, PB, PE, AL e SE</title>
 <meta name="description" content="A ideia de adiantar em uma hora o relógio de RN, PB, PE, AL e SE: os apoios no Senado, ao vivo, e o que muda no nascer e no pôr do sol.">
 <meta property="og:title" content="Fuso Nordeste · o mesmo sol, uma hora depois">
-<meta property="og:description" content="Apoios ao vivo à ideia do fuso UTC−2 no e-Cidadania e o céu de cada capital com o relógio novo.">
+<meta property="og:description" content="Apoios ao vivo à ideia do fuso UTC−2 no e-Cidadania e o céu de cada cidade com o relógio novo.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://joaovitorsl.github.io/fuso-nordeste/">
+<meta property="og:image" content="https://joaovitorsl.github.io/fuso-nordeste/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="O mesmo relógio, outro céu: 18:27 com UTC−2 e o sol se pondo no horizonte.">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#07080f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -254,6 +260,7 @@ button{font:inherit;color:inherit}
 .stats dd{margin:2px 0 0;font-family:var(--display);font-size:40px;font-weight:400;line-height:1}
 .dots-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap;margin-top:16px;font-size:14px;color:var(--ink-3)}
 .dots-foot{justify-content:flex-start}
+.login-note{margin:12px 0 0;font-size:15px;color:var(--ink-2)}
 .live{display:inline-flex;align-items:center;gap:8px}
 .link{background:none;border:0;padding:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px}
 .link:disabled{opacity:.5;cursor:default}
@@ -413,6 +420,7 @@ footer p{margin:0}
           <div><dt>Ritmo necessário</dt><dd id="need">—</dd></div>
         </dl>
         <a class="cta reveal" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Ler e apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
+        <p class="login-note">Para apoiar, o Senado pede login com a conta gov.br.</p>
         <div class="dots-foot">
           <span class="live" id="live-line">Consultando o Senado…</span>
           <button class="link" id="refresh" type="button">Atualizar</button>
@@ -747,7 +755,10 @@ function drawIdeas(n){
 }
 /* Mandar para alguém: compartilhamento do sistema; sem ele, WhatsApp */
 $('#share').addEventListener('click',async()=>{
-  const url=location.origin+location.pathname,text='Uma ideia no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE. Veja o céu da sua cidade e apoie:';
+  // a mensagem leva o dado da cidade escolhida: o pôr do sol de hoje, no relógio atual e com UTC−2
+  const t=SunCalc.getTimes(new Date(todayBase()+12*36e5),place.lat,place.lon),set=toLocal(t.sunset);
+  const url=location.origin+location.pathname+'?cidade='+place.code;
+  const text='Em '+place.name+', hoje o sol se põe às '+hhmm(set)+'. Com UTC−2, seria às '+hhmm(set+60)+'. Uma ideia no Senado propõe essa mudança para RN, PB, PE, AL e SE. Veja o céu da sua cidade e apoie:';
   if(navigator.share){try{await navigator.share({title:'Fuso Nordeste',text,url})}catch(e){}return}
   window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url),'_blank','noopener');
 });
