@@ -1,14 +1,8 @@
 import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
 
 let html=await readFile('worker/page.html','utf8');
-function change(before,after){if(!html.includes(before))throw new Error('Trecho esperado ausente: '+before.slice(0,60));html=html.replaceAll(before,after)}
-change('<!--MAPA-->',await readFile('worker/nordeste.svg','utf8'));
+function change(before,after){if(!html.includes(before))throw new Error('Trecho esperado ausente: '+before.slice(0,60));html=html.replaceAll(before,()=>after)}
 change('/*SUN_CALC_LIBRARY*/',await readFile('vendor/suncalc.js','utf8'));
-change("fetch('/api/historico',{cache:'no-store'})","fetch('./data/history.json',{cache:'no-store'})");
-change('A coleta acontece enquanto alguém está com o painel aberto. Sem visitas, não há medições; linhas pontilhadas indicam intervalos maiores que 10 minutos. Dados com mais de 24 horas são resumidos por hora. Nenhum apoiador é identificado.','O histórico é salvo periodicamente pelo GitHub e pode não incluir a consulta ao vivo mais recente. As linhas pontilhadas indicam intervalos maiores que 10 minutos. Os pontos são medições confirmadas, não o horário exato de cada apoio. Nenhum apoiador é identificado.');
-change('O painel consulta a página pública da ideia no Senado a cada minuto enquanto está aberto. A leitura pode falhar ou atrasar; confira a fonte oficial. A contagem é nacional, não por estado.','O painel tenta consultar a página pública do Senado a cada minuto através de cors.dev. O GitHub registra o histórico separadamente e pode atrasar. A consulta depende dos dois serviços; a contagem é nacional, não por estado.');
-change('Avisos no painel enquanto esta página estiver aberta. A consulta ocorre a cada minuto; novos apoios podem chegar juntos.','Avisos com a página aberta. Consulta ao Senado aproximadamente a cada minuto via cors.dev; os apoios podem chegar juntos.');
-change('Avisos no painel e no navegador enquanto esta página estiver aberta. A consulta ocorre aproximadamente a cada minuto.','Avisos no painel e no navegador com a página aberta. A consulta ao Senado usa cors.dev e pode falhar ou atrasar.');
 const history=JSON.parse(await readFile('data/history.json','utf8'));
 if(!Array.isArray(history.pontos)||!history.pontos.length)throw new Error('Não há medições verificadas para publicar.');
 const latest=history.pontos.at(-1);
