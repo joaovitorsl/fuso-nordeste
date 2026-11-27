@@ -14,5 +14,6 @@ await writeFile('public/index.html',html,'utf8');
 await copyFile('data/history.json','public/data/history.json');
 await writeFile('public/data/current.json',JSON.stringify({apoios:latest.count,consultadoEm:new Date(latest.observed_at*1000).toISOString(),historicoDisponivel:true})+'\n','utf8');
 await copyFile('worker/og.png','public/og.png');
+for(const name of ['favicon.ico','favicon.svg','apple-touch-icon.png'])await copyFile('worker/'+name,'public/'+name);
 await writeFile('public/.nojekyll','');
 console.log('GitHub Pages gerado. Última medição:',latest.count);
