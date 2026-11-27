@@ -16,10 +16,10 @@
 :root{
   color-scheme:dark;
   --bg:#08090f;
-  --panel:#0f111a;
-  --line:#21253a;
-  --grid:#191c2b;
-  --dim:#1c2033;
+  --panel:rgb(255 255 255 / .035);
+  --line:rgb(255 255 255 / .11);
+  --grid:rgb(255 255 255 / .06);
+  --dim:rgb(255 255 255 / .08);
   --ink:#f4f1ea;
   --ink-2:#b9bcc8;
   --ink-3:#878c9b;
@@ -35,7 +35,8 @@
 @media (min-width:760px){:root{--g:40px}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--f);font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+/* O fundo da página acompanha o céu do simulador (definido no script) */
+body{margin:0;background:var(--bg);transition:background-color .5s linear;color:var(--ink);font:400 17px/1.55 var(--f);font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--glow);outline-offset:3px}
@@ -64,7 +65,7 @@ button{font:inherit;color:inherit}
 /* ---------- Céu ---------- */
 /* Três faixas: texto, céu livre e mar. O horizonte é sempre o início da faixa de baixo,
    então nada se sobrepõe; se faltar altura, a abertura cresce em vez de comprimir. */
-.hero{position:relative;display:grid;grid-template-columns:100%;grid-template-rows:auto minmax(var(--sky-gap),1fr) auto;min-height:100vh;min-height:100svh;overflow:hidden;isolation:isolate;--sky-gap:clamp(64px,14svh,360px)}
+.hero{position:relative;display:grid;grid-template-columns:100%;grid-template-rows:auto minmax(var(--sky-gap),1fr) auto;min-height:100vh;min-height:100svh;overflow:hidden;isolation:isolate;--sky-gap:clamp(48px,10svh,360px)}
 .hero>.wrap{width:100%;justify-self:center;position:relative;z-index:2}
 .sky{grid-area:1/1/3/2;position:relative}
 .stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -74,9 +75,9 @@ button{font:inherit;color:inherit}
 .glint{position:absolute;top:0;width:90px;height:85%;margin-left:-45px;filter:blur(10px);pointer-events:none}
 .ripples{position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none}
 
-.hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(20px,6svh,72px))}
+.hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(16px,4.5svh,64px))}
 .hero-top h1{margin:0;font-weight:600;font-size:clamp(30px,min(7.6vw,7.4svh),76px);line-height:1.02;letter-spacing:-.035em;max-width:13em;text-wrap:balance;text-shadow:0 2px 24px rgb(0 0 0 / .25)}
-.hero-top p{margin:clamp(10px,2svh,18px) 0 0;max-width:30em;font-size:clamp(15px,min(4vw,2.5svh),20px);color:rgb(244 241 234 / .86);text-shadow:0 1px 12px rgb(0 0 0 / .3);text-wrap:pretty}
+.hero-top p{margin:clamp(10px,2svh,18px) 0 0;max-width:34em;font-size:clamp(15px,min(4vw,2.5svh),20px);color:rgb(244 241 234 / .86);text-shadow:0 1px 12px rgb(0 0 0 / .3);text-wrap:pretty}
 .finder{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:clamp(14px,3svh,26px)}
 .search{position:relative;flex:0 1 340px;min-width:0}
 .search input{width:100%;height:42px;border-radius:999px;border:1px solid rgb(255 255 255 / .32);background:rgb(8 9 15 / .32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);font:500 16px var(--f);padding:0 46px 0 40px;outline:none;transition:border-color .2s,background .2s}
@@ -97,31 +98,43 @@ button{font:inherit;color:inherit}
 .place-msg{margin:8px 0 0;font-size:14px;color:rgb(244 241 234 / .8);min-height:0}
 .place-msg:empty{display:none}
 @media (max-width:640px){.search{flex:1 1 100%}}
-.cities{display:flex;gap:6px;margin:0;padding:2px 0;overflow-x:auto;scrollbar-width:none;min-width:0;flex:0 1 auto}
-@media (max-width:640px){.cities{margin:0 calc(-1 * var(--g));padding:2px var(--g);flex-basis:calc(100% + 2 * var(--g))}}
-@media (max-width:640px) and (max-height:700px){.cities{display:none}}
-.cities::-webkit-scrollbar{display:none}
-.cities button{flex:none;border:1px solid rgb(255 255 255 / .28);background:rgb(8 9 15 / .18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:999px;padding:6px 13px;font-size:15px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
-.cities button:hover{border-color:rgb(255 255 255 / .6)}
-.cities button[aria-pressed=true]{background:var(--ink);color:#0b0d16;border-color:var(--ink)}
 
-.hero-bottom{grid-area:3/1/4/2;padding-top:clamp(18px,3.5svh,40px);padding-bottom:max(14px,env(safe-area-inset-bottom))}
-.clocks{display:flex;align-items:flex-end;gap:10px 28px;flex-wrap:wrap}
+/* Botões segmentados */
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:14px;color:var(--ink-2);cursor:pointer}
+.seg button:hover:not(:disabled){color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#0b0d16;font-weight:600}
+.seg button:disabled{opacity:.35;cursor:default}
+
+/* Simulador: relógio, fuso, régua, dia e horários do dia a dia */
+.hero-bottom{grid-area:3/1/4/2;padding-top:clamp(16px,3svh,36px);padding-bottom:max(14px,env(safe-area-inset-bottom))}
+.clocks{display:flex;align-items:flex-end;gap:12px 28px;flex-wrap:wrap}
 .big{font-weight:250;font-stretch:75%;font-size:clamp(76px,min(27vw,19svh),240px);line-height:.8;letter-spacing:-.015em;font-variant-numeric:tabular-nums;margin-left:-.04em}
-.clock-side{display:flex;flex-direction:column;gap:4px;padding-bottom:8px;font-size:16px;color:var(--ink-2)}
-.clock-side .tag{color:var(--glow);font-weight:600;font-size:15px;letter-spacing:.02em}
-.clock-side b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.ruler{position:relative;margin-top:clamp(12px,2.5svh,24px);height:76px}
-.ruler svg{display:block;width:100%;height:76px;overflow:visible}
-.ruler input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.clock-side{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding-bottom:6px;font-size:16px;color:var(--ink-2);min-width:0}
+.clock-side .state{color:var(--ink);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
+.clock-side .other{font-size:15px;font-variant-numeric:tabular-nums}
+.seg.glass{background:rgb(8 9 15 / .3);border-color:rgb(255 255 255 / .2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.seg.glass button:not([aria-pressed=true]){color:rgb(244 241 234 / .85)}
+.zone button{padding:7px 14px;font-size:15px}
+.zone button[aria-pressed=true]{color:#0b0d16}
+.zone button[data-zone="60"][aria-pressed=true]{background:var(--glow);color:#1b1206}
+.ruler{position:relative;margin-top:clamp(12px,2.4svh,22px);height:72px;touch-action:none;cursor:ew-resize}
+.ruler svg{display:block;width:100%;height:72px;overflow:visible}
+.ruler input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
 .ruler:has(input:focus-visible){outline:2px solid var(--glow);outline-offset:4px;border-radius:6px}
 .r-lab{font-size:12px;fill:rgb(244 241 234 / .62);font-variant-numeric:tabular-nums}
-.r-lab.new{fill:var(--glow)}
-.r-key{font-size:12px;font-weight:600;fill:rgb(244 241 234 / .9)}
-.r-key.new{fill:var(--glow)}
-.ruler-foot{display:flex;justify-content:space-between;gap:12px;margin-top:6px;font-size:13px;color:rgb(244 241 234 / .6)}
-.ruler-foot button{background:none;border:0;padding:0;color:var(--glow);font-size:13px;font-weight:600;cursor:pointer}
-@media (max-width:760px){.clock-side{flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:0;font-size:15px}}
+.r-key{font-size:12px;font-weight:600;fill:rgb(244 241 234 / .45)}
+.r-key.on{fill:rgb(244 241 234 / .95)}
+.sim-foot{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:10px}
+.play{display:inline-flex;align-items:center;gap:8px;border:1px solid rgb(255 255 255 / .28);background:rgb(8 9 15 / .3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+.play:hover{border-color:rgb(255 255 255 / .6)}
+.play i{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
+.play[aria-pressed=true] i{width:8px;height:10px;border:0;border-left:3px solid;border-right:3px solid}
+.clock-side .scene{color:var(--glow);font-weight:600;font-size:15px;min-height:1.4em}
+.sim-foot .hint{margin-left:auto;font-size:13px;color:rgb(244 241 234 / .6)}
+.sim-foot .hint button{background:none;border:0;padding:0;color:var(--glow);font-size:13px;font-weight:600;cursor:pointer}
+@media (max-width:760px){.clock-side .state{font-size:16px}.clock-side .other{font-size:14px}}
+@media (max-width:640px){.sim-foot .hint{margin-left:0}#hint-text{display:none}}
 
 /* ---------- Seções ---------- */
 .sec{padding:120px 0 40px}
@@ -137,33 +150,6 @@ button{font:inherit;color:inherit}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
 
-/* Relógio × sol */
-.noon{margin:48px 0 0;padding:0}
-.noon-cap{font-size:14px;color:var(--ink-3);margin-bottom:6px}
-.noon svg{display:block;width:100%;overflow:visible}
-.n-tick{fill:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums}
-.n-noon{fill:var(--ink);font-size:13px;font-weight:600}
-.n-lab{font-size:14px;font-weight:600;fill:var(--ink)}
-.n-sub{font-size:13px;fill:var(--ink-2);font-variant-numeric:tabular-nums}
-.n-ref{font-size:12px;fill:var(--ink-3)}
-.fact{margin:40px 0 0;font-size:clamp(18px,2vw,22px);line-height:1.4;max-width:34em;padding-left:18px;border-left:2px solid var(--glow);color:var(--ink-2)}
-.fact b{color:var(--ink);font-weight:600}
-.fact:empty{display:none}
-
-/* Rotina */
-.moments{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.moment{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
-.m-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-.m-time{font-weight:300;font-stretch:75%;font-size:40px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.m-label{font-size:15px;color:var(--ink-2)}
-.m-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-sky{position:relative;height:96px;margin:0;border-radius:10px;overflow:hidden}
-.m-sky.night:after{content:'';position:absolute;inset:0 0 28% 0;background:radial-gradient(1px 1px at 18% 22%,#fff,transparent),radial-gradient(1px 1px at 62% 14%,#fff,transparent),radial-gradient(1px 1px at 80% 40%,#fff,transparent),radial-gradient(1px 1px at 36% 50%,#fff,transparent),radial-gradient(1px 1px at 90% 12%,#fff,transparent);opacity:.8}
-.m-sun{position:absolute;width:16px;height:16px;margin-left:-8px;border-radius:50%}
-.m-tag{position:absolute;left:8px;bottom:4px;font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgb(0 0 0 / .5)}
-.m-tag.new{color:var(--glow)}
-.m-state{display:block;margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-@media (max-width:900px){.moments{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.moment{padding:12px}.m-time{font-size:32px}.m-head{flex-direction:column;gap:2px}.m-sky{height:80px}.m-state{font-size:13px}}
 
 /* Ideias anteriores */
 .before{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 56px;margin-top:72px;padding-top:40px;border-top:1px solid var(--line)}
@@ -183,34 +169,23 @@ button{font:inherit;color:inherit}
 @media (max-width:860px){.before{grid-template-columns:1fr;margin-top:56px}}
 
 /* Pontos */
-.dots{margin-top:48px;position:relative}
+/* Contagem à esquerda, grade de 20.000 pontos à direita; no celular, empilhadas */
+.support{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px 64px;align-items:start}
+.support .h-xl{font-size:clamp(56px,8vw,112px)}
+.stats{display:flex;gap:16px 40px;flex-wrap:wrap;margin:28px 0 0}
+.stats dt{font-size:14px;color:var(--ink-3)}
+.stats dd{margin:2px 0 0;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
+.dots{position:relative;padding-top:6px}
 .dots canvas{display:block;width:100%}
+@media (max-width:900px){.support{grid-template-columns:1fr;gap:32px}}
 .dots-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap;margin-top:16px;font-size:14px;color:var(--ink-3)}
 .dots-foot .k{display:inline-flex;align-items:center;gap:8px}
 .dots-foot .k i{width:7px;height:7px;border-radius:50%;background:var(--glow);box-shadow:0 0 6px var(--glow)}
 .live{display:inline-flex;align-items:center;gap:8px}
 .link{background:none;border:0;padding:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px}
 .link:disabled{opacity:.5;cursor:default}
-.cta{display:inline-flex;align-items:center;gap:10px;margin-top:40px;background:var(--glow);color:#1b1206;text-decoration:none;font-weight:700;font-size:19px;padding:16px 26px;border-radius:999px;transition:transform .2s,background .2s}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:32px;background:var(--glow);color:#1b1206;text-decoration:none;font-weight:700;font-size:19px;padding:16px 26px;border-radius:999px;transition:transform .2s,background .2s}
 .cta:hover{background:#ffc56e;transform:translateY(-2px)}
-
-/* Ritmo */
-.pace{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 56px;margin-top:96px;padding-top:40px;border-top:1px solid var(--line)}
-.pace>div{min-width:0}
-.pace h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
-.pace p{margin:8px 0 0;color:var(--ink-2);font-size:16px}
-.stat{margin-top:24px}
-.stat dt{font-size:14px;color:var(--ink-3)}
-.stat dd{margin:0;font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1.15}
-.stat dd small{font-size:15px;font-weight:400;color:var(--ink-3);letter-spacing:0;margin-left:4px}
-.seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
-.seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:14px;color:var(--ink-2);cursor:pointer}
-.seg button:hover:not(:disabled){color:var(--ink)}
-.seg button[aria-pressed=true]{background:var(--ink);color:#0b0d16;font-weight:600}
-.seg button:disabled{opacity:.35;cursor:default}
-.chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.chart-head span{font-size:14px;color:var(--ink-3)}
-@media (max-width:860px){.pace{grid-template-columns:1fr;margin-top:64px}}
 
 /* Gráficos */
 .plot{position:relative;outline:none;touch-action:pan-y}
@@ -290,8 +265,8 @@ footer p{margin:0}
   <div class="sea" id="sea" aria-hidden="true"><div class="glint" id="glint"></div><div class="ripples"></div></div>
 
   <div class="hero-top wrap">
-    <h1 id="h1">O mesmo sol, uma hora depois no relógio.</h1>
-    <p>Uma ideia legislativa no Senado propõe o fuso UTC−2 para Rio Grande do Norte, Paraíba, Pernambuco, Alagoas e Sergipe.</p>
+    <h1 id="h1">O mesmo relógio, outro céu.</h1>
+    <p>Uma ideia legislativa no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE, com o fuso UTC−2.</p>
     <div class="finder">
       <div class="search">
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -299,121 +274,35 @@ footer p{margin:0}
         <button class="near" id="near" type="button" aria-label="Usar a cidade mais perto de mim" title="Usar a cidade mais perto de mim"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="10" r="1.8" fill="currentColor"/><path d="M10 1.5v3M10 15.5v3M1.5 10h3M15.5 10h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
         <ul class="options" id="city-list" role="listbox" aria-label="Cidades" hidden></ul>
       </div>
-      <div class="cities" role="group" aria-label="Capitais">
-        <button type="button" data-city="2408102" aria-pressed="false">Natal</button>
-        <button type="button" data-city="2507507" aria-pressed="false">João Pessoa</button>
-        <button type="button" data-city="2611606" aria-pressed="true">Recife</button>
-        <button type="button" data-city="2704302" aria-pressed="false">Maceió</button>
-        <button type="button" data-city="2800308" aria-pressed="false">Aracaju</button>
-      </div>
     </div>
     <p class="place-msg" id="place-msg" role="status"></p>
   </div>
 
   <div class="hero-bottom wrap">
     <div class="clocks">
-      <div class="big" id="clock-new" aria-describedby="clock-tag">--:--</div>
+      <div class="big" id="clock">--:--</div>
       <div class="clock-side">
-        <span class="tag" id="clock-tag">com UTC−2</span>
-        <span>hoje <b id="clock-now">--:--</b> · UTC−3</span>
-        <span id="sun-state">—</span>
+        <div class="seg glass zone" role="group" aria-label="Relógio">
+          <button type="button" data-zone="0" aria-pressed="true">Hoje · UTC−3</button>
+          <button type="button" data-zone="60" aria-pressed="false">Com UTC−2</button>
+        </div>
+        <span class="scene" id="scene" aria-live="polite"></span>
+        <span class="state" id="sun-state">—</span>
+        <span class="other" id="sun-other">—</span>
       </div>
     </div>
     <div class="ruler" id="ruler">
       <svg id="ruler-svg" aria-hidden="true"></svg>
-      <input type="range" id="scrub" min="0" max="1439" step="5" value="0" aria-label="Hora do dia">
+      <input type="range" id="scrub" min="0" max="1435" step="5" value="0" aria-label="Hora no relógio">
     </div>
-    <div class="ruler-foot"><span id="ruler-hint">Arraste para mudar a hora</span><button type="button" id="now-btn" hidden>Voltar para agora</button></div>
-  </div>
-</section>
-
-<section class="sec" id="relogio" aria-labelledby="noon-title">
-  <div class="wrap">
-    <p class="kicker reveal">Relógio × sol</p>
-    <h2 class="h-l reveal" id="noon-title">—</h2>
-    <p class="lead reveal" id="noon-lead"></p>
-    <figure class="noon reveal" id="noon">
-      <figcaption class="noon-cap">A que horas o sol fica no ponto mais alto, em média</figcaption>
-      <svg id="noon-svg" role="img"></svg>
-    </figure>
-    <p class="note" id="noon-note"></p>
-    <p class="fact reveal" id="noon-fact"></p>
-  </div>
-</section>
-
-<section class="sec" id="rotina" aria-labelledby="routine-title">
-  <div class="wrap">
-    <p class="kicker reveal">Sua rotina</p>
-    <div class="year-head">
-      <div>
-        <h2 class="h-l reveal" id="routine-title">O mesmo horário no relógio, outro sol.</h2>
-        <p class="lead reveal">Os compromissos continuam na mesma hora do relógio. Com UTC−2, eles acontecem uma hora mais cedo em relação ao sol: manhãs mais escuras, fim de tarde mais claro.</p>
-      </div>
-      <div class="seg" role="group" aria-label="Dia">
+    <div class="sim-foot">
+      <div class="seg glass" role="group" aria-label="Dia">
         <button type="button" data-day="hoje" aria-pressed="true">Hoje</button>
-        <button type="button" data-day="jun" aria-pressed="false">21 de junho</button>
-        <button type="button" data-day="dez" aria-pressed="false">21 de dezembro</button>
+        <button type="button" data-day="jun" aria-pressed="false">21 jun</button>
+        <button type="button" data-day="dez" aria-pressed="false">21 dez</button>
       </div>
-    </div>
-    <ol class="moments reveal" id="moments"></ol>
-    <p class="note" id="routine-note"></p>
-  </div>
-</section>
-
-<section class="sec" id="apoios" aria-labelledby="apoios-title">
-  <div class="wrap">
-    <p class="kicker reveal">Apoios no e-Cidadania</p>
-    <h2 class="h-xl reveal" id="apoios-title"><span id="n-big" class="num">—</span> <span class="soft">apoios.</span></h2>
-    <p class="lead reveal" id="n-lead">São necessários 20.000 até 11 de março de 2027.</p>
-    <div class="dots reveal" id="dots"><canvas id="dots-canvas" role="img" aria-label="Grade com 20.000 pontos; os acesos são os apoios confirmados."></canvas></div>
-    <div class="dots-foot">
-      <span class="k"><i></i>Cada ponto aceso é um apoio confirmado</span>
-      <span class="live" id="live-line">Consultando o Senado…</span>
-      <button class="link" id="refresh" type="button">Atualizar</button>
-    </div>
-    <a class="cta reveal" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Ler e apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
-
-    <div class="pace" id="historico">
-      <div>
-        <h3>Ritmo</h3>
-        <p id="hist-summary">Carregando registros…</p>
-        <dl>
-          <div class="stat"><dt>Ritmo necessário até o prazo</dt><dd id="need">—</dd></div>
-          <div class="stat"><dt>Prazo</dt><dd><span id="days-left">—</span><small>até 11/03/2027</small></dd></div>
-        </dl>
-      </div>
-      <div>
-        <div class="chart-head">
-          <span>Total de apoios por registro</span>
-          <div class="seg" role="group" aria-label="Período">
-            <button type="button" data-range="24" aria-pressed="false">24 h</button>
-            <button type="button" data-range="168" aria-pressed="false">7 dias</button>
-            <button type="button" data-range="all" aria-pressed="true">Tudo</button>
-          </div>
-        </div>
-        <div class="plot" id="hist-plot" tabindex="0" aria-describedby="hist-summary"><svg id="hist-svg" role="img" aria-label="Gráfico do total de apoios ao longo do tempo"></svg><div class="empty" id="hist-empty"></div><div class="tip" id="hist-tip" hidden></div></div>
-        <p class="note">● Leituras do Senado · ◇ Marcos relatados na conversa. Os marcos antigos vieram de um resumo não verificado; quando só se conhece a data, são posicionados no início do dia, sem afirmar o horário. A linha tracejada liga registros separados por mais de 10 minutos ou relatados: não sabemos o percurso entre eles. O eixo vertical não começa em zero.</p>
-        <p class="note">Os 32 apoios mencionados na conversa e os 237 do print não entram no gráfico porque não recuperamos datas confiáveis para eles.</p>
-        <details class="table"><summary>Ver registros e fontes em tabela</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Data ou leitura</th><th scope="col">Apoios</th><th scope="col">Fonte</th></tr></thead><tbody id="hist-rows"></tbody></table></div></details>
-      </div>
-    </div>
-
-    <div class="before" aria-labelledby="before-title">
-      <div>
-        <h3 id="before-title">Ideias parecidas no e-Cidadania</h3>
-        <p id="before-lead">Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios.</p>
-      </div>
-      <ol class="ideas" id="ideas">
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><span class="track"><i data-n="13"></i></span><b class="num">13</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><span class="track"><i data-n="6"></i></span><b class="num">6</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><span class="track"><i data-n="2"></i></span><b class="num">2</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><span class="track"><i data-n="26"></i></span><b class="num">26</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><span class="track"><i data-n="1"></i></span><b class="num">1</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
-        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><span class="track"><i id="idea-now"></i></span><b class="num" id="idea-now-n">—</b></li>
-      </ol>
-      <p class="note">Apoios confirmados nas páginas oficiais em 27/11/2026. As sete anteriores estão encerradas e não recebem mais apoios.</p>
+      <button type="button" class="play" id="play" aria-pressed="false"><i aria-hidden="true"></i><span>Ver o dia passar</span></button>
+      <span class="hint"><span id="hint-text">Arraste a régua para mudar a hora</span><button type="button" id="now-btn" hidden>Voltar para agora</button></span>
     </div>
   </div>
 </section>
@@ -443,6 +332,49 @@ footer p{margin:0}
   </div>
 </section>
 
+<section class="sec" id="apoios" aria-labelledby="apoios-title">
+  <div class="wrap">
+    <div class="support">
+      <div>
+        <p class="kicker reveal">Apoios no e-Cidadania</p>
+        <h2 class="h-xl reveal" id="apoios-title"><span id="n-big" class="num">—</span> <span class="soft">apoios.</span></h2>
+        <p class="lead reveal" id="n-lead">São necessários 20.000 até 11 de março de 2027.</p>
+        <dl class="stats">
+          <div><dt>Prazo</dt><dd id="days-left">—</dd></div>
+          <div><dt>Ritmo necessário</dt><dd id="need">—</dd></div>
+        </dl>
+        <a class="cta reveal" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Ler e apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
+      </div>
+      <div>
+        <div class="dots reveal" id="dots"><canvas id="dots-canvas" role="img" aria-label="Grade com 20.000 pontos; os acesos são os apoios confirmados."></canvas></div>
+        <div class="dots-foot">
+          <span class="k"><i></i>Cada ponto aceso é um apoio</span>
+          <span class="live" id="live-line">Consultando o Senado…</span>
+          <button class="link" id="refresh" type="button">Atualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="before" aria-labelledby="before-title">
+      <div>
+        <h3 id="before-title">Ideias parecidas no e-Cidadania</h3>
+        <p id="before-lead">Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios.</p>
+      </div>
+      <ol class="ideas" id="ideas">
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><span class="track"><i data-n="13"></i></span><b class="num">13</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><span class="track"><i data-n="6"></i></span><b class="num">6</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><span class="track"><i data-n="2"></i></span><b class="num">2</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><span class="track"><i data-n="26"></i></span><b class="num">26</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><span class="track"><i data-n="1"></i></span><b class="num">1</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><span class="track"><i id="idea-now"></i></span><b class="num" id="idea-now-n">—</b></li>
+      </ol>
+      <p class="note">Apoios confirmados nas páginas oficiais em 27/11/2026. As sete anteriores estão encerradas e não recebem mais apoios.</p>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="perguntas" aria-labelledby="faq-title">
   <div class="wrap">
     <p class="kicker reveal">Perguntas</p>
@@ -450,7 +382,7 @@ footer p{margin:0}
     <div class="faq">
       <details><summary>A mudança já vale?</summary><p>Não. É uma ideia legislativa. Com 20 mil apoios no prazo, ela vai para a Comissão de Direitos Humanos e Legislação Participativa do Senado, que decide se vira projeto de lei. Não há aprovação automática. Pelas regras do portal, qualquer senador ou deputado também pode adotar a ideia a qualquer momento, com qualquer número de apoios. Para mudar o fuso basta uma lei federal ordinária, sem emenda à Constituição: foi assim no Acre, em 2008 e em 2013.</p></details>
       <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p></details>
-      <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o relógio ficaria mais longe do sol do que hoje (veja Relógio × sol). E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
+      <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h. E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
       <details><summary>Por que não só antecipar os horários?</summary><p>Daria um efeito parecido: entrar às 7h e sair às 16h no relógio de hoje equivale, em relação ao sol, a entrar às 8h e sair às 17h com UTC−2. A diferença é a coordenação. Antecipar depende de cada escola, empresa e órgão, e nem todo mundo tem autonomia para isso; mudar o fuso muda o relógio de todos de uma vez, mas não garante que os horários continuariam os mesmos no relógio.</p></details>
       <details><summary>E o sono?</summary><p>A relação entre luz, horários e sono é complexa. Um <a href="https://pubmed.ncbi.nlm.nih.gov/31030116/" target="_blank" rel="noopener noreferrer">estudo nos Estados Unidos</a> (Giuntella e Mazzonna, 2019) comparou cidades dos dois lados de fronteiras de fuso: uma hora a mais de luz no fim do dia esteve associada a 19 minutos a menos de sono, em média, quando os horários de trabalho e escola são rígidos. É outro país, com outra latitude e outras rotinas; o resultado não prevê o que aconteceria aqui, mas mostra que a questão merece estudo.</p></details>
       <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. A Paraíba já adiantou o relógio em uma hora nos horários de verão de 1988–89, 1989–90, 1999–2000 e 2001–02 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>), mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
@@ -458,15 +390,13 @@ footer p{margin:0}
       <details><summary>Economizaria energia?</summary><p>Não há estudo sobre esta proposta. A experiência mais parecida é o horário de verão, que também adiantava o relógio em uma hora. Ele foi extinto em 2019 (<a href="https://planalto.gov.br/ccivil_03/_ato2019-2022/2019/decreto/d9772.htm" target="_blank" rel="noopener noreferrer">Decreto nº 9.772</a>) porque, segundo o Ministério de Minas e Energia, a economia tinha deixado de ser relevante: com o ar-condicionado, o pico de consumo saiu do começo da noite para o meio da tarde (<a href="https://www.camara.leg.br/noticias/603108-deputados-comemoram-fim-do-horario-de-verao" target="_blank" rel="noopener noreferrer">Agência Câmara</a>). Em 2024, uma nota técnica do ONS voltou a estimar ganhos: até 2,9% menos demanda no pico e cerca de R$ 400 milhões de economia em cinco meses (<a href="https://agenciabrasil.ebc.com.br/economia/noticia/2024-09/economia-com-horario-de-verao-pode-beirar-r-400-milhoes" target="_blank" rel="noopener noreferrer">Agência Brasil</a>). Nada disso se transfere automaticamente para um UTC−2 permanente.</p></details>
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
       <details><summary>Por que a minha cidade dá horários diferentes da capital?</summary><p>O sol nasce mais tarde quanto mais a oeste. Entre Recife e Petrolina, a diferença passa de 20 minutos. A página calcula cada uma das 751 sedes municipais dos cinco estados, com as coordenadas da base de localidades do IBGE (2022). O horário é o da sede; em outras partes do município ele pode variar alguns minutos.</p></details>
-      <details><summary>De onde vem a contagem?</summary><p>Da página pública da ideia no Senado. Com esta página aberta, o navegador lê a contagem a cada minuto pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP e a URL consultada; nenhuma credencial é enviada. Se a leitura falhar, aparece o último registro salvo, sinalizado. A contagem é nacional, não por estado. Se você usar o botão de localização, a posição é comparada com as cidades aqui mesmo, no navegador, e não é enviada a nenhum serviço.</p></details>
-      <details><summary>Como o histórico é gravado?</summary><p>Uma automação no GitHub lê o Senado a cada 10 minutos, aproximadamente, e grava quando o total muda ou, sem mudança, uma vez por hora. As medições automáticas começam em 26/11/2026 e podem atrasar. O gráfico também mostra marcos anteriores relatados na conversa, identificados por fonte e precisão. Nenhum apoiador é identificado.</p></details>
     </div>
   </div>
 </section>
 </main>
 
 <footer><div class="wrap">
-  <p>Projeto independente, sem vínculo com o Senado Federal.</p>
+  <p>Projeto independente, sem vínculo com o Senado Federal. A contagem é lida da página pública da ideia pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP.</p>
   <p>Fontes: <a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">e-Cidadania</a> · <a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil" target="_blank" rel="noopener noreferrer">Observatório Nacional</a> · <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> · <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a></p>
 </div></footer>
 
@@ -535,7 +465,7 @@ function interactive(plot,api){
   });
   return{refresh(){if(idx!==null)show(idx)}};
 }
-function tween(dur,fn,done){if(reduced){fn(1);done&&done();return}const t0=performance.now();const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;(function f(now){const t=clamp((now-t0)/dur,0,1);fn(ease(t));if(t<1)requestAnimationFrame(f);else done&&done()})(t0)}
+function tween(dur,fn,done){if(reduced){fn(1);done&&done();return}const t0=performance.now();const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;(function f(){const t=clamp((performance.now()-t0)/dur,0,1);fn(ease(t));if(t<1)requestAnimationFrame(f);else done&&done()})()}
 
 /* ---------- Capitais ---------- */
 /* Sedes municipais de RN, PB, PE, AL e SE (IBGE, Localidades do Brasil 2022), embutidas no build */
@@ -546,29 +476,49 @@ const byCode=new Map(cities.map(c=>[c.code,c]));
 const CAPITALS=new Set([2408102,2507507,2611606,2704302,2800308]);
 let place=byCode.get(2611606);
 
-/* ---------- Céu ---------- */
+/* ---------- Simulador ---------- */
+/* O relógio mostra uma hora "de parede". Trocar o fuso mantém o relógio e move o sol:
+   com UTC−2, a mesma hora do relógio acontece uma hora antes em relação ao sol. */
 const hero=$('.hero'),sky=$('#sky'),sea=$('#sea'),sunEl=$('#sun'),glint=$('#glint'),starsC=$('#stars'),scrub=$('#scrub');
-let heroMin=nowMinutes(),following=true,today=null;
+const themeMeta=document.querySelector('meta[name=theme-color]');
+let zone=0,zoneShown=0,simDay='hoje',following=true,clockMin=nowMinutes(),sun=null;
+const thisYear=()=>Number(fmt(new Date(),{year:'numeric'}));
+function dayBase(){
+  if(simDay==='jun')return Date.UTC(thisYear(),5,21)-OFFSET*6e4;
+  if(simDay==='dez')return Date.UTC(thisYear(),11,21)-OFFSET*6e4;
+  return todayBase();
+}
+function solarDay(){
+  const {lat,lon}=place,base=dayBase(),s=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
+  return{base,lat,lon,rise:toLocal(s.sunrise),set:toLocal(s.sunset),noon:toLocal(s.solarNoon)};
+}
+const altAt=real=>SunCalc.getPosition(new Date(sun.base+real*6e4),sun.lat,sun.lon).altitude*180/Math.PI;
+function sunPhrase(z){
+  const real=clockMin-z,alt=altAt(real);
+  if(alt>0)return'sol a '+Math.round(alt)+'° · pôr às '+hhmm(sun.set+z);
+  if(alt>-6)return'crepúsculo · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr foi às '+hhmm(sun.set+z));
+  return'noite · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr foi às '+hhmm(sun.set+z));
+}
+const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
 function drawStars(){
   const w=sky.clientWidth,h=sky.clientHeight;
   const x=canvasFit(starsC,w,h);let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   for(let i=0;i<Math.round(w*h/5200);i++){const sx=rnd()*w,sy=rnd()*h,r=rnd()<.08?1.3:.7;x.globalAlpha=(.35+rnd()*.65)*(1-sy/h*.6);x.fillStyle='#fff';x.beginPath();x.arc(sx,sy,r,0,7);x.fill()}
 }
-function solarToday(){
-  const {lat,lon}=place,base=todayBase(),s=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
-  return{base,lat,lon,rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk),noon:toLocal(s.solarNoon)};
-}
 function renderHero(){
-  if(!today)return;
-  const {base,lat,lon,rise,set}=today,t=new Date(base+heroMin*6e4);
-  const alt=SunCalc.getPosition(t,lat,lon).altitude*180/Math.PI;
+  if(!sun)return;
+  const real=clockMin-zoneShown,alt=altAt(real);
   const [top,mid,hor]=skyAt(alt);
+  // o céu tinge a página inteira, escuro o bastante para manter o contraste do texto
+  const bg=mix(top,'#06070d',.8);
+  document.documentElement.style.setProperty('--bg',bg);
+  if(themeMeta)themeMeta.content=bg;
   sky.style.background='linear-gradient(180deg,'+top+' 0%,'+mid+' 62%,'+hor+' 100%)';
   const seaTop=mix(mix(top,'#03101f',.45),hor,.25);
-  sea.style.background='linear-gradient(180deg,'+seaTop+' 0%,'+mix(top,'#02050c',.72)+' 45%,#02040a 100%)';
+  sea.style.background='linear-gradient(180deg,'+seaTop+' 0%,'+mix(top,'#02050c',.72)+' 45%,'+bg+' 100%)';
   starsC.style.opacity=clamp((-alt-3)/9,0,1);
   const W=hero.clientWidth,H=sky.clientHeight;
-  const frac=(heroMin-rise)/(set-rise),x=W*(.1+.8*frac);
+  const frac=(real-sun.rise)/(sun.set-sun.rise),x=W*(.1+.8*frac);
   const textBottom=document.querySelector('.hero-top').getBoundingClientRect().bottom-hero.getBoundingClientRect().top;
   const minY=Math.min(H-60,textBottom+56);
   const y=H-Math.sin(alt*Math.PI/180)*(H-minY);
@@ -580,51 +530,109 @@ function renderHero(){
   glint.style.left=x+'px';
   glint.style.background='linear-gradient(180deg,'+core+' 0%,'+core+'00 100%)';
   glint.style.opacity=(clamp((alt+1)/6,0,1)*(1-clamp((alt-35)/40,0,.6))*.55).toFixed(2);
-  $('#clock-new').textContent=hhmm(heroMin+60);
-  $('#clock-now').textContent=hhmm(heroMin);
-  let state;
-  if(alt>0)state='Sol a '+Math.round(alt)+'° · pôr às '+hhmm(set+60);
-  else if(alt>-6)state='Crepúsculo · '+(heroMin<720?'nascer às '+hhmm(rise+60):'pôr foi às '+hhmm(set+60));
-  else state='Noite · nascer às '+hhmm(rise+60);
+  const shown=((Math.round(clockMin)%1440)+1440)%1440,state=cap(sunPhrase(zone));
+  $('#clock').textContent=hhmm(shown);
   $('#sun-state').textContent=state;
-  scrub.value=String(Math.round(heroMin/5)*5);
-  scrub.setAttribute('aria-valuetext',hhmm(heroMin)+' hoje, '+hhmm(heroMin+60)+' com UTC−2. '+state);
+  $('#sun-other').textContent=(zone?'Hoje, UTC−3: ':'Com UTC−2: ')+sunPhrase(60-zone);
+  scrub.value=String(Math.round(shown/5)*5);
+  scrub.setAttribute('aria-valuetext',hhmm(shown)+' no relógio, '+(zone?'com UTC−2':'hoje')+'. '+state);
   drawRuler();
 }
+/* Régua: o eixo é o relógio; cada faixa mostra o período com sol em um dos fusos */
 function drawRuler(){
-  const svg=$('#ruler-svg'),W=svg.clientWidth,pl=58,pr=10,iw=W-pl-pr,x=m=>pl+clamp(m,0,1440)/1440*iw;
-  svg.setAttribute('viewBox','0 0 '+W+' 76');svg.replaceChildren();
-  const step=W<620?6:3;
-  svg.append(node('text',{x:0,y:16,class:'r-key new'},'UTC−2'),node('text',{x:0,y:70,class:'r-key'},'UTC−3'));
-  svg.append(node('line',{x1:pl,x2:pl+iw,y1:40,y2:40,stroke:'rgb(255 255 255 / .22)','stroke-width':2}));
-  svg.append(node('line',{x1:x(today.rise),x2:x(today.set),y1:40,y2:40,stroke:'#ffb347','stroke-width':4,'stroke-linecap':'round'}));
+  const svg=$('#ruler-svg'),W=svg.clientWidth;if(!W||!sun)return;
+  const pl=52,pr=8,iw=W-pl-pr,x=m=>pl+clamp(m,0,1440)/1440*iw,step=W<620?6:3;
+  svg.setAttribute('viewBox','0 0 '+W+' 72');svg.replaceChildren();
+  [[0,16,'#5a8ee0','UTC−3'],[60,36,'#ffb347','UTC−2']].forEach(([z,yy,color,label])=>{
+    const on=z===zone;
+    svg.append(node('text',{x:0,y:yy+4,class:'r-key'+(on?' on':'')},label));
+    svg.append(node('line',{x1:pl,x2:pl+iw,y1:yy,y2:yy,stroke:'rgb(255 255 255 / .16)','stroke-width':2}));
+    svg.append(node('line',{x1:x(sun.rise+z),x2:x(sun.set+z),y1:yy,y2:yy,stroke:color,'stroke-width':on?6:4,'stroke-opacity':on?1:.45,'stroke-linecap':'round'}));
+  });
   for(let h=0;h<=24;h+=step){
-    const mNew=h*60-60;if(mNew>=0&&mNew<=1440){svg.append(node('line',{x1:x(mNew),x2:x(mNew),y1:24,y2:32,stroke:'#ffb347','stroke-opacity':.7}));svg.append(node('text',{x:x(mNew),y:16,'text-anchor':'middle',class:'r-lab new'},String(h%24).padStart(2,'0')+'h'))}
-    if(h<24){svg.append(node('line',{x1:x(h*60),x2:x(h*60),y1:48,y2:56,stroke:'rgb(255 255 255 / .45)'}));svg.append(node('text',{x:x(h*60),y:70,'text-anchor':'middle',class:'r-lab'},String(h).padStart(2,'0')+'h'))}
+    svg.append(node('line',{x1:x(h*60),x2:x(h*60),y1:46,y2:52,stroke:'rgb(255 255 255 / .4)'}));
+    if(h<24)svg.append(node('text',{x:x(h*60),y:66,'text-anchor':h===0?'start':'middle',class:'r-lab'},String(h).padStart(2,'0')+'h'));
   }
-  svg.append(node('line',{x1:x(heroMin),x2:x(heroMin),y1:22,y2:58,stroke:'#fff','stroke-width':1.5}));
-  svg.append(node('circle',{cx:x(heroMin),cy:40,r:8,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':2}));
+  const cx=x(((clockMin%1440)+1440)%1440);
+  svg.append(node('line',{x1:cx,x2:cx,y1:4,y2:50,stroke:'#fff','stroke-width':1.5}));
+  svg.append(node('circle',{cx,cy:zone?36:16,r:8,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':2}));
 }
-function setHeroMin(m,manual){heroMin=m;following=!manual;$('#now-btn').hidden=!manual;renderHero()}
-scrub.addEventListener('input',()=>setHeroMin(Number(scrub.value),true));
-$('#now-btn').addEventListener('click',()=>{const from=heroMin,to=nowMinutes();tween(900,t=>{heroMin=from+(to-from)*t;renderHero()},()=>setHeroMin(to,false))});
-setInterval(()=>{if(following){heroMin=nowMinutes();renderHero()}},15000);
+function manual(){stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
+function glideTo(to){const from=clockMin;tween(700,t=>{clockMin=from+(to-from)*t;renderHero()},()=>{clockMin=to;renderHero()})}
+scrub.addEventListener('input',()=>{clockMin=Number(scrub.value);manual();renderHero()});
+/* Arrastar a régua: toque ou mouse em qualquer ponto, no mesmo eixo desenhado */
+const ruler=$('#ruler');
+function minFromX(cx){const r=ruler.getBoundingClientRect();return clamp(Math.round((cx-r.left-52)/(r.width-60)*1440/5)*5,0,1435)}
+ruler.addEventListener('pointerdown',e=>{if(e.button)return;ruler.setPointerCapture(e.pointerId);manual();clockMin=minFromX(e.clientX);renderHero()});
+ruler.addEventListener('pointermove',e=>{if(!ruler.hasPointerCapture(e.pointerId))return;clockMin=minFromX(e.clientX);renderHero()});
+function setZone(z,animate){
+  if(z===zone)return;zone=z;
+  document.querySelectorAll('[data-zone]').forEach(x=>x.setAttribute('aria-pressed',String(Number(x.dataset.zone)===z)));
+  if(!animate){zoneShown=z;renderHero();return}
+  const from=zoneShown;tween(900,t=>{zoneShown=from+(z-from)*t;renderHero()},()=>{zoneShown=z;renderHero()});
+}
+document.querySelectorAll('[data-zone]').forEach(b=>b.addEventListener('click',()=>{manual();setZone(Number(b.dataset.zone),true)}));
+function setDay(d){
+  simDay=d;
+  document.querySelectorAll('[data-day]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.day===d)));
+  sun=solarDay();renderHero();
+}
+document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{manual();setDay(b.dataset.day)}));
+$('#now-btn').addEventListener('click',()=>{
+  setDay('hoje');stopStory();following=true;$('#now-btn').hidden=true;
+  let to=nowMinutes()+zone;if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;$('#hint-text').hidden=false;
+  glideTo(to);
+});
+
+/* ---------- O dia passando ---------- */
+/* O relógio corre sozinho com UTC−2 e para em cenas do dia a dia. O texto de cada cena
+   é só o rótulo; a comparação com o relógio de hoje vem do cálculo do sol, logo abaixo. */
+const SCENES=[[360,'Saindo para o trabalho'],[420,'Entrada na escola'],[1020,'Saída da escola'],[1080,'Voltando do trabalho'],[1110,'Corrida no fim da tarde']];
+const sceneEl=$('#scene'),playBtn=$('#play');
+let story=null;
+function playLabel(t,on){playBtn.querySelector('span').textContent=t;playBtn.setAttribute('aria-pressed',String(on))}
+function stopStory(){if(!story)return;cancelAnimationFrame(story.raf);clearTimeout(story.wait);story=null;sceneEl.textContent='';playLabel('Ver o dia passar',false)}
+function playStory(){
+  stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true;
+  setZone(60,true);clockMin=330;renderHero();
+  story={i:0};playLabel('Pausar',true);
+  let last=performance.now();
+  const step=()=>{
+    if(!story)return;
+    const now=performance.now(),dt=clamp(now-last,0,64);last=now;
+    const target=story.i<SCENES.length?SCENES[story.i][0]:1170;
+    clockMin=Math.min(target,clockMin+dt*(target-clockMin>90?.3:.07));renderHero();
+    if(clockMin<target){story.raf=requestAnimationFrame(step);return}
+    if(story.i<SCENES.length){
+      sceneEl.textContent=SCENES[story.i++][1];
+      story.wait=setTimeout(()=>{if(!story)return;sceneEl.textContent='';last=performance.now();story.raf=requestAnimationFrame(step)},2800);
+      return;
+    }
+    story=null;playLabel('Ver de novo',false);
+    sceneEl.textContent='Com UTC−2, o sol se põe uma hora mais tarde no relógio.';
+  };
+  story.raf=requestAnimationFrame(step);
+}
+playBtn.addEventListener('click',()=>{if(story){const keep=sceneEl.textContent;stopStory();sceneEl.textContent=keep}else playStory()});
+
+setInterval(()=>{if(following){sun=solarDay();clockMin=nowMinutes()+zone;renderHero()}},15000);
 
 /* ---------- Contagem ---------- */
-let current=null,firstLive=null,historyPoints=[],shownCount=0,dotsSeen=false;
+let current=null,firstLive=null,shownCount=0,dotsSeen=false;
 const dotsC=$('#dots-canvas'),dotsWrap=$('#dots');
 let dotGeo=null;
 function layoutDots(){
-  const W=dotsWrap.clientWidth;
-  const cols=[250,200,160,125,100].find(c=>W/c>=(W<600?2.6:3.4))||100,pitch=W/cols,rows=GOAL/cols;
-  dotGeo={W,cols,pitch,H:Math.ceil(rows*pitch),r:Math.max(.75,pitch*.3)};
+  // menos colunas deixam os pontos maiores; usa a menor quantidade que caiba na altura disponível
+  const W=dotsWrap.clientWidth,maxH=W<600?260:Math.min(360,innerHeight*.45);
+  const cols=[100,125,160,200,250,400].find(c=>GOAL/c*(W/c)<=maxH)||400,pitch=W/cols,rows=GOAL/cols;
+  dotGeo={W,cols,pitch,H:Math.ceil(rows*pitch),r:Math.max(.6,pitch*.32)};
   dotGeo.ctx=canvasFit(dotsC,W,dotGeo.H);
 }
 function drawDots(lit){
   if(!dotGeo)layoutDots();
   const {ctx,cols,pitch,W,H,r}=dotGeo,n=Math.floor(lit);
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#1b1f31';ctx.beginPath();
+  ctx.fillStyle='rgba(255,255,255,.1)';ctx.beginPath();
   for(let i=n;i<GOAL;i++){const cx=(i%cols+.5)*pitch,cy=(Math.floor(i/cols)+.5)*pitch;ctx.moveTo(cx+r,cy);ctx.arc(cx,cy,r,0,6.2832)}
   ctx.fill();
   if(n>0){
@@ -701,86 +709,10 @@ async function update(){
     if(current)setLive('saved','Sem conexão · mostrando a leitura de '+when(new Date(current.consultadoEm)));
     else setLive('error','Não foi possível ler o Senado nem o último registro salvo.');
   }finally{inFlight=false;$('#refresh').disabled=false;clearTimeout(timer);timer=setTimeout(update,60000)}
-  loadHistory();
 }
 $('#refresh').addEventListener('click',update);
 
-/* ---------- Histórico ---------- */
-let historyRange='all',hist={pts:[]};
-const milestones=/*MARCOS*/[];
-const conversationPoints=milestones.map(p=>({...p,observed_at:p.precision==='day'?Date.parse(p.date+'T00:00:00-03:00')/1000:p.observed_at,reported:true})).filter(p=>Number.isSafeInteger(p.count)&&Number.isSafeInteger(p.observed_at));
-const historyLabel=p=>p.precision==='day'?fmt(new Date(p.observed_at*1000),{day:'2-digit',month:'2-digit',year:'numeric'})+' · horário desconhecido':when(new Date(p.observed_at*1000))+(p.precision==='message'?' · horário da mensagem':'');
-const historySource=p=>p.reported?p.source:'Leitura do Senado';
-const allHistory=()=>[...historyPoints,...conversationPoints].sort((a,b)=>a.observed_at-b.observed_at);
-const histPlot=$('#hist-plot'),histSvg=$('#hist-svg'),histTip=$('#hist-tip');
-function niceStep(span,target){const raw=span/target,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return(f<=1?1:f<=2?2:f<=5?5:10)*p}
-function histSummary(){
-  const el=$('#hist-summary');
-  if(!historyPoints.length){el.textContent='Ainda não há medições gravadas.';return}
-  const last=historyPoints.at(-1),now=Date.now()/1000;
-  const total=current&&current.aoVivo&&Date.parse(current.consultadoEm)/1000>last.observed_at?current.apoios:last.count;
-  const base=historyPoints.filter(p=>p.observed_at<=now-86400).at(-1);
-  const sign=v=>(v>=0?'+':'')+nf(v);
-  if(base)el.textContent=sign(total-base.count)+' apoios nas últimas 24 horas.';
-  else{const f=historyPoints[0];el.textContent=sign(total-f.count)+' apoios desde o início do registro, em '+when(new Date(f.observed_at*1000))+'.'}
-}
-function drawHistory(){
-  const all=allHistory(),now=Date.now()/1000,first=all[0],span=first?now-first.observed_at:0;
-  document.querySelectorAll('[data-range]').forEach(b=>{if(b.dataset.range!=='all')b.disabled=span<=Number(b.dataset.range)*3600});
-  if(historyRange!=='all'&&span<=Number(historyRange)*3600)historyRange='all';
-  document.querySelectorAll('[data-range]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.range===historyRange)));
-  const since=historyRange==='all'?0:now-Number(historyRange)*3600,pts=all.filter(p=>p.observed_at>=since);
-  hist.pts=pts;
-  const W=histPlot.clientWidth,H=W<560?210:260,m={l:52,r:52,t:14,b:28},iw=W-m.l-m.r,ih=H-m.t-m.b;
-  histSvg.setAttribute('viewBox','0 0 '+W+' '+H);histSvg.setAttribute('height',H);histSvg.replaceChildren();
-  $('#hist-empty').textContent=pts.length?'':historyPoints.length?'Nenhuma medição neste período.':'Carregando…';
-  if(!pts.length)return;
-  let lo=Math.min(...pts.map(p=>p.count)),hi=Math.max(...pts.map(p=>p.count));
-  const ystep=niceStep(Math.max(hi-lo,4),4);lo=Math.floor(lo/ystep)*ystep;hi=Math.ceil(hi/ystep)*ystep;if(hi===lo)hi=lo+ystep;
-  let t0=pts[0].observed_at,t1=pts.at(-1).observed_at;if(t1-t0<1800){t0-=900;t1+=900}
-  const x=t=>m.l+(t-t0)/(t1-t0)*iw,y=c=>m.t+ih-(c-lo)/(hi-lo)*ih;hist.x=x;hist.y=y;
-  for(let v=lo;v<=hi+1e-9;v+=ystep)histSvg.append(node('line',{x1:m.l,x2:m.l+iw,y1:y(v),y2:y(v),class:v===lo?'g-base':'g-grid'}),node('text',{x:m.l-10,y:y(v)+4,'text-anchor':'end',class:'g-tick'},nf(v)));
-  const steps=[600,1800,3600,7200,10800,21600,43200,86400,172800,604800,1209600,2592000];
-  const tstep=steps.find(s=>(t1-t0)/s<=Math.max(2,iw/90))||2592000,local=OFFSET*60;
-  for(let t=Math.ceil((t0+local)/tstep)*tstep-local;t<=t1;t+=tstep){
-    const midnight=((t+local)%86400+86400)%86400===0;
-    const label=tstep>=86400||midnight?fmt(new Date(t*1000),{day:'2-digit',month:'2-digit'}):fmt(new Date(t*1000),{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
-    histSvg.append(node('text',{x:x(t),y:H-8,'text-anchor':'middle',class:'g-tick'},label));
-  }
-  pts.slice(1).forEach((p,i)=>{const prev=pts[i],uncertain=p.reported||prev.reported||p.observed_at-prev.observed_at>600;histSvg.append(node('line',{x1:x(prev.observed_at),y1:y(prev.count),x2:x(p.observed_at),y2:y(p.count),stroke:'var(--sun)',class:'g-line',...(uncertain?{'stroke-dasharray':'5 5'}:{})}))});
-  pts.forEach(p=>{if(p.reported){const px=x(p.observed_at),py=y(p.count);histSvg.append(node('path',{d:`M${px},${py-6} L${px+6},${py} L${px},${py+6} L${px-6},${py} Z`,fill:'var(--bg)',stroke:'var(--sun)','stroke-width':2}))}else if(pts.length<=100)histSvg.append(node('circle',{cx:x(p.observed_at),cy:y(p.count),r:4,fill:'var(--sun)',class:'g-dot'}))});
-  const last=pts.at(-1);
-  histSvg.append(node('text',{x:x(last.observed_at)+10,y:y(last.count)+4,class:'g-end'},nf(last.count)));
-  hist.cross=node('line',{class:'g-cross',y1:m.t,y2:m.t+ih,visibility:'hidden'});
-  hist.mark=node('circle',{r:5,fill:'var(--sun)',class:'g-dot',visibility:'hidden'});
-  histSvg.append(hist.cross,hist.mark);
-  histSvg.setAttribute('aria-label','Total de apoios: '+nf(pts[0].count)+' em '+historyLabel(pts[0])+' e '+nf(last.count)+' em '+historyLabel(last)+'. Marcos da conversa e leituras do Senado; fontes na tabela abaixo.');
-  histInteraction.refresh();
-}
-const histInteraction=interactive(histPlot,{
-  count:()=>hist.pts.length,initial:()=>hist.pts.length-1,bigStep:10,
-  nearest(px){let best=0,d=Infinity;hist.pts.forEach((p,i)=>{const dd=Math.abs(hist.x(p.observed_at)-px);if(dd<d){d=dd;best=i}});return best},
-  focus(i){
-    const p=hist.pts[i],px=hist.x(p.observed_at),py=hist.y(p.count),prev=hist.pts[i-1];
-    hist.cross.setAttribute('x1',px);hist.cross.setAttribute('x2',px);hist.cross.setAttribute('visibility','visible');
-    hist.mark.setAttribute('cx',px);hist.mark.setAttribute('cy',py);hist.mark.setAttribute('visibility','visible');
-    histTip.replaceChildren();const b=document.createElement('b');b.textContent=nf(p.count)+' apoios';
-    histTip.append(b,document.createElement('br'),historyLabel(p),document.createElement('br'),historySource(p));
-    placeTip(histTip,histPlot,px,py);
-  },
-  blur(){histTip.hidden=true;hist.cross?.setAttribute('visibility','hidden');hist.mark?.setAttribute('visibility','hidden')}
-});
 function rowsInto(tbody,rows){tbody.replaceChildren(...rows.map(r=>{const tr=document.createElement('tr');r.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});return tr}))}
-async function loadHistory(){
-  try{
-    const r=await fetch('./data/history.json',{cache:'no-store'});if(!r.ok)throw Error();
-    const d=await r.json();if(!Array.isArray(d.pontos))throw Error();
-    historyPoints=d.pontos.filter(p=>Number.isSafeInteger(p.count)&&Number.isSafeInteger(p.observed_at));
-    drawHistory();histSummary();
-    rowsInto($('#hist-rows'),allHistory().reverse().map(p=>[historyLabel(p),nf(p.count),historySource(p)]));
-  }catch(e){if(!historyPoints.length){$('#hist-empty').textContent='Histórico indisponível no momento.';$('#hist-summary').textContent='Não foi possível carregar os registros.'}}
-}
-document.querySelectorAll('[data-range]').forEach(b=>b.addEventListener('click',()=>{historyRange=b.dataset.range;drawHistory()}));
 
 /* ---------- O ano ---------- */
 const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -854,13 +786,10 @@ function yearText(){
   const dark7=cnt(d=>d.rise+60>420);
   $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
   $('#year-city').textContent=city+', '+place.uf;
-  const r=[Math.min(...days.map(d=>d.rise)),Math.max(...days.map(d=>d.rise))],s=[Math.min(...days.map(d=>d.set)),Math.max(...days.map(d=>d.set))];
   const items=[
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
     ['Dias com o sol nascendo depois das 6h',nf(dark[0]),nf(dark[1]),'dias'],
-    ['Pôr do sol mais tarde do ano',hhmm(s[1]),hhmm(s[1]+60),''],
-    ['Nascer do sol mais tarde do ano',hhmm(r[1]),hhmm(r[1]+60),''],
-    ['Dias com o sol nascendo depois das 7h, limite usado no estudo do Senado de 2005',nf(cnt(d=>d.rise>420)),nf(dark7),'dias']];
+  ];
   $('#versus').replaceChildren(...items.map(([label,a,b,u])=>{
     const div=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;
     const sp=(c,t)=>{const e=document.createElement('span');e.className=c;e.textContent=t;return e};
@@ -870,110 +799,17 @@ function yearText(){
   rowsInto($('#sun-rows'),days.filter(d=>d.date.getUTCDate()===1||d.date.getUTCDate()===15).map(d=>[fmt(d.date,{day:'2-digit',month:'2-digit'}),hhmm(d.rise),hhmm(d.rise+60),hhmm(d.set),hhmm(d.set+60)]));
 }
 
-/* ---------- Relógio × sol ---------- */
-// Referências do IBGE (Localidades do Brasil 2022): sedes de São Paulo e Brasília
-const SAO_PAULO=[-23.5548,-46.5790],BRASILIA=[-15.7843,-47.9081];
-// Meio-dia solar médio no relógio UTC−3: o fuso é acertado pelo meridiano de 45° O, e cada grau vale 4 minutos
-const meanNoon=lon=>720+(-45-lon)*4;
-let noonProgress=0,noonSeen=false;
-function minutesPhrase(d){const m=Math.round(Math.abs(d));return(m===1?'1 minuto':m+' minutos')+(d<0?' antes':' depois')}
-function noonText(){
-  const now=meanNoon(place.lon),d=now-720,p=d+60,dist=Math.round(Math.abs(place.lon+45)*111.32*Math.cos(place.lat*Math.PI/180)/10)*10;
-  const noons=year.days.map(x=>x.noon);
-  $('#noon-title').textContent='Hoje, em '+place.name+', o sol chega ao ponto mais alto às '+hhmm(today.noon)+'.';
-  $('#noon-lead').textContent='O horário de Brasília é acertado pelo meridiano de 45° O, a cerca de '+nf(dist)+' km a oeste. Por isso, em média, o sol chega ao topo '+minutesPhrase(d)+' do meio-dia do relógio. Com UTC−2, chegaria '+minutesPhrase(p)+(Math.abs(p)>Math.abs(d)?', mais longe do meio-dia do relógio do que hoje.':'.');
-  $('#noon-note').textContent='Média do ano, pela longitude. No dia a dia o horário varia entre '+hhmm(Math.min(...noons))+' e '+hhmm(Math.max(...noons))+' com o relógio de hoje, porque a órbita da Terra não é um círculo perfeito.';
-  const decLatest=(lat,lon)=>{let m=0;for(let dd=1;dd<=31;dd++)m=Math.max(m,toLocal(SunCalc.getTimes(new Date(Date.UTC(year.y,11,dd,15)),lat,lon).sunset));return m};
-  const here=decLatest(place.lat,place.lon),sp=decLatest(...SAO_PAULO);
-  const f=$('#noon-fact');f.replaceChildren();const b=t=>{const e=document.createElement('b');e.textContent=t;return e};
-  f.append('Mesmo relógio, outro sol: em dezembro, o sol se põe no máximo às ',b(hhmm(here)),' em '+place.name+' e às ',b(hhmm(sp)),' em São Paulo.');
-}
-function drawNoon(){
-  const svg=$('#noon-svg'),W=svg.clientWidth;if(!W||!today)return;
-  const narrow=W<560,pad=narrow?26:40,lo=660,hi=780,x=v=>pad+(clamp(v,lo,hi)-lo)/(hi-lo)*(W-2*pad),H=128,ay=86;
-  const now=meanNoon(place.lon),prop=now+60,cur=now+60*noonProgress,br=meanNoon(BRASILIA[1]);
-  svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('height',H);svg.replaceChildren();
-  svg.append(node('line',{x1:x(lo),x2:x(hi),y1:ay,y2:ay,stroke:'var(--line)','stroke-width':2}));
-  for(let v=lo;v<=hi;v+=narrow?30:15){
-    const noon=v===720;
-    svg.append(node('line',{x1:x(v),x2:x(v),y1:ay-(noon?10:5),y2:ay+(noon?10:5),stroke:noon?'var(--ink)':'var(--ink-3)','stroke-width':noon?1.5:1}));
-    svg.append(node('text',{x:x(v),y:ay+28,'text-anchor':'middle',class:noon?'n-noon':'n-tick'},hhmm(v)));
-  }
-  svg.append(node('line',{x1:x(br),x2:x(br),y1:12,y2:ay,stroke:'var(--ink-3)','stroke-width':1}));
-  svg.append(node('text',{x:x(br),y:8,'text-anchor':'middle',class:'n-ref'},'Brasília'));
-  if(noonProgress>0)svg.append(node('line',{x1:x(now),x2:x(cur),y1:ay,y2:ay,stroke:'var(--sun)','stroke-width':3,'stroke-linecap':'round'}));
-  const label=(v,t1,t2,anchor)=>{const lx=x(v)+(anchor==='end'?6:-6);svg.append(node('text',{x:lx,y:36,'text-anchor':anchor,class:'n-lab'},t1),node('text',{x:lx,y:54,'text-anchor':anchor,class:'n-sub'},t2))};
-  svg.append(node('circle',{cx:x(now),cy:ay,r:8,fill:'var(--now)',stroke:'var(--bg)','stroke-width':3}));
-  label(now,'Hoje',hhmm(now),'end');
-  if(noonProgress>0){svg.append(node('circle',{cx:x(cur),cy:ay,r:8,fill:'var(--sun)',stroke:'var(--bg)','stroke-width':3}));if(noonProgress>.35)label(cur,'Com UTC−2',hhmm(prop),x(cur)>W-100?'end':'start')}
-  svg.setAttribute('aria-label','Em '+place.name+', o sol fica no ponto mais alto, em média, às '+hhmm(now)+' no relógio de hoje e às '+hhmm(prop)+' com UTC−2. Em Brasília, às '+hhmm(br)+'.');
-}
-function revealNoon(){if(noonSeen)return;noonSeen=true;setTimeout(()=>tween(1100,t=>{noonProgress=t;drawNoon()}),300)}
-
-/* ---------- Rotina ---------- */
-// Horários de exemplo do dia a dia; ficam iguais no relógio, o sol é que muda de lugar
-const MOMENTS=[[360,'Sair de casa'],[420,'Início das aulas'],[570,'Recreio'],[720,'Almoço'],[1080,'Saída do trabalho'],[1110,'Caminhada']];
-let routineDay='hoje';
-function routineBase(){
-  if(routineDay==='jun')return Date.UTC(year.y,5,21)-OFFSET*6e4;
-  if(routineDay==='dez')return Date.UTC(year.y,11,21)-OFFSET*6e4;
-  return todayBase();
-}
-function drawRoutine(){
-  const base=routineBase(),{lat,lon}=place,t=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
-  const riseAt=t.sunrise.getTime(),setAt=t.sunset.getTime(),rise=toLocal(t.sunrise),set=toLocal(t.sunset),noon=toLocal(t.solarNoon);
-  const items=MOMENTS.map(([m,label])=>{
-    const li=document.createElement('li');li.className='moment';
-    const head=document.createElement('div');head.className='m-head';
-    const tm=document.createElement('span');tm.className='m-time';tm.textContent=hhmm(m);
-    const lb=document.createElement('span');lb.className='m-label';lb.textContent=label;
-    head.append(tm,lb);
-    const pair=document.createElement('div');pair.className='m-pair';
-    [['hoje',0],['UTC−2',60]].forEach(([tag,off])=>{
-      const real=m-off,at=base+real*6e4,alt=SunCalc.getPosition(new Date(at),lat,lon).altitude*180/Math.PI;
-      const [top,mid,hor]=skyAt(alt),seaTop=mix(mix(top,'#03101f',.45),hor,.25);
-      const wrap=document.createElement('div');
-      const fig=document.createElement('figure');fig.className='m-sky'+(alt<-8?' night':'');
-      fig.style.background='linear-gradient(180deg,'+top+' 0%,'+mid+' 46%,'+hor+' 72%,'+seaTop+' 72%,#02040a 100%)';
-      if(alt>-1){
-        const sun=document.createElement('span'),warm=clamp(alt/28,0,1),core=mix('#ff7a36','#fff4dc',warm);
-        sun.className='m-sun';sun.style.background=core;sun.style.boxShadow='0 0 14px 4px '+core+'88';
-        sun.style.left=(12+76*clamp((at-riseAt)/(setAt-riseAt),0,1))+'%';
-        sun.style.top='calc('+(72-clamp(alt,0,90)/90*62)+'% - 16px)';
-        fig.append(sun);
-      }
-      const tg=document.createElement('span');tg.className='m-tag'+(off?' new':'');tg.textContent=tag;fig.append(tg);
-      const st=document.createElement('span');st.className='m-state';
-      st.textContent=alt>=0?'sol a '+Math.round(alt)+'°':real<noon?'nasce '+hhmm(rise+off):'pôr '+hhmm(set+off);
-      fig.setAttribute('aria-label',(off?'Com UTC−2':'Hoje')+', às '+hhmm(m)+': '+st.textContent);fig.setAttribute('role','img');
-      wrap.append(fig,st);pair.append(wrap);
-    });
-    li.append(head,pair);return li;
-  });
-  $('#moments').replaceChildren(...items);
-  const when=routineDay==='jun'?'em 21 de junho':routineDay==='dez'?'em 21 de dezembro':'hoje';
-  $('#routine-note').textContent='Horários de exemplo. Céu calculado para '+place.name+', '+place.uf+', '+when+'. O "sol a" é a altura do sol sobre o horizonte: quanto maior, mais forte.';
-}
-document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{
-  routineDay=b.dataset.day;
-  document.querySelectorAll('[data-day]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  drawRoutine();
-}));
-
 /* ---------- Escolha da cidade ---------- */
 const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
 function select(code,remember){
   const c=byCode.get(Number(code));if(!c)return;place=c;
-  document.querySelectorAll('[data-city]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.city)===c.code)));
-  q.value=CAPITALS.has(c.code)?'':c.name+', '+c.uf;
+  q.value=c.name+', '+c.uf;
   try{
-    today=solarToday();renderHero();
-    year=solarYear();yearText();drawYear();noonText();drawNoon();drawRoutine();
-    $('#ruler-hint').textContent='Arraste para mudar a hora · céu de '+c.name+', '+c.uf;
+    sun=solarDay();renderHero();
+    year=solarYear();yearText();drawYear();
   }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
   if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
 }
-document.querySelectorAll('[data-city]').forEach(b=>b.addEventListener('click',()=>{placeMsg.textContent='';select(b.dataset.city,true)}));
 
 function search(text){
   let term=fold(text).trim().replace(/\s+/g,' '),uf=null;
@@ -994,8 +830,8 @@ function paintActive(){
   if(active>=0){q.setAttribute('aria-activedescendant','opt-'+opts[active].code);list.children[active].scrollIntoView({block:'nearest'})}
   else q.removeAttribute('aria-activedescendant');
 }
-function openList(items){
-  opts=items;active=items.length?0:-1;
+function openList(items,pick=true){
+  opts=items;active=items.length&&pick?0:-1;
   if(items.length)list.replaceChildren(...items.map(c=>{
     const li=document.createElement('li'),s=document.createElement('small');
     li.id='opt-'+c.code;li.setAttribute('role','option');li.setAttribute('aria-label',c.name+', '+c.uf);li.append(c.name);s.textContent=c.uf;li.append(s);
@@ -1006,9 +842,9 @@ function openList(items){
 }
 function closeList(){list.hidden=true;q.setAttribute('aria-expanded','false');opts=[];active=-1;q.removeAttribute('aria-activedescendant')}
 function choose(c){closeList();placeMsg.textContent='';select(c.code,true);q.blur()}
-q.addEventListener('focus',()=>q.select());
-q.addEventListener('input',()=>{q.value.trim()?openList(search(q.value)):closeList()});
-q.addEventListener('blur',()=>{closeList();q.value=CAPITALS.has(place.code)?'':place.name+', '+place.uf});
+q.addEventListener('focus',()=>{q.select();openList(cities.filter(c=>CAPITALS.has(c.code)),false)});
+q.addEventListener('input',()=>openList(q.value.trim()?search(q.value):cities.filter(c=>CAPITALS.has(c.code)),!!q.value.trim()));
+q.addEventListener('blur',()=>{closeList();q.value=place.name+', '+place.uf});
 q.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown'||e.key==='ArrowUp'){
     e.preventDefault();
@@ -1042,17 +878,17 @@ const io=new IntersectionObserver(entries=>entries.forEach(e=>{
   if(!e.isIntersecting)return;
   e.target.classList.add('in');
   if(e.target===countTitle&&!dotsSeen){dotsSeen=true;if(current)animateCount(current.apoios)}
-  if(e.target===noonFig)revealNoon();
   if(e.target===yearPlot&&!yearShown){yearShown=true;setTimeout(()=>setOffset(60,true),500)}
   io.unobserve(e.target);
 }),{threshold:.15});
-const countTitle=$('#apoios-title'),noonFig=$('#noon');
+const countTitle=$('#apoios-title');
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(yearPlot);
 
 let frame;
-new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawHistory();drawYear();drawNoon()})}).observe(document.body);
+new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawYear()})}).observe(document.body);
 const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
 select(byCode.has(fromLink)?fromLink:2611606,false);drawStars();drawDots(0);
+if(!reduced)setTimeout(()=>{if(following&&scrollY<innerHeight/2)playStory()},1600);
 update();
 })();
 </script>
