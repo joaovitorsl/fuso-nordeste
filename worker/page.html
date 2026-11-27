@@ -138,6 +138,7 @@ button{font:inherit;color:inherit}
 .options li small{color:var(--ink-3);font-size:14px}
 .options li[aria-selected=true]{background:rgb(255 255 255 / .1)}
 .options .none{cursor:default;color:var(--ink-3)}
+.options .head{display:block;cursor:default;color:var(--ink-3);font-size:13px;line-height:1.4;padding:6px 12px 8px}
 .place-msg{margin:8px 0 0;font-size:14px;color:var(--ink);min-height:0}
 .place-msg:empty{display:none}
 @media (max-width:640px){.search{flex:1 1 100%}}
@@ -146,9 +147,8 @@ button{font:inherit;color:inherit}
 .seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
 .seg button{border:0;background:none;border-radius:999px;padding:6px 14px;font-size:14px;color:var(--ink-2);cursor:pointer;transition:background .3s ease,color .3s ease,transform .15s}
 .seg button:active,.play:active,.cta:active,.bar-cta:active,.bell:active{transform:scale(.95)}
-.seg button:hover:not(:disabled){color:var(--ink)}
 .seg button[aria-pressed=true]{background:var(--ink);color:#0b0d16;font-weight:600}
-.seg button[aria-pressed=true]:hover:not(:disabled){color:#0b0d16}
+@media (hover:hover){.seg button:hover:not(:disabled):not([aria-pressed=true]){color:var(--ink)}}
 .seg button:disabled{opacity:.35;cursor:default}
 
 /* Simulador: relógio, fuso, régua, dia e horários do dia a dia */
@@ -182,7 +182,8 @@ button{font:inherit;color:inherit}
 .play:hover{border-color:rgb(255 255 255 / .6);background:rgb(255 255 255 / .08)}
 .play i{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
 .play[aria-pressed=true] i{width:8px;height:10px;border:0;border-left:3px solid;border-right:3px solid}
-.clock-side .scene{color:var(--glow);font-weight:600;font-size:15px;min-height:1.4em}
+.clock-side .scene{color:var(--glow);font-weight:600;font-size:15px;min-height:1.4em;transition:opacity .45s ease}
+.scene.out{opacity:0}
 .scene.in{animation:scene-in .6s cubic-bezier(.2,.8,.2,1)}
 @keyframes scene-in{from{opacity:0;transform:translateX(-10px);filter:blur(4px)}}
 .clock-side .state,.clock-side .other{transition:color .3s}
@@ -220,12 +221,19 @@ button{font:inherit;color:inherit}
 .before p{margin:8px 0 0;color:var(--ink-2);font-size:16px}
 .before .note{grid-column:1/-1;margin:0}
 .ideas{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.ideas li{display:grid;grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:'t n' 's n';gap:2px 12px;align-items:baseline}
+.ideas li{display:grid;grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:'t n' 's n' 'b b';gap:2px 12px;align-items:baseline}
 .ideas a{grid-area:t;font-size:16px;text-decoration:none;color:var(--ink-2)}
 .ideas a:hover{text-decoration:underline;color:var(--ink)}
 .ideas small{grid-area:s;font-size:13px;color:var(--ink-3)}
 .ideas b{grid-area:n;text-align:right;font-size:20px;font-weight:600;align-self:center}
+.ideas .track{grid-area:b;display:block;height:8px;margin-top:6px;border-radius:4px;background:var(--dim)}
+.ideas .track i{display:block;height:100%;width:0;border-radius:4px;background:var(--ink-3);transition:width .9s ease}
 .ideas .this a{color:var(--ink);font-weight:600}
+.before .push{color:var(--ink);font-weight:600;margin-top:16px}
+.share{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 18px;border-radius:999px;border:2px solid currentColor;background:none;color:var(--ink);font-weight:700;font-size:16px;cursor:pointer;transition:background .2s,color .2s,transform .15s}
+.share:hover{background:var(--ink);color:var(--sun)}
+.share:active{transform:scale(.95)}
+.share svg{width:17px;height:17px}
 @media (max-width:860px){.before{grid-template-columns:1fr;margin-top:56px}}
 
 /* Pontos */
@@ -234,6 +242,8 @@ button{font:inherit;color:inherit}
 #apoios .cta{background:#121212;color:var(--sun)}
 #apoios .cta:hover{background:#2a2a2a}
 #apoios .cta:after{background:linear-gradient(105deg,transparent 35%,rgb(255 255 255 / .18) 50%,transparent 65%)}
+#apoios .ideas .track i{background:rgb(18 18 18 / .55)}
+#apoios .ideas .this .track i{background:#00507d}
 #apoios .link{color:var(--ink)}
 #apoios a:focus-visible,#apoios button:focus-visible{outline-color:#121212}
 /* Contagem e estado da consulta ao Senado */
@@ -271,36 +281,6 @@ button{font:inherit;color:inherit}
 .tip td+td{padding-left:14px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
 .tip tr:first-child td{color:var(--ink-3);font-size:12px}
 .note{font-size:14px;color:var(--ink-3);margin:14px 0 0;max-width:60em}
-/* Consulta de horários: painel independente, sem rolagem dentro da página */
-.table-open{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:11px 16px;color:var(--ink);background:rgb(255 255 255 / .06);border:1px solid rgb(255 255 255 / .3);border-radius:8px;font-weight:600;cursor:pointer}
-.table-open:hover{background:rgb(255 255 255 / .12);border-color:var(--glow)}
-.table-open:disabled{opacity:.5;cursor:wait}
-.sun-drawer{margin-top:30px;max-width:860px;background:#101a30;color:#f2f1eb;border:1px solid rgb(255 255 255 / .18);border-radius:14px;overflow:hidden}
-.sun-drawer[hidden]{display:none}
-.drawer-head{padding:22px 26px 20px;border-bottom:1px solid rgb(255 255 255 / .13)}
-.drawer-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
-.drawer-label{margin:0;color:#ffd329;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.drawer-close{display:grid;place-items:center;flex:none;width:40px;height:40px;border:1px solid rgb(255 255 255 / .3);border-radius:50%;background:transparent;color:#fff;font-size:27px;line-height:1;cursor:pointer}
-.drawer-close:hover{background:rgb(255 255 255 / .1)}
-.drawer-head h3{font-family:var(--display);font-size:clamp(38px,6vw,54px);font-weight:400;line-height:1;margin:12px 0 8px}
-.drawer-head p:not(.drawer-label){margin:0;color:#c5ccdc;font-size:14px;line-height:1.5}
-.drawer-body{padding:18px 26px 36px}
-.drawer-tools{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:16px}
-.drawer-city{margin:0;font-size:15px;font-weight:600;color:#fff}
-.month-picker{display:flex;align-items:center;gap:10px;font-size:14px;color:#c5ccdc}
-.month-picker select{font:inherit;color:#fff;background:#1c2c49;border:1px solid rgb(255 255 255 / .3);border-radius:6px;padding:8px 28px 8px 10px}
-.table-wrap{overflow-x:auto}
-table.data{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
-table.data th,table.data td{padding:12px 6px;text-align:right;border-bottom:1px solid rgb(255 255 255 / .11);white-space:nowrap}
-table.data tbody th,table.data thead th[rowspan]{text-align:left}
-table.data thead th[colspan]{text-align:center}
-table.data thead th{font-size:12px;font-weight:600;color:#c5ccdc}
-table.data thead tr:first-child th{padding-bottom:5px;color:#fff;font-size:14px}
-table.data thead tr:nth-child(2) th{padding-top:3px}
-table.data tbody th{font-weight:500;color:#c5ccdc}
-table.data tbody td:nth-child(3),table.data tbody td:nth-child(5){color:#ffdc54;font-weight:600}
-.drawer-note{margin:18px 0 0;color:#aebbd1;font-size:13px;line-height:1.5}
-@media(max-width:600px){.drawer-head{padding:18px}.drawer-body{padding:16px 18px 24px}table.data th,table.data td{padding-left:3px;padding-right:3px}}
 
 /* Ano */
 .year-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
@@ -415,19 +395,6 @@ footer p{margin:0}
         <div class="plot" id="year-plot" tabindex="0" aria-describedby="year-title"><canvas id="year-canvas" role="img"></canvas><div class="tip" id="year-tip" hidden></div></div>
         <div class="legend-sky"><span><i style="background:#0b1022"></i>Noite</span><span><i style="background:#4b3f7a"></i>Crepúsculo</span><span><i style="background:#f09a58"></i>Nascer e pôr</span><span><i style="background:#6f9fd6"></i>Dia</span></div>
         <p class="note">Calculado dia a dia para a sede municipal de <span id="year-city">Recife</span>, com coordenadas do <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> e <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
-        <button class="table-open" id="table-open" type="button" aria-expanded="false" aria-controls="sun-drawer" disabled>Ver horários por mês <span aria-hidden="true">☼</span></button>
-        <section class="sun-drawer" id="sun-drawer" aria-labelledby="drawer-title" hidden>
-  <div class="drawer-head">
-    <div class="drawer-top"><p class="drawer-label">O ano inteiro</p><button class="drawer-close" id="drawer-close" type="button" aria-label="Fechar horários">×</button></div>
-    <h3 id="drawer-title">O sol ao longo do ano.</h3>
-    <p id="drawer-description">Compare o relógio de hoje com a proposta nos dias 1 e 15 de cada mês.</p>
-  </div>
-  <div class="drawer-body">
-    <div class="drawer-tools"><p class="drawer-city" id="drawer-city"></p><label class="month-picker" for="sun-month">Mês <select id="sun-month"><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></label></div>
-    <div class="table-wrap"><table class="data"><colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup><thead><tr><th scope="col" rowspan="2">Dia</th><th scope="colgroup" colspan="2">Nascer</th><th scope="colgroup" colspan="2">Pôr</th></tr><tr><th scope="col">Hoje</th><th scope="col">UTC−2</th><th scope="col">Hoje</th><th scope="col">UTC−2</th></tr></thead><tbody id="sun-rows"></tbody></table></div>
-    <p class="drawer-note">Hoje: UTC−3. Proposta: UTC−2. Horários calculados para a sede municipal, sem considerar o relevo.</p>
-  </div>
-        </section>
       </div>
       <dl class="versus" id="versus"></dl>
     </div>
@@ -456,20 +423,21 @@ footer p{margin:0}
     <div class="before" aria-labelledby="before-title">
       <div>
         <h3 id="before-title">Ideias parecidas no e-Cidadania</h3>
-        <p id="before-lead">Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios.</p>
-        <p>As propostas anteriores já foram encerradas. Esta ainda está aberta: se você acredita na ideia, compartilhe com alguém que também gostaria de conhecê-la.</p>
+        <p>Desde 2018, sete ideias parecidas passaram pelo portal. Somadas, tiveram 48 apoios. Todas expiraram.</p>
+        <p class="push">Esta já tem <span id="push-n">—</span>. Se não chegar a 20.000 até 11 de março, expira também. Ela só vai longe se cada pessoa trouxer mais uma.</p>
+        <button class="share" id="share" type="button">Mandar para alguém <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11 4l6 6-6 6M17 10H8a5 5 0 0 0-5 5v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
       <ol class="ideas" id="ideas">
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><b class="num">13</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><b class="num">6</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><b class="num">2</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><b class="num">26</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><b class="num">0</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><b class="num">1</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><b class="num">0</b></li>
-        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><b class="num" id="idea-now-n">—</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><span class="track"><i data-n="13"></i></span><b class="num">13</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><span class="track"><i data-n="6"></i></span><b class="num">6</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><span class="track"><i data-n="2"></i></span><b class="num">2</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><span class="track"><i data-n="26"></i></span><b class="num">26</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><span class="track"><i data-n="1"></i></span><b class="num">1</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><span class="track"><i id="idea-now"></i></span><b class="num" id="idea-now-n">—</b></li>
       </ol>
-      <p class="note">Apoios confirmados nas páginas oficiais em 27/11/2026. As sete anteriores estão encerradas e não recebem mais apoios.</p>
+      <p class="note">Apoios das ideias anteriores conferidos nas páginas oficiais em 27/11/2026.</p>
     </div>
   </div>
 </section>
@@ -484,7 +452,7 @@ footer p{margin:0}
       <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h. E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
       <details><summary>Por que não só antecipar os horários?</summary><p>Daria um efeito parecido: entrar às 7h e sair às 16h no relógio de hoje equivale, em relação ao sol, a entrar às 8h e sair às 17h com UTC−2. A diferença é a coordenação. Antecipar depende de cada escola, empresa e órgão, e nem todo mundo tem autonomia para isso; mudar o fuso muda o relógio de todos de uma vez, mas não garante que os horários continuariam os mesmos no relógio.</p></details>
       <details><summary>E o sono?</summary><p>A relação entre luz, horários e sono é complexa. Um <a href="https://pubmed.ncbi.nlm.nih.gov/31030116/" target="_blank" rel="noopener noreferrer">estudo nos Estados Unidos</a> (Giuntella e Mazzonna, 2019) comparou cidades dos dois lados de fronteiras de fuso: uma hora a mais de luz no fim do dia esteve associada a 19 minutos a menos de sono, em média, quando os horários de trabalho e escola são rígidos. É outro país, com outra latitude e outras rotinas; o resultado não prevê o que aconteceria aqui, mas mostra que a questão merece estudo.</p></details>
-      <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. A Paraíba já adiantou o relógio em uma hora nos horários de verão de 1988–89, 1989–90, 1999–2000 e 2001–02 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>), mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
+      <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. Os cinco estados já adiantaram o relógio em uma hora nos horários de verão de 1985–86 a 1989–90, de 1999–2000 e de 2001–02; Alagoas e Sergipe, também no de 1995–96 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>). Nesses verões, o relógio deles ficava em UTC−2, mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
       <details><summary>Alguém já estudou isso?</summary><p>Sim. Em 2005, um <a href="https://www12.senado.leg.br/publicacoes/estudos-legislativos/tipos-de-estudos/textos-para-discussao/td-19-o-setor-eletrico-e-o-horario-de-verao" target="_blank" rel="noopener noreferrer">estudo da Consultoria Legislativa do Senado</a> (Edmundo Montalvão, Texto para Discussão nº 19) concluiu que RN, PB, PE, AL e SE “podem ser mudados para GMT−2 sem transtornos para a população”, como alternativa ao horário de verão. O critério do autor era que o sol continuasse nascendo antes das 7h, e a análise usou as capitais. O texto é de responsabilidade do autor e não é uma posição do Senado.</p></details>
       <details><summary>Economizaria energia?</summary><p>Não há estudo sobre esta proposta. A experiência mais parecida é o horário de verão, que também adiantava o relógio em uma hora. Ele foi extinto em 2019 (<a href="https://planalto.gov.br/ccivil_03/_ato2019-2022/2019/decreto/d9772.htm" target="_blank" rel="noopener noreferrer">Decreto nº 9.772</a>) porque, segundo o Ministério de Minas e Energia, a economia tinha deixado de ser relevante: com o ar-condicionado, o pico de consumo saiu do começo da noite para o meio da tarde (<a href="https://www.camara.leg.br/noticias/603108-deputados-comemoram-fim-do-horario-de-verao" target="_blank" rel="noopener noreferrer">Agência Câmara</a>). Em 2024, uma nota técnica do ONS voltou a estimar ganhos: até 2,9% menos demanda no pico e cerca de R$ 400 milhões de economia em cinco meses (<a href="https://agenciabrasil.ebc.com.br/economia/noticia/2024-09/economia-com-horario-de-verao-pode-beirar-r-400-milhoes" target="_blank" rel="noopener noreferrer">Agência Brasil</a>). Nada disso se transfere automaticamente para um UTC−2 permanente.</p></details>
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
@@ -552,7 +520,9 @@ function interactive(plot,api){
   const show=i=>{idx=clamp(i,0,api.count()-1);api.focus(idx)};
   const hide=()=>{idx=null;api.blur()};
   plot.addEventListener('pointermove',e=>{if(!api.count())return;const r=plot.getBoundingClientRect();show(api.nearest(e.clientX-r.left))});
-  plot.addEventListener('pointerleave',()=>{if(document.activeElement!==plot)hide()});
+  plot.addEventListener('pointerdown',e=>{if(!api.count())return;const r=plot.getBoundingClientRect();show(api.nearest(e.clientX-r.left))});
+  // no toque, pointerleave vem logo depois de soltar o dedo; a dica fica até tocar fora
+  plot.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&document.activeElement!==plot)hide()});
   plot.addEventListener('blur',hide);
   plot.addEventListener('focus',()=>{if(api.count()&&idx===null)show(api.initial())});
   plot.addEventListener('keydown',e=>{
@@ -634,7 +604,7 @@ function renderHero(){
   const clockText=hhmm(shown),clockEl=$('#clock');
   if(clockEl.dataset.t!==clockText){clockEl.dataset.t=clockText;clockEl.setAttribute('aria-label',clockText);clockEl.replaceChildren(...[...clockText].map(ch=>{const e=document.createElement('span');e.className=ch===':'?'c':'d';e.textContent=ch;e.setAttribute('aria-hidden','true');return e}))}
   $('#sun-state').textContent=state;
-  $('#sun-other').textContent=(zone?'No mesmo horário, UTC−3: ':'No mesmo horário, UTC−2: ')+sunPhrase(60-zone);
+  $('#sun-other').textContent=(zone?'Hoje, UTC−3: ':'Com UTC−2: ')+sunPhrase(60-zone);
   scrub.value=String(Math.round(shown/5)*5);
   scrub.setAttribute('aria-valuetext',hhmm(shown)+' no relógio, '+(zone?'com UTC−2':'hoje')+'. '+state);
   drawRuler();
@@ -659,7 +629,7 @@ function drawRuler(){
   svg.append(node('circle',{cx,cy:zone?36:16,r:8,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':2}));
 }
 let clockGeneration=0,zoneGeneration=0;
-function manual(){clockGeneration++;zoneGeneration++;zoneShown=zone;$('.sim-foot').classList.remove('ended');stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
+function manual(){intro=false;clearTimeout(introTimer);clockGeneration++;zoneGeneration++;zoneShown=zone;$('.sim-foot').classList.remove('ended');stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
 function glideTo(to){const from=clockMin,id=++clockGeneration;tween(700,t=>{if(id===clockGeneration){clockMin=from+(to-from)*t;renderHero()}},()=>{if(id===clockGeneration){clockMin=to;renderHero()}})}
 scrub.addEventListener('input',()=>{clockMin=Number(scrub.value);manual();renderHero()});
 /* Arrastar a régua: toque ou mouse em qualquer ponto, no mesmo eixo desenhado */
@@ -687,47 +657,61 @@ $('#now-btn').addEventListener('click',()=>{
 });
 
 /* ---------- O dia passando ---------- */
-/* O relógio corre sozinho com UTC−2 e para em cenas do dia a dia. O texto de cada cena
-   é só o rótulo; a comparação com o relógio de hoje vem do cálculo do sol, logo abaixo. */
-const SCENES=[[360,'Começo da manhã'],[420,'Entrada na escola'],[540,'Manhã em movimento'],[720,'Hora do almoço'],[900,'Meio da tarde'],[1020,'Saída da escola'],[1080,'Voltando do trabalho'],[1110,'Fim de tarde']];
-const sceneEl=$('#scene'),playBtn=$('#play');
+/* Time-lapse com UTC−2: o relógio desacelera perto de cada cena, sem parar, e termina no
+   pôr do sol. A legenda é só a cena; a comparação com o relógio de hoje vem do cálculo do sol. */
+const SCENES=[[360,'Saindo de casa'],[420,'Entrada na escola'],[720,'Almoço'],[1020,'Saída do trabalho']];
+const sceneEl=$('#scene'),playBtn=$('#play'),simFoot=$('.sim-foot'),simCta=$('#sim-cta');
 let story=null;
 function playLabel(t,on){playBtn.querySelector('span').textContent=t;playBtn.setAttribute('aria-pressed',String(on))}
-function stopStory(){if(story)cancelAnimationFrame(story.raf);story=null;sceneEl.textContent='';playLabel('Ver o dia passar',false);$('#sim-cta').hidden=true;$('.sim-foot').classList.remove('ended')}
-function resumeStory(){
-  if(!story)return;
+function setScene(text){
+  if(!text){sceneEl.classList.add('out');return}
+  if(sceneEl.textContent===text&&!sceneEl.classList.contains('out'))return;
+  sceneEl.textContent=text;sceneEl.classList.remove('out','in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
+}
+function stopStory(){if(story)cancelAnimationFrame(story.raf);story=null;sceneEl.textContent='';sceneEl.classList.remove('out','in');playLabel('Ver o dia passar',false);simCta.hidden=true;simFoot.classList.remove('ended')}
+// minutos de relógio por segundo: devagar perto das cenas e do fim, rápido entre elas
+const smooth=t=>t*t*(3-2*t);
+function storySpeed(x,end){const d=Math.min(end-x,...SCENES.map(([m])=>Math.abs(x-m)));return 5+105*smooth(Math.min(1,d/45))}
+function finishStory(){
+  story=null;playLabel('Ver de novo',false);
+  setScene('O sol se pondo, uma hora mais tarde que hoje.');
+  simCta.hidden=false;simFoot.classList.add('ended');
+}
+function runStory(){
   story.paused=false;story.last=performance.now();playLabel('Pausar',true);
   const step=()=>{
-    if(!story||story.paused)return;
-    const s=story,now=performance.now(),dt=clamp(now-s.last,0,64);s.last=now;
-    if(s.rest>0){
-      s.rest=Math.max(0,s.rest-dt);
-      if(!s.rest){
-        if(s.finishing){
-          const originalZone=s.originalZone;stopStory();setDay('hoje');setZone(originalZone,true);following=true;$('#now-btn').hidden=true;$('#hint-text').hidden=false;
-          let to=nowMinutes()+originalZone;if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;glideTo(to);return;
-        }
-        sceneEl.textContent='';
-      }
-    }else{
-      const target=s.i<SCENES.length?SCENES[s.i][0]:1170;
-      clockMin=Math.min(target,clockMin+dt*.16);renderHero();
-      if(clockMin>=target){
-        if(s.i<SCENES.length){sceneEl.textContent=SCENES[s.i++][1];sceneEl.classList.remove('in');void sceneEl.offsetWidth;sceneEl.classList.add('in');s.rest=1400}
-        else{sceneEl.textContent='Com UTC−2, o sol se põe 1 hora mais tarde no relógio.';s.finishing=true;s.rest=2600}
-      }
-    }
+    const s=story;if(!s||s.paused)return;
+    const now=performance.now(),dt=clamp(now-s.last,0,64)/1000;s.last=now;
+    const end=sun.set+60,ramp=Math.min(1,.25+(clockMin-s.from)/15);
+    clockMin=Math.min(end,clockMin+storySpeed(clockMin,end)*ramp*dt);renderHero();
+    const near=SCENES.find(([m])=>Math.abs(clockMin-m)<22);
+    setScene(near?near[1]:'');
+    if(clockMin>=end){finishStory();return}
     s.raf=requestAnimationFrame(step);
   };
   story.raf=requestAnimationFrame(step);
 }
-function playStory(){
-  const originalZone=zone;clockGeneration++;stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true;
-  if(reduced){setZone(60,false);clockMin=1080;sceneEl.textContent='Comparação às 18h · movimento reduzido';renderHero();return}
-  setZone(60,true);clockMin=330;renderHero();
-  story={i:0,rest:0,paused:false,finishing:false,originalZone};resumeStory();
+/* Abertura: enquanto a cidade não chega (a localização pode levar alguns segundos), o céu fica
+   parado na madrugada, onde a história começa; assim não há salto da hora atual para as 05:20. */
+let intro=!reduced,introTimer;
+function goNow(){clockGeneration++;stopStory();setDay('hoje');setZone(0,true);following=true;$('#now-btn').hidden=true;$('#hint-text').hidden=false;let to=nowMinutes();if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;glideTo(to)}
+function startIntro(){
+  if(!intro)return;
+  if(document.activeElement===q){introTimer=setTimeout(startIntro,500);return} // escolhendo a cidade: espera
+  intro=false;
+  if(scrollY<innerHeight/2)playStory();else goNow();
 }
-playBtn.addEventListener('click',()=>{if(!story){playStory();return}if(story.paused){resumeStory();return}story.paused=true;cancelAnimationFrame(story.raf);playLabel('Continuar',false)});
+function playStory(){
+  clockGeneration++;stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true;
+  if(reduced){setZone(60,false);clockMin=sun.set+60;renderHero();finishStory();return}
+  setZone(60,true);clockMin=320;renderHero();
+  story={from:320};runStory();
+}
+playBtn.addEventListener('click',()=>{
+  if(!story){playStory();return}
+  if(story.paused){runStory();return}
+  story.paused=true;cancelAnimationFrame(story.raf);playLabel('Continuar',false);
+});
 
 setInterval(()=>{if(following){sun=solarDay();clockMin=nowMinutes()+zone;renderHero()}},15000);
 
@@ -756,9 +740,17 @@ function renderCount(){
 }
 /* Barras das ideias parecidas, na mesma escala da ideia atual (contagem ao vivo) */
 function drawIdeas(n){
+  const bars=[...document.querySelectorAll('#ideas .track i')],max=Math.max(n,...bars.map(i=>Number(i.dataset.n)||0));
+  bars.forEach(i=>{const v=i.id==='idea-now'?n:Number(i.dataset.n);i.style.width=v?Math.max(.6,v/max*100)+'%':'0'});
   $('#idea-now-n').textContent=nf(n);
-  $('#before-lead').textContent='Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios; a maior, 26. Esta tem '+nf(n)+'.';
+  $('#push-n').textContent=nf(n)+(n>48?', mais que todas juntas':'');
 }
+/* Mandar para alguém: compartilhamento do sistema; sem ele, WhatsApp */
+$('#share').addEventListener('click',async()=>{
+  const url=location.origin+location.pathname,text='Uma ideia no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE. Veja o céu da sua cidade e apoie:';
+  if(navigator.share){try{await navigator.share({title:'Fuso Nordeste',text,url})}catch(e){}return}
+  window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url),'_blank','noopener');
+});
 function setLive(kind,text){$('#bar').dataset.live=kind;$('#live-line').textContent=text}
 
 async function readCurrent(){
@@ -833,19 +825,9 @@ bell.addEventListener('click',async()=>{
   showToast(['Pronto: você recebe um aviso a cada apoio novo enquanto esta página estiver aberta.']);
 });
 
-function rowsInto(tbody,rows){tbody.replaceChildren(...rows.map(r=>{const tr=document.createElement('tr');r.forEach((v,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=v;tr.append(cell)});return tr}))}
-const drawer=$('#sun-drawer'),tableOpen=$('#table-open');
-function closeDrawer(focus=false){drawer.hidden=true;tableOpen.setAttribute('aria-expanded','false');if(focus)tableOpen.focus()}
-tableOpen.addEventListener('click',()=>{if(!drawer.hidden){closeDrawer();return}drawer.hidden=false;tableOpen.setAttribute('aria-expanded','true')});
-$('#drawer-close').addEventListener('click',()=>closeDrawer(true));
-document.addEventListener('pointerdown',e=>{if(!drawer.hidden&&!drawer.contains(e.target)&&!tableOpen.contains(e.target))closeDrawer()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!drawer.hidden){e.preventDefault();closeDrawer(true)}});
-
 /* ---------- O ano ---------- */
 const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const MONTHS_LONG=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-const monthSelect=$('#sun-month');monthSelect.value=String(Number(fmt(new Date(),{month:'numeric'}))-1);
-monthSelect.addEventListener('change',renderMonth);
 const yearPlot=$('#year-plot'),yearC=$('#year-canvas'),yearTip=$('#year-tip');
 let year={days:[]},yearOffset=0,yearShown=false;
 function solarYear(){
@@ -885,7 +867,7 @@ function drawYear(){
   for(let mo=0;mo<12;mo++){const i0=days.findIndex(d=>d.date.getUTCMonth()===mo),i1=mo===11?n:days.findIndex(d=>d.date.getUTCMonth()===mo+1);ctx.fillText(narrow?MONTHS[mo][0].toUpperCase():MONTHS[mo],m.l+(i0+i1)/2*cw,H-6)}
   if(year.today>=0){const tx=Math.round(m.l+(year.today+.5)*cw)+.5;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.moveTo(tx,m.t);ctx.lineTo(tx,m.t+ih);ctx.stroke()}
   if(year.hover!=null){const hx=Math.round(m.l+(year.hover+.5)*cw)+.5;ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(hx,m.t);ctx.lineTo(hx,m.t+ih);ctx.stroke()}
-  yearC.setAttribute('aria-label','Mapa de luz do ano em '+place.name+', relógio '+(off?'UTC−2':'UTC−3')+'. Tabela por mês disponível abaixo.');
+  yearC.setAttribute('aria-label','Mapa de luz do ano em '+place.name+', relógio '+(off?'UTC−2':'UTC−3')+'. Toque, passe o mouse ou use as setas para ver os horários de cada dia.');
 }
 const yearInteraction=interactive(yearPlot,{
   count:()=>year.days.length,initial:()=>Math.max(0,year.today),bigStep:7,
@@ -915,7 +897,6 @@ function yearText(){
   const dark7=cnt(d=>d.rise+60>420);
   $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
   $('#year-city').textContent=city+', '+place.uf;
-  $('#drawer-city').textContent=city+', '+place.uf+' · '+thisYear();
   const items=[
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
     ['Dias com o sol nascendo depois das 6h',nf(dark[0]),nf(dark[1]),'dias'],
@@ -926,23 +907,23 @@ function yearText(){
     dd.append(sp('a',a),sp('arrow','→'),sp('b',b));if(u)dd.append(sp('u',u));
     dd.setAttribute('aria-label','hoje '+a+', com a proposta '+b+(u?' '+u:''));
     div.append(dt,dd);return div}));
-  renderMonth();
-  tableOpen.disabled=false;
 }
-function renderMonth(){rowsInto($('#sun-rows'),year.days.filter(d=>d.date.getUTCMonth()===Number(monthSelect.value)&&(d.date.getUTCDate()===1||d.date.getUTCDate()===15)).map(d=>[fmt(d.date,{day:'2-digit',month:'2-digit'}),hhmm(d.rise),hhmm(d.rise+60),hhmm(d.set),hhmm(d.set+60)]))}
 
 /* ---------- Escolha da cidade ---------- */
 const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
 let geoRequest=0,geoTimer=null,cityReady=false;
 function cancelGeo(){geoRequest++;clearTimeout(geoTimer);$('#near').removeAttribute('aria-busy')}
-function select(code,remember){
-  const c=byCode.get(Number(code));if(!c)return;place=c;
-  cancelGeo();
-  q.value=c.name+', '+c.uf;
+function show(c){
+  place=c;
   try{
     sun=solarDay();renderHero();
     year=solarYear();yearText();drawYear();
   }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
+}
+function select(code,remember){
+  const c=byCode.get(Number(code));if(!c)return;
+  cancelGeo();q.placeholder='Busque sua cidade';q.value=c.name+', '+c.uf;show(c);
+  if(intro){clearTimeout(introTimer);introTimer=setTimeout(startIntro,Math.max(0,1200-performance.now()))}
   if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
   cityReady=true;
 }
@@ -962,8 +943,9 @@ function search(text){
 }
 let opts=[],active=-1;
 function paintActive(){
-  [...list.children].forEach((li,i)=>li.setAttribute('aria-selected',String(i===active)));
-  if(active>=0){q.setAttribute('aria-activedescendant','opt-'+opts[active].code);list.children[active].scrollIntoView({block:'nearest'})}
+  const items=list.querySelectorAll('[role=option]');
+  items.forEach((li,i)=>li.setAttribute('aria-selected',String(i===active)));
+  if(active>=0){q.setAttribute('aria-activedescendant','opt-'+opts[active].code);items[active].scrollIntoView({block:'nearest'})}
   else q.removeAttribute('aria-activedescendant');
 }
 function openList(items,pick=true){
@@ -971,18 +953,30 @@ function openList(items,pick=true){
   if(items.length)list.replaceChildren(...items.map(c=>{
     const li=document.createElement('li'),s=document.createElement('small');
     li.id='opt-'+c.code;li.setAttribute('role','option');li.setAttribute('aria-label',c.name+', '+c.uf);li.append(c.name);s.textContent=c.uf;li.append(s);
-    // No iOS, o campo pode perder o foco antes do click e desmontar a lista.
-    li.addEventListener('pointerdown',e=>{e.preventDefault();choose(c)});
-    li.addEventListener('click',e=>{e.preventDefault();choose(c)});
+    li.dataset.code=c.code;
     return li}));
   else{const li=document.createElement('li');li.className='none';li.textContent='Nenhuma cidade de RN, PB, PE, AL ou SE com esse nome';list.replaceChildren(li)}
+  // sem texto digitado a lista mostra só as capitais; o cabeçalho avisa que as outras cidades estão na busca
+  if(items.length&&!pick){const h=document.createElement('li');h.className='head';h.setAttribute('role','presentation');h.textContent='Capitais · digite para ver as '+nf(cities.length)+' cidades';list.prepend(h)}
   list.hidden=false;q.setAttribute('aria-expanded','true');paintActive();
 }
 function closeList(){list.hidden=true;q.setAttribute('aria-expanded','false');opts=[];active=-1;q.removeAttribute('aria-activedescendant')}
 function choose(c){closeList();placeMsg.textContent='';select(c.code,true);q.blur()}
 q.addEventListener('focus',()=>{if(!cityReady)select(2611606,false);else cancelGeo();placeMsg.textContent='';q.select();openList(cities.filter(c=>CAPITALS.has(c.code)),false)});
 q.addEventListener('input',()=>openList(q.value.trim()?search(q.value):cities.filter(c=>CAPITALS.has(c.code)),!!q.value.trim()));
-q.addEventListener('blur',()=>{closeList();q.value=place.name+', '+place.uf});
+function leaveSearch(){closeList();q.value=cityReady?place.name+', '+place.uf:''}
+/* No iPhone o campo pode perder o foco no meio do toque; a lista só fecha depois do click,
+   que é o último evento do toque, então nada atravessa para o que está atrás dela. */
+let picking=false;
+list.addEventListener('pointerdown',e=>{e.preventDefault();picking=true});
+list.addEventListener('pointercancel',()=>{picking=false;if(document.activeElement!==q)leaveSearch()});
+list.addEventListener('click',e=>{
+  picking=false;
+  const li=e.target.closest('li[role=option]'),c=li&&byCode.get(Number(li.dataset.code));
+  if(c)choose(c);else if(document.activeElement!==q)leaveSearch();
+});
+document.addEventListener('pointerup',()=>{if(picking)setTimeout(()=>{if(picking){picking=false;if(document.activeElement!==q)leaveSearch()}},600)});
+q.addEventListener('blur',()=>{if(!picking)leaveSearch()});
 q.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown'||e.key==='ArrowUp'){
     e.preventDefault();
@@ -1004,7 +998,7 @@ function locate(initial=false){
     placeMsg.textContent=message+(initial?' Mostrando Recife; você pode escolher outra cidade.':' Busque a cidade pelo nome.');
   };
   if(!('geolocation' in navigator)){fail('Este navegador não informa a localização.');return}
-  btn.setAttribute('aria-busy','true');placeMsg.textContent='Procurando a cidade mais perto…';
+  btn.setAttribute('aria-busy','true');if(initial&&!cityReady){q.value='';q.placeholder='Procurando sua cidade…'}else placeMsg.textContent='Procurando a cidade mais perto…';
   // Alguns navegadores deixam o pedido de permissão pendente sem disparar timeout.
   geoTimer=setTimeout(()=>fail('Não foi possível obter a localização agora.'),12000);
   navigator.geolocation.getCurrentPosition(p=>{
@@ -1012,8 +1006,7 @@ function locate(initial=false){
     let best=null,dist=Infinity;
     for(const c of cities){const d=km(p.coords.latitude,p.coords.longitude,c.lat,c.lon);if(d<dist){dist=d;best=c}}
     if(!best||dist>60){fail('Não encontramos uma cidade próxima entre RN, PB, PE, AL e SE.');return}
-    select(best.code,!initial);
-    placeMsg.textContent='Mostrando '+best.name+', '+best.uf+', a sede municipal mais perto de você. A localização não sai do seu navegador.';
+    select(best.code,!initial);placeMsg.textContent='';
   },err=>{
     fail(err.code===1?'Sem permissão para usar a localização.':'Não foi possível obter a localização agora.');
   },{enableHighAccuracy:false,timeout:12000,maximumAge:600000});
@@ -1034,7 +1027,8 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(year
 let frame;
 new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();drawYear()})}).observe(document.body);
 const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
-if(byCode.has(fromLink))select(fromLink,false);else locate(true);
+if(intro){following=false;clockMin=320;setZone(60,false)}
+if(byCode.has(fromLink))select(fromLink,false);else{show(place);locate(true)}
 drawStars();
 update();
 })();
