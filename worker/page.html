@@ -1111,7 +1111,7 @@ function locate(initial=false){
   const fail=message=>{
     if(request!==geoRequest)return;
     if(initial&&!cityReady)select(2611606,false);else cancelGeo();
-    placeMsg.textContent=message+(initial?' Mostrando Recife; você pode escolher outra cidade.':' Busque a cidade pelo nome.');
+    placeMsg.textContent='Escolha sua cidade.'; // sem permissão, sem localização ou fora dos cinco estados: só o convite
   };
   if(!('geolocation' in navigator)){fail('Este navegador não informa a localização.');return}
   btn.setAttribute('aria-busy','true');if(initial&&!cityReady){q.value='';q.placeholder='Procurando sua cidade…'}else placeMsg.textContent='Procurando a cidade mais perto…';
