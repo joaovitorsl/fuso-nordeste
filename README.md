@@ -4,8 +4,9 @@ Painel independente para acompanhar a ideia legislativa de UTC−2 em RN, PB, PE
 
 ## Como funciona
 
-- A abertura desenha o céu da capital escolhida a partir da altura real do sol, calculada com [SunCalc](https://github.com/mourner/suncalc). A régua dupla mostra as duas escalas, UTC−3 e UTC−2; ao arrastá-la, o céu e os relógios mudam para a hora escolhida de hoje.
-- O mapa de luz do ano calcula, dia a dia no ano corrente, noite, crepúsculo, nascer, dia e pôr do sol na capital escolhida. O título e os números ao lado são gerados a partir desses cálculos.
+- Os horários do sol valem para qualquer uma das 751 sedes municipais de RN, PB, PE, AL e SE (Fernando de Noronha fica de fora porque já usa UTC−2). A pessoa escolhe a cidade pela busca, pelos atalhos das capitais ou pelo botão de localização. A posição é comparada com as cidades no próprio navegador e não é enviada a nenhum serviço. O endereço `?cidade=<código IBGE>` abre a página direto numa cidade.
+- A abertura desenha o céu da cidade escolhida a partir da altura real do sol, calculada com [SunCalc](https://github.com/mourner/suncalc). A régua dupla mostra as duas escalas, UTC−3 e UTC−2; ao arrastá-la, o céu e os relógios mudam para a hora escolhida de hoje.
+- O mapa de luz do ano calcula, dia a dia no ano corrente, noite, crepúsculo, nascer, dia e pôr do sol na cidade escolhida. O título e os números ao lado são gerados a partir desses cálculos.
 - A grade de 20.000 pontos acende um ponto por apoio confirmado.
 - A automação do GitHub consulta o Senado aproximadamente a cada 10 minutos, sujeita a atrasos e indisponibilidade. Se a conexão direta falhar, tenta pelo serviço independente cors.dev. Ela registra mudanças e, quando o valor permanece igual, registra uma medição pelo menos a cada hora em que for executada.
 - O histórico começou com medições oficiais coletadas durante a criação do painel; não inclui uma reconstrução dos dados anteriores. Nenhum apoiador é identificado.
@@ -21,8 +22,8 @@ node scripts/update-history.mjs
 node scripts/build-pages.mjs
 ```
 
-Sirva a pasta `public/` usando um servidor HTTP local. `worker/page.html` contém a página editável. `data/history.json` é gerenciado pela automação: cada ponto contém o total confirmado pelo Senado e o horário de leitura, não o momento individual de cada apoio. Não substitua dados reais por estimativas sem sinalizá-las.
+Sirva a pasta `public/` usando um servidor HTTP local. `worker/page.html` contém a página editável. `data/cidades.json` vem da base Localidades do Brasil 2022 do IBGE. Para gerá-lo de novo, baixe `Localidades_Brasil_shp.zip` em <https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/>, extraia e rode `node scripts/build-cities.mjs caminho/BR_localidades_2022.dbf`. O script confere o número de municípios de cada estado. `data/history.json` é gerenciado pela automação: cada ponto contém o total confirmado pelo Senado e o horário de leitura, não o momento individual de cada apoio. Não substitua dados reais por estimativas sem sinalizá-las.
 
 ## Fontes e licenças
 
-A biblioteca SunCalc é de Vladimir Agafonkin; licença em `vendor/suncalc-LICENSE.txt`. As faixas oficiais podem ser consultadas no [Observatório Nacional](https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil). O projeto não é um site oficial do Senado.
+As coordenadas das sedes municipais são do [IBGE, Localidades do Brasil 2022](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html), em SIRGAS 2000. A biblioteca SunCalc é de Vladimir Agafonkin; licença em `vendor/suncalc-LICENSE.txt`. As faixas oficiais podem ser consultadas no [Observatório Nacional](https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil). O projeto não é um site oficial do Senado.

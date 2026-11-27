@@ -74,10 +74,32 @@ button{font:inherit;color:inherit}
 .glint{position:absolute;top:0;width:90px;height:85%;margin-left:-45px;filter:blur(10px);pointer-events:none}
 .ripples{position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none}
 
-.hero-top{grid-area:1/1/2/2;padding-top:calc(56px + clamp(20px,6svh,72px))}
+.hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(20px,6svh,72px))}
 .hero-top h1{margin:0;font-weight:600;font-size:clamp(30px,min(7.6vw,7.4svh),76px);line-height:1.02;letter-spacing:-.035em;max-width:13em;text-wrap:balance;text-shadow:0 2px 24px rgb(0 0 0 / .25)}
 .hero-top p{margin:clamp(10px,2svh,18px) 0 0;max-width:30em;font-size:clamp(15px,min(4vw,2.5svh),20px);color:rgb(244 241 234 / .86);text-shadow:0 1px 12px rgb(0 0 0 / .3);text-wrap:pretty}
-.cities{display:flex;gap:6px;margin:clamp(14px,3svh,26px) calc(-1 * var(--g)) 0;padding:2px var(--g);overflow-x:auto;scrollbar-width:none;scroll-padding:0 var(--g)}
+.finder{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:clamp(14px,3svh,26px)}
+.search{position:relative;flex:0 1 340px;min-width:0}
+.search input{width:100%;height:42px;border-radius:999px;border:1px solid rgb(255 255 255 / .32);background:rgb(8 9 15 / .32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);font:500 16px var(--f);padding:0 46px 0 40px;outline:none;transition:border-color .2s,background .2s}
+.search input::placeholder{color:rgb(244 241 234 / .7)}
+.search input:focus{border-color:var(--ink);background:rgb(8 9 15 / .55)}
+.search>svg{position:absolute;z-index:1;color:var(--ink);left:14px;top:50%;width:17px;height:17px;margin-top:-8.5px;pointer-events:none;opacity:.8}
+.near{position:absolute;z-index:1;right:3px;top:3px;width:36px;height:36px;border-radius:50%;border:0;background:none;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.near:hover{background:rgb(255 255 255 / .12)}
+.near[aria-busy=true] svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.near svg{width:18px;height:18px}
+.options{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:6;margin:0;padding:6px;list-style:none;background:#121522;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgb(0 0 0 / .5);max-height:min(320px,46svh);overflow-y:auto}
+.options[hidden]{display:none}
+.options li{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:16px}
+.options li small{color:var(--ink-3);font-size:14px}
+.options li[aria-selected=true]{background:rgb(255 255 255 / .1)}
+.options .none{cursor:default;color:var(--ink-3)}
+.place-msg{margin:8px 0 0;font-size:14px;color:rgb(244 241 234 / .8);min-height:0}
+.place-msg:empty{display:none}
+@media (max-width:640px){.search{flex:1 1 100%}}
+.cities{display:flex;gap:6px;margin:0;padding:2px 0;overflow-x:auto;scrollbar-width:none;min-width:0;flex:0 1 auto}
+@media (max-width:640px){.cities{margin:0 calc(-1 * var(--g));padding:2px var(--g);flex-basis:calc(100% + 2 * var(--g))}}
+@media (max-width:640px) and (max-height:700px){.cities{display:none}}
 .cities::-webkit-scrollbar{display:none}
 .cities button{flex:none;border:1px solid rgb(255 255 255 / .28);background:rgb(8 9 15 / .18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:999px;padding:6px 13px;font-size:15px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .cities button:hover{border-color:rgb(255 255 255 / .6)}
@@ -224,13 +246,22 @@ footer p{margin:0}
   <div class="hero-top wrap">
     <h1 id="h1">O mesmo sol, uma hora depois no relógio.</h1>
     <p>Uma ideia legislativa no Senado propõe o fuso UTC−2 para Rio Grande do Norte, Paraíba, Pernambuco, Alagoas e Sergipe.</p>
-    <div class="cities" role="group" aria-label="Capital">
-      <button type="button" data-state="RN" aria-pressed="false">Natal</button>
-      <button type="button" data-state="PB" aria-pressed="false">João Pessoa</button>
-      <button type="button" data-state="PE" aria-pressed="true">Recife</button>
-      <button type="button" data-state="AL" aria-pressed="false">Maceió</button>
-      <button type="button" data-state="SE" aria-pressed="false">Aracaju</button>
+    <div class="finder">
+      <div class="search">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="city-q" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="city-list" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="search" placeholder="Busque sua cidade" aria-label="Cidade de RN, PB, PE, AL ou SE">
+        <button class="near" id="near" type="button" aria-label="Usar a cidade mais perto de mim" title="Usar a cidade mais perto de mim"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="10" r="1.8" fill="currentColor"/><path d="M10 1.5v3M10 15.5v3M1.5 10h3M15.5 10h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+        <ul class="options" id="city-list" role="listbox" aria-label="Cidades" hidden></ul>
+      </div>
+      <div class="cities" role="group" aria-label="Capitais">
+        <button type="button" data-city="2408102" aria-pressed="false">Natal</button>
+        <button type="button" data-city="2507507" aria-pressed="false">João Pessoa</button>
+        <button type="button" data-city="2611606" aria-pressed="true">Recife</button>
+        <button type="button" data-city="2704302" aria-pressed="false">Maceió</button>
+        <button type="button" data-city="2800308" aria-pressed="false">Aracaju</button>
+      </div>
     </div>
+    <p class="place-msg" id="place-msg" role="status"></p>
   </div>
 
   <div class="hero-bottom wrap">
@@ -306,7 +337,7 @@ footer p{margin:0}
       <div>
         <div class="plot" id="year-plot" tabindex="0" aria-describedby="year-title"><canvas id="year-canvas" role="img"></canvas><div class="tip" id="year-tip" hidden></div></div>
         <div class="legend-sky"><span><i style="background:#0b1022"></i>Noite</span><span><i style="background:#4b3f7a"></i>Crepúsculo</span><span><i style="background:#f09a58"></i>Nascer e pôr</span><span><i style="background:#6f9fd6"></i>Dia</span></div>
-        <p class="note">Calculado dia a dia para as coordenadas de <span id="year-city">Recife</span> com <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
+        <p class="note">Calculado dia a dia para a sede municipal de <span id="year-city">Recife</span>, com coordenadas do <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> e <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
         <details class="table"><summary>Ver tabela por mês</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Dia</th><th scope="col">Nascer hoje</th><th scope="col">Nascer proposta</th><th scope="col">Pôr hoje</th><th scope="col">Pôr proposta</th></tr></thead><tbody id="sun-rows"></tbody></table></div></details>
       </div>
       <dl class="versus" id="versus"></dl>
@@ -323,7 +354,8 @@ footer p{margin:0}
       <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p></details>
       <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. Impactos em transporte, voos, bancos e no contato com outros estados não são calculados aqui.</p></details>
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
-      <details><summary>De onde vem a contagem?</summary><p>Da página pública da ideia no Senado. Com esta página aberta, o navegador lê a contagem a cada minuto pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP e a URL consultada; nenhuma credencial é enviada. Se a leitura falhar, aparece o último registro salvo, sinalizado. A contagem é nacional, não por estado.</p></details>
+      <details><summary>Por que a minha cidade dá horários diferentes da capital?</summary><p>O sol nasce mais tarde quanto mais a oeste. Entre Recife e Petrolina, a diferença passa de 20 minutos. A página calcula cada uma das 751 sedes municipais dos cinco estados, com as coordenadas da base de localidades do IBGE (2022). O horário é o da sede; em outras partes do município ele pode variar alguns minutos.</p></details>
+      <details><summary>De onde vem a contagem?</summary><p>Da página pública da ideia no Senado. Com esta página aberta, o navegador lê a contagem a cada minuto pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP e a URL consultada; nenhuma credencial é enviada. Se a leitura falhar, aparece o último registro salvo, sinalizado. A contagem é nacional, não por estado. Se você usar o botão de localização, a posição é comparada com as cidades aqui mesmo, no navegador, e não é enviada a nenhum serviço.</p></details>
       <details><summary>Como o histórico é gravado?</summary><p>Uma automação no GitHub lê o Senado a cada 10 minutos, aproximadamente, e grava quando o total muda ou, sem mudança, uma vez por hora. O registro começa em 26/11/2026 e pode ficar alguns minutos atrás da contagem ao vivo. Nenhum apoiador é identificado.</p></details>
     </div>
   </div>
@@ -332,7 +364,7 @@ footer p{margin:0}
 
 <footer><div class="wrap">
   <p>Projeto independente, sem vínculo com o Senado Federal.</p>
-  <p>Fontes: <a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">e-Cidadania</a> · <a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil" target="_blank" rel="noopener noreferrer">Observatório Nacional</a> · <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a></p>
+  <p>Fontes: <a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">e-Cidadania</a> · <a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil" target="_blank" rel="noopener noreferrer">Observatório Nacional</a> · <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> · <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a></p>
 </div></footer>
 
 <script>/*SUN_CALC_LIBRARY*/</script>
@@ -403,8 +435,13 @@ function interactive(plot,api){
 function tween(dur,fn,done){if(reduced){fn(1);done&&done();return}const t0=performance.now();const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;(function f(now){const t=clamp((now-t0)/dur,0,1);fn(ease(t));if(t<1)requestAnimationFrame(f);else done&&done()})(t0)}
 
 /* ---------- Capitais ---------- */
-const capitals={RN:['Natal',-5.7945,-35.2110],PB:['João Pessoa',-7.1195,-34.8450],PE:['Recife',-8.0476,-34.8770],AL:['Maceió',-9.6658,-35.7353],SE:['Aracaju',-10.9472,-37.0731]};
-let selected='PE';
+/* Sedes municipais de RN, PB, PE, AL e SE (IBGE, Localidades do Brasil 2022), embutidas no build */
+const CITY_DATA=/*CIDADES*/{cidades:[[2611606,'Recife','PE',-8.0632,-34.8711]]};
+const fold=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const cities=CITY_DATA.cidades.map(([code,name,uf,lat,lon])=>({code,name,uf,lat,lon,key:fold(name)}));
+const byCode=new Map(cities.map(c=>[c.code,c]));
+const CAPITALS=new Set([2408102,2507507,2611606,2704302,2800308]);
+let place=byCode.get(2611606);
 
 /* ---------- Céu ---------- */
 const hero=$('.hero'),sky=$('#sky'),sea=$('#sea'),sunEl=$('#sun'),glint=$('#glint'),starsC=$('#stars'),scrub=$('#scrub');
@@ -415,7 +452,7 @@ function drawStars(){
   for(let i=0;i<Math.round(w*h/5200);i++){const sx=rnd()*w,sy=rnd()*h,r=rnd()<.08?1.3:.7;x.globalAlpha=(.35+rnd()*.65)*(1-sy/h*.6);x.fillStyle='#fff';x.beginPath();x.arc(sx,sy,r,0,7);x.fill()}
 }
 function solarToday(){
-  const [,lat,lon]=capitals[selected],base=todayBase(),s=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
+  const {lat,lon}=place,base=todayBase(),s=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
   return{base,lat,lon,rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk)};
 }
 function renderHero(){
@@ -637,7 +674,7 @@ const MONTHS_LONG=['janeiro','fevereiro','março','abril','maio','junho','julho'
 const yearPlot=$('#year-plot'),yearC=$('#year-canvas'),yearTip=$('#year-tip');
 let year={days:[]},yearOffset=0,yearShown=false;
 function solarYear(){
-  const [,lat,lon]=capitals[selected],y=Number(fmt(new Date(),{year:'numeric'})),days=[];
+  const {lat,lon}=place,y=Number(fmt(new Date(),{year:'numeric'})),days=[];
   for(let t=Date.UTC(y,0,1,15);new Date(t).getUTCFullYear()===y;t+=864e5){
     const s=SunCalc.getTimes(new Date(t),lat,lon);
     days.push({date:new Date(t),rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk),ndawn:toLocal(s.nauticalDawn),ndusk:toLocal(s.nauticalDusk),noon:toLocal(s.solarNoon)});
@@ -673,7 +710,7 @@ function drawYear(){
   for(let mo=0;mo<12;mo++){const i0=days.findIndex(d=>d.date.getUTCMonth()===mo),i1=mo===11?n:days.findIndex(d=>d.date.getUTCMonth()===mo+1);ctx.fillText(narrow?MONTHS[mo][0].toUpperCase():MONTHS[mo],m.l+(i0+i1)/2*cw,H-6)}
   if(year.today>=0){const tx=Math.round(m.l+(year.today+.5)*cw)+.5;ctx.strokeStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.moveTo(tx,m.t);ctx.lineTo(tx,m.t+ih);ctx.stroke()}
   if(year.hover!=null){const hx=Math.round(m.l+(year.hover+.5)*cw)+.5;ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(hx,m.t);ctx.lineTo(hx,m.t+ih);ctx.stroke()}
-  yearC.setAttribute('aria-label','Mapa de luz do ano em '+capitals[selected][0]+', relógio '+(off?'UTC−2':'UTC−3')+'. Tabela por mês disponível abaixo.');
+  yearC.setAttribute('aria-label','Mapa de luz do ano em '+place.name+', relógio '+(off?'UTC−2':'UTC−3')+'. Tabela por mês disponível abaixo.');
 }
 const yearInteraction=interactive(yearPlot,{
   count:()=>year.days.length,initial:()=>Math.max(0,year.today),bigStep:7,
@@ -696,12 +733,13 @@ function setOffset(to,animate){
 }
 document.querySelectorAll('[data-offset]').forEach(b=>b.addEventListener('click',()=>setOffset(Number(b.dataset.offset),true)));
 function yearText(){
-  const {days}=year,n=days.length,city=capitals[selected][0],cnt=f=>days.filter(f).length;
+  const {days}=year,n=days.length,city=place.name,cnt=f=>days.filter(f).length;
   const phr=k=>k===n?'todos os dias do ano':k===0?'nenhum dia do ano':nf(k)+(k===1?' dia do ano':' dias do ano');
   const late=[cnt(d=>d.set>=1080),cnt(d=>d.set+60>=1080)],dark=[cnt(d=>d.rise>360),cnt(d=>d.rise+60>360)];
   $('#year-title').textContent='Em '+city+', com UTC−2, o sol se poria depois das 18h em '+phr(late[1])+'.';
-  $('#year-lead').textContent=dark[1]?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'E continuaria nascendo antes das 6h o ano todo.';
-  $('#year-city').textContent=city;
+  const dark7=cnt(d=>d.rise+60>420);
+  $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
+  $('#year-city').textContent=city+', '+place.uf;
   const r=[Math.min(...days.map(d=>d.rise)),Math.max(...days.map(d=>d.rise))],s=[Math.min(...days.map(d=>d.set)),Math.max(...days.map(d=>d.set))];
   const items=[
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
@@ -717,17 +755,82 @@ function yearText(){
   rowsInto($('#sun-rows'),days.filter(d=>d.date.getUTCDate()===1||d.date.getUTCDate()===15).map(d=>[fmt(d.date,{day:'2-digit',month:'2-digit'}),hhmm(d.rise),hhmm(d.rise+60),hhmm(d.set),hhmm(d.set+60)]));
 }
 
-/* ---------- Seleção de capital ---------- */
-function select(uf){
-  if(!capitals[uf])return;selected=uf;
-  document.querySelectorAll('[data-state]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.state===uf)));
+/* ---------- Escolha da cidade ---------- */
+const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
+function select(code,remember){
+  const c=byCode.get(Number(code));if(!c)return;place=c;
+  document.querySelectorAll('[data-city]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.city)===c.code)));
+  q.value=CAPITALS.has(c.code)?'':c.name+', '+c.uf;
   try{
     today=solarToday();renderHero();
     year=solarYear();yearText();drawYear();
-    $('#ruler-hint').textContent='Arraste para mudar a hora · céu calculado para '+capitals[uf][0];
+    $('#ruler-hint').textContent='Arraste para mudar a hora · céu de '+c.name+', '+c.uf;
   }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
+  if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
 }
-document.querySelectorAll('[data-state]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.state)));
+document.querySelectorAll('[data-city]').forEach(b=>b.addEventListener('click',()=>{placeMsg.textContent='';select(b.dataset.city,true)}));
+
+function search(text){
+  let term=fold(text).trim().replace(/\s+/g,' '),uf=null;
+  const m=term.match(/^(.+?)[\s,/-]+(rn|pb|pe|al|se)$/);if(m){term=m[1].trim();uf=m[2].toUpperCase()}
+  if(!term)return[];
+  const hits=[];
+  for(const c of cities){
+    if(uf&&c.uf!==uf)continue;
+    const rank=c.key.startsWith(term)?0:c.key.includes(' '+term)?1:c.key.includes(term)?2:-1;
+    if(rank>=0)hits.push([rank,CAPITALS.has(c.code)?0:1,c]);
+  }
+  hits.sort((a,b)=>a[0]-b[0]||a[1]-b[1]||a[2].name.localeCompare(b[2].name,'pt-BR'));
+  return hits.slice(0,8).map(h=>h[2]);
+}
+let opts=[],active=-1;
+function paintActive(){
+  [...list.children].forEach((li,i)=>li.setAttribute('aria-selected',String(i===active)));
+  if(active>=0){q.setAttribute('aria-activedescendant','opt-'+opts[active].code);list.children[active].scrollIntoView({block:'nearest'})}
+  else q.removeAttribute('aria-activedescendant');
+}
+function openList(items){
+  opts=items;active=items.length?0:-1;
+  if(items.length)list.replaceChildren(...items.map(c=>{
+    const li=document.createElement('li'),s=document.createElement('small');
+    li.id='opt-'+c.code;li.setAttribute('role','option');li.setAttribute('aria-label',c.name+', '+c.uf);li.append(c.name);s.textContent=c.uf;li.append(s);
+    li.addEventListener('pointerdown',e=>{e.preventDefault();choose(c)});
+    return li}));
+  else{const li=document.createElement('li');li.className='none';li.textContent='Nenhuma cidade de RN, PB, PE, AL ou SE com esse nome';list.replaceChildren(li)}
+  list.hidden=false;q.setAttribute('aria-expanded','true');paintActive();
+}
+function closeList(){list.hidden=true;q.setAttribute('aria-expanded','false');opts=[];active=-1;q.removeAttribute('aria-activedescendant')}
+function choose(c){closeList();placeMsg.textContent='';select(c.code,true);q.blur()}
+q.addEventListener('focus',()=>q.select());
+q.addEventListener('input',()=>{q.value.trim()?openList(search(q.value)):closeList()});
+q.addEventListener('blur',()=>{closeList();q.value=CAPITALS.has(place.code)?'':place.name+', '+place.uf});
+q.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();
+    if(list.hidden){if(q.value.trim())openList(search(q.value));return}
+    if(opts.length){active=(active+(e.key==='ArrowDown'?1:-1)+opts.length)%opts.length;paintActive()}
+  }else if(e.key==='Enter'){e.preventDefault();if(opts[active])choose(opts[active])}
+  else if(e.key==='Escape'){if(!list.hidden){e.preventDefault();closeList()}else q.blur()}
+});
+
+/* Cidade mais perto: a posição é usada só aqui no navegador e não é enviada a nenhum serviço */
+const km=(a,b,c,d)=>{const r=Math.PI/180,h=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 12742*Math.asin(Math.sqrt(h))};
+$('#near').addEventListener('click',()=>{
+  const btn=$('#near');
+  if(!('geolocation' in navigator)){placeMsg.textContent='Este navegador não informa a localização. Busque a cidade pelo nome.';return}
+  btn.setAttribute('aria-busy','true');placeMsg.textContent='Procurando a cidade mais perto…';
+  navigator.geolocation.getCurrentPosition(p=>{
+    btn.removeAttribute('aria-busy');
+    let best=null,dist=Infinity;
+    for(const c of cities){const d=km(p.coords.latitude,p.coords.longitude,c.lat,c.lon);if(d<dist){dist=d;best=c}}
+    if(dist>60){placeMsg.textContent='Você parece estar fora de RN, PB, PE, AL e SE. A sede mais perto é '+best.name+', '+best.uf+', a '+nf(dist)+' km.';return}
+    select(best.code,true);
+    placeMsg.textContent='Mostrando '+best.name+', '+best.uf+', a sede municipal mais perto de você. A localização não sai do seu navegador.';
+  },err=>{
+    btn.removeAttribute('aria-busy');
+    placeMsg.textContent=err.code===1?'Sem permissão para usar a localização. Busque a cidade pelo nome.':'Não foi possível obter a localização agora. Busque a cidade pelo nome.';
+  },{enableHighAccuracy:false,timeout:12000,maximumAge:600000});
+});
 
 /* ---------- Entrada em cena ---------- */
 const io=new IntersectionObserver(entries=>entries.forEach(e=>{
@@ -742,7 +845,8 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(year
 
 let frame;
 new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawHistory();drawYear()})}).observe(document.body);
-select('PE');drawStars();drawDots(0);
+const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
+select(byCode.has(fromLink)?fromLink:2611606,false);drawStars();drawDots(0);
 update();
 })();
 </script>
