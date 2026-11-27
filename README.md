@@ -27,4 +27,4 @@ Sirva a pasta `public/` usando um servidor HTTP local. `worker/page.html` conté
 
 ## Fontes e licenças
 
-As coordenadas das sedes municipais são do [IBGE, Localidades do Brasil 2022](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html), em SIRGAS 2000. A biblioteca SunCalc é de Vladimir Agafonkin; licença em `vendor/suncalc-LICENSE.txt`. As faixas oficiais podem ser consultadas no [Observatório Nacional](https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil). O projeto não é um site oficial do Senado.
+As coordenadas das sedes municipais são do [IBGE, Localidades do Brasil 2022](https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html), em SIRGAS 2000. A biblioteca SunCalc é de Vladimir Agafonkin; licença em `vendor/suncalc-LICENSE.txt`. As fontes Mouse Memoirs e Sora vêm do Google Fonts, sob a SIL Open Font License. As faixas oficiais podem ser consultadas no [Observatório Nacional](https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil). O projeto não é um site oficial do Senado.
