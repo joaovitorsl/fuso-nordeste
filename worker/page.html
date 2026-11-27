@@ -148,6 +148,7 @@ button{font:inherit;color:inherit}
 .seg button:active,.play:active,.cta:active,.bar-cta:active,.bell:active{transform:scale(.95)}
 .seg button:hover:not(:disabled){color:var(--ink)}
 .seg button[aria-pressed=true]{background:var(--ink);color:#0b0d16;font-weight:600}
+.seg button[aria-pressed=true]:hover:not(:disabled){color:#0b0d16}
 .seg button:disabled{opacity:.35;cursor:default}
 
 /* Simulador: relógio, fuso, régua, dia e horários do dia a dia */
@@ -219,15 +220,12 @@ button{font:inherit;color:inherit}
 .before p{margin:8px 0 0;color:var(--ink-2);font-size:16px}
 .before .note{grid-column:1/-1;margin:0}
 .ideas{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.ideas li{display:grid;grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:'t n' 's n' 'b b';gap:2px 12px;align-items:baseline}
+.ideas li{display:grid;grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:'t n' 's n';gap:2px 12px;align-items:baseline}
 .ideas a{grid-area:t;font-size:16px;text-decoration:none;color:var(--ink-2)}
 .ideas a:hover{text-decoration:underline;color:var(--ink)}
 .ideas small{grid-area:s;font-size:13px;color:var(--ink-3)}
 .ideas b{grid-area:n;text-align:right;font-size:20px;font-weight:600;align-self:center}
-.ideas .track{grid-area:b;display:block;height:8px;margin-top:6px;border-radius:4px;background:var(--dim)}
-.ideas .track i{display:block;height:100%;width:0;border-radius:4px;background:var(--ink-3);transition:width .9s ease}
 .ideas .this a{color:var(--ink);font-weight:600}
-.ideas .this .track i{background:var(--glow);box-shadow:0 0 8px rgb(245 193 22 / .6)}
 @media (max-width:860px){.before{grid-template-columns:1fr;margin-top:56px}}
 
 /* Pontos */
@@ -236,23 +234,16 @@ button{font:inherit;color:inherit}
 #apoios .cta{background:#121212;color:var(--sun)}
 #apoios .cta:hover{background:#2a2a2a}
 #apoios .cta:after{background:linear-gradient(105deg,transparent 35%,rgb(255 255 255 / .18) 50%,transparent 65%)}
-#apoios .dots-foot .k i{background:#121212;box-shadow:none}
-#apoios .ideas .track i{background:rgb(18 18 18 / .55)}
-#apoios .ideas .this .track i{background:#00507d;box-shadow:none}
 #apoios .link{color:var(--ink)}
 #apoios a:focus-visible,#apoios button:focus-visible{outline-color:#121212}
-/* Contagem à esquerda, grade de 20.000 pontos à direita; no celular, empilhadas */
-.support{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px 64px;align-items:start}
+/* Contagem e estado da consulta ao Senado */
+.support{max-width:780px}
 .support .h-xl{font-size:clamp(84px,10vw,150px)}
 .stats{display:flex;gap:16px 40px;flex-wrap:wrap;margin:28px 0 0}
 .stats dt{font-size:14px;color:var(--ink-3)}
 .stats dd{margin:2px 0 0;font-family:var(--display);font-size:40px;font-weight:400;line-height:1}
-.dots{position:relative;padding-top:6px}
-.dots canvas{display:block;width:100%}
-@media (max-width:900px){.support{grid-template-columns:1fr;gap:32px}}
 .dots-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap;margin-top:16px;font-size:14px;color:var(--ink-3)}
-.dots-foot .k{display:inline-flex;align-items:center;gap:8px}
-.dots-foot .k i{width:7px;height:7px;border-radius:50%;background:var(--glow);box-shadow:0 0 6px var(--glow)}
+.dots-foot{justify-content:flex-start}
 .live{display:inline-flex;align-items:center;gap:8px}
 .link{background:none;border:0;padding:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px}
 .link:disabled{opacity:.5;cursor:default}
@@ -420,11 +411,7 @@ footer p{margin:0}
           <div><dt>Ritmo necessário</dt><dd id="need">—</dd></div>
         </dl>
         <a class="cta reveal" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Ler e apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
-      </div>
-      <div>
-        <div class="dots reveal" id="dots"><canvas id="dots-canvas" role="img" aria-label="Grade com 20.000 pontos; os acesos são os apoios confirmados."></canvas></div>
         <div class="dots-foot">
-          <span class="k"><i></i>Cada ponto aceso é um apoio</span>
           <span class="live" id="live-line">Consultando o Senado…</span>
           <button class="link" id="refresh" type="button">Atualizar</button>
         </div>
@@ -435,16 +422,17 @@ footer p{margin:0}
       <div>
         <h3 id="before-title">Ideias parecidas no e-Cidadania</h3>
         <p id="before-lead">Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios.</p>
+        <p>As propostas anteriores já foram encerradas. Esta ainda está aberta: se você acredita na ideia, compartilhe com alguém que também gostaria de conhecê-la.</p>
       </div>
       <ol class="ideas" id="ideas">
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><span class="track"><i data-n="13"></i></span><b class="num">13</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><span class="track"><i data-n="6"></i></span><b class="num">6</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><span class="track"><i data-n="2"></i></span><b class="num">2</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><span class="track"><i data-n="26"></i></span><b class="num">26</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><span class="track"><i data-n="1"></i></span><b class="num">1</b></li>
-        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
-        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><span class="track"><i id="idea-now"></i></span><b class="num" id="idea-now-n">—</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><b class="num">13</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><b class="num">6</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><b class="num">2</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><b class="num">26</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><b class="num">0</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><b class="num">1</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><b class="num">0</b></li>
+        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><b class="num" id="idea-now-n">—</b></li>
       </ol>
       <p class="note">Apoios confirmados nas páginas oficiais em 27/11/2026. As sete anteriores estão encerradas e não recebem mais apoios.</p>
     </div>
@@ -697,33 +685,9 @@ setInterval(()=>{if(following){sun=solarDay();clockMin=nowMinutes()+zone;renderH
 
 /* ---------- Contagem ---------- */
 let current=null,firstLive=null,shownCount=0,dotsSeen=false;
-const dotsC=$('#dots-canvas'),dotsWrap=$('#dots');
-let dotGeo=null;
-function layoutDots(){
-  // menos colunas deixam os pontos maiores; usa a menor quantidade que caiba na altura disponível
-  const css=getComputedStyle(dotsWrap),W=dotsWrap.clientWidth,maxH=W<600?260:Math.min(360,innerHeight*.45);
-  const cols=[100,125,160,200,250,400].find(c=>GOAL/c*(W/c)<=maxH)||400,pitch=W/cols,rows=GOAL/cols;
-  dotGeo={W,cols,pitch,H:Math.ceil(rows*pitch),r:Math.max(.6,pitch*.32),off:css.getPropertyValue('--dot-off').trim()||'rgba(255,255,255,.1)',on:css.getPropertyValue('--dot-on').trim()||'#f5c116',last:css.getPropertyValue('--dot-last').trim()||'#fff6df'};
-  dotGeo.ctx=canvasFit(dotsC,W,dotGeo.H);
-}
-function drawDots(lit){
-  if(!dotGeo)layoutDots();
-  const {ctx,cols,pitch,W,H,r,off,on,last}=dotGeo,n=Math.floor(lit);
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle=off;ctx.beginPath();
-  for(let i=n;i<GOAL;i++){const cx=(i%cols+.5)*pitch,cy=(Math.floor(i/cols)+.5)*pitch;ctx.moveTo(cx+r,cy);ctx.arc(cx,cy,r,0,6.2832)}
-  ctx.fill();
-  if(n>0){
-    ctx.save();ctx.fillStyle=on;ctx.beginPath();
-    for(let i=0;i<n;i++){const cx=(i%cols+.5)*pitch,cy=(Math.floor(i/cols)+.5)*pitch;ctx.moveTo(cx+r*1.15,cy);ctx.arc(cx,cy,r*1.15,0,6.2832)}
-    ctx.fill();ctx.restore();
-    const i=n-1,cx=(i%cols+.5)*pitch,cy=(Math.floor(i/cols)+.5)*pitch;
-    ctx.fillStyle=last;ctx.beginPath();ctx.arc(cx,cy,r*1.9,0,6.2832);ctx.fill();
-  }
-}
 function animateCount(to){
   const from=shownCount;
-  tween(from===0?1800:900,t=>{shownCount=from+(to-from)*t;$('#n-big').textContent=nf(shownCount);drawDots(shownCount)},()=>{shownCount=to;$('#n-big').textContent=nf(to);drawDots(to)});
+  tween(from===0?1800:900,t=>{shownCount=from+(to-from)*t;$('#n-big').textContent=nf(shownCount)},()=>{shownCount=to;$('#n-big').textContent=nf(to)});
 }
 function renderCount(){
   if(!current)return;
@@ -744,8 +708,6 @@ function renderCount(){
 }
 /* Barras das ideias parecidas, na mesma escala da ideia atual (contagem ao vivo) */
 function drawIdeas(n){
-  const bars=[...document.querySelectorAll('#ideas .track i')],max=Math.max(n,...bars.map(i=>Number(i.dataset.n)||0));
-  bars.forEach(i=>{const v=i.id==='idea-now'?n:Number(i.dataset.n);i.style.width=v?Math.max(.6,v/max*100)+'%':'0'});
   $('#idea-now-n').textContent=nf(n);
   $('#before-lead').textContent='Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios; a maior, 26. Esta tem '+nf(n)+'.';
 }
@@ -912,14 +874,18 @@ function yearText(){
 
 /* ---------- Escolha da cidade ---------- */
 const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
+let geoRequest=0,geoTimer=null,cityReady=false;
+function cancelGeo(){geoRequest++;clearTimeout(geoTimer);$('#near').removeAttribute('aria-busy')}
 function select(code,remember){
   const c=byCode.get(Number(code));if(!c)return;place=c;
+  cancelGeo();
   q.value=c.name+', '+c.uf;
   try{
     sun=solarDay();renderHero();
     year=solarYear();yearText();drawYear();
   }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
   if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
+  cityReady=true;
 }
 
 function search(text){
@@ -946,14 +912,16 @@ function openList(items,pick=true){
   if(items.length)list.replaceChildren(...items.map(c=>{
     const li=document.createElement('li'),s=document.createElement('small');
     li.id='opt-'+c.code;li.setAttribute('role','option');li.setAttribute('aria-label',c.name+', '+c.uf);li.append(c.name);s.textContent=c.uf;li.append(s);
-    li.addEventListener('pointerdown',e=>e.preventDefault());li.addEventListener('click',e=>{e.preventDefault();choose(c)});
+    // No iOS, o campo pode perder o foco antes do click e desmontar a lista.
+    li.addEventListener('pointerdown',e=>{e.preventDefault();choose(c)});
+    li.addEventListener('click',e=>{e.preventDefault();choose(c)});
     return li}));
   else{const li=document.createElement('li');li.className='none';li.textContent='Nenhuma cidade de RN, PB, PE, AL ou SE com esse nome';list.replaceChildren(li)}
   list.hidden=false;q.setAttribute('aria-expanded','true');paintActive();
 }
 function closeList(){list.hidden=true;q.setAttribute('aria-expanded','false');opts=[];active=-1;q.removeAttribute('aria-activedescendant')}
 function choose(c){closeList();placeMsg.textContent='';select(c.code,true);q.blur()}
-q.addEventListener('focus',()=>{placeMsg.textContent='';q.select();openList(cities.filter(c=>CAPITALS.has(c.code)),false)});
+q.addEventListener('focus',()=>{if(!cityReady)select(2611606,false);else cancelGeo();placeMsg.textContent='';q.select();openList(cities.filter(c=>CAPITALS.has(c.code)),false)});
 q.addEventListener('input',()=>openList(q.value.trim()?search(q.value):cities.filter(c=>CAPITALS.has(c.code)),!!q.value.trim()));
 q.addEventListener('blur',()=>{closeList();q.value=place.name+', '+place.uf});
 q.addEventListener('keydown',e=>{
@@ -967,22 +935,31 @@ q.addEventListener('keydown',e=>{
 
 /* Cidade mais perto: a posição é usada só aqui no navegador e não é enviada a nenhum serviço */
 const km=(a,b,c,d)=>{const r=Math.PI/180,h=Math.sin((c-a)*r/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin((d-b)*r/2)**2;return 12742*Math.asin(Math.sqrt(h))};
-$('#near').addEventListener('click',()=>{
+function locate(initial=false){
   const btn=$('#near');
-  if(!('geolocation' in navigator)){placeMsg.textContent='Este navegador não informa a localização. Busque a cidade pelo nome.';return}
+  initial=initial||!cityReady;
+  cancelGeo();const request=geoRequest;
+  const fail=message=>{
+    if(request!==geoRequest)return;
+    if(initial&&!cityReady)select(2611606,false);else cancelGeo();
+    placeMsg.textContent=message+(initial?' Mostrando Recife; você pode escolher outra cidade.':' Busque a cidade pelo nome.');
+  };
+  if(!('geolocation' in navigator)){fail('Este navegador não informa a localização.');return}
   btn.setAttribute('aria-busy','true');placeMsg.textContent='Procurando a cidade mais perto…';
+  // Alguns navegadores deixam o pedido de permissão pendente sem disparar timeout.
+  geoTimer=setTimeout(()=>fail('Não foi possível obter a localização agora.'),12000);
   navigator.geolocation.getCurrentPosition(p=>{
-    btn.removeAttribute('aria-busy');
+    if(request!==geoRequest)return;
     let best=null,dist=Infinity;
     for(const c of cities){const d=km(p.coords.latitude,p.coords.longitude,c.lat,c.lon);if(d<dist){dist=d;best=c}}
-    if(dist>60){placeMsg.textContent='Você parece estar fora de RN, PB, PE, AL e SE. A sede mais perto é '+best.name+', '+best.uf+', a '+nf(dist)+' km.';return}
-    select(best.code,true);
+    if(!best||dist>60){fail('Não encontramos uma cidade próxima entre RN, PB, PE, AL e SE.');return}
+    select(best.code,!initial);
     placeMsg.textContent='Mostrando '+best.name+', '+best.uf+', a sede municipal mais perto de você. A localização não sai do seu navegador.';
   },err=>{
-    btn.removeAttribute('aria-busy');
-    placeMsg.textContent=err.code===1?'Sem permissão para usar a localização. Busque a cidade pelo nome.':'Não foi possível obter a localização agora. Busque a cidade pelo nome.';
+    fail(err.code===1?'Sem permissão para usar a localização.':'Não foi possível obter a localização agora.');
   },{enableHighAccuracy:false,timeout:12000,maximumAge:600000});
-});
+}
+$('#near').addEventListener('click',()=>locate());
 
 /* ---------- Entrada em cena ---------- */
 const io=new IntersectionObserver(entries=>entries.forEach(e=>{
@@ -996,10 +973,10 @@ const countTitle=$('#apoios-title');
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(yearPlot);
 
 let frame;
-new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawYear()})}).observe(document.body);
+new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();drawYear()})}).observe(document.body);
 const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
-select(byCode.has(fromLink)?fromLink:2611606,false);drawStars();drawDots(0);
-if(!reduced)setTimeout(()=>{if(following&&scrollY<innerHeight/2)playStory()},1600);
+if(byCode.has(fromLink))select(fromLink,false);else locate(true);
+drawStars();
 update();
 })();
 </script>
