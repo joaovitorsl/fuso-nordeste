@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fuso Nordeste · UTC−2 para RN, PB, PE, AL e SE</title>
+<title>Uma hora para viver · UTC−2 para RN, PB, PE, AL e SE</title>
 <meta name="description" content="A ideia de adiantar em uma hora o relógio de RN, PB, PE, AL e SE: os apoios no Senado, ao vivo, e o que muda no nascer e no pôr do sol.">
-<meta property="og:title" content="Fuso Nordeste · o mesmo sol, uma hora depois">
+<meta property="og:title" content="Uma hora para viver · mais luz no fim do dia">
 <meta property="og:description" content="Apoios ao vivo à ideia do fuso UTC−2 no e-Cidadania e o céu de cada cidade com o relógio novo.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joaovitorsl.github.io/fuso-nordeste/">
 <meta property="og:image" content="https://joaovitorsl.github.io/fuso-nordeste/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="O mesmo relógio, outro céu: 18:27 com UTC−2 e o sol se pondo no horizonte.">
+<meta property="og:image:alt" content="O mesmo relógio, 18:27: noite com o horário de hoje e pôr do sol com UTC−2.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#07080f">
 <link rel="icon" href="./favicon.ico" sizes="any">
@@ -74,7 +74,7 @@ button{font:inherit;color:inherit}
 .bar-cta:hover{background:#ffd54a}
 .bar-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:rgb(255 255 255 / .05)}
 .bar-progress span{display:block;height:100%;width:0;background:var(--glow);box-shadow:0 0 8px var(--glow);transition:width .8s ease}
-@media (max-width:520px){.bar-count .of{display:none}.bar{gap:10px}}
+@media (max-width:520px){.brand{display:flex;flex-direction:column;font-size:19px;line-height:.86;letter-spacing:.02em}.bar-count .of{display:none}.bar{gap:10px}}
 .bar-cta{animation:cta-glow 4s ease-in-out infinite}
 @keyframes cta-glow{0%,100%{box-shadow:0 0 0 0 rgb(245 193 22 / 0)}50%{box-shadow:0 0 22px 2px rgb(245 193 22 / .35)}}
 .bar-count{position:relative}
@@ -96,28 +96,30 @@ button{font:inherit;color:inherit}
 .toast b{font-weight:700}
 
 /* ---------- Céu ---------- */
-/* Três faixas: texto, céu livre e mar. O horizonte é sempre o início da faixa de baixo,
-   então nada se sobrepõe; se faltar altura, a abertura cresce em vez de comprimir. */
+/* Dois céus lado a lado, um para cada fuso, sob um relógio só. O horizonte é sempre o início
+   da faixa de baixo, então nada se sobrepõe; se faltar altura, a abertura cresce. */
 .hero:after{content:'';position:absolute;inset:0;z-index:1;background:var(--grain);opacity:.09;pointer-events:none}
-.hero{position:relative;display:grid;grid-template-columns:100%;grid-template-rows:auto minmax(var(--sky-gap),1fr) auto;min-height:100vh;min-height:100svh;overflow:hidden;isolation:isolate;--sky-gap:clamp(40px,9svh,360px)}
+.hero{position:relative;display:grid;grid-template-columns:100%;grid-template-rows:auto minmax(var(--sky-gap),1fr) auto;min-height:100vh;min-height:100svh;overflow:hidden;isolation:isolate;--sky-gap:clamp(110px,18svh,360px);--sun-size:72px}
 .hero>.wrap{width:100%;justify-self:center;position:relative;z-index:2}
-.sky{grid-area:1/1/3/2;position:relative}
+.sky{grid-area:1/1/3/2;position:relative;display:grid;grid-template-columns:1fr 1fr}
+.pane{position:relative;overflow:hidden}
+.pane+.pane{box-shadow:inset 1px 0 0 rgb(255 255 255 / .22)}
 /* véu escuro no alto do céu: mantém o texto legível mesmo com o céu claro do meio-dia */
-.sky:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgb(4 8 20 / .55) 0%,rgb(4 8 20 / .25) 50%,rgb(4 8 20 / 0) 75%);pointer-events:none}
-.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.sun{position:absolute;left:0;top:0;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;will-change:transform}
-.sea{grid-area:3/1/4/2;position:relative;overflow:hidden}
-.sea:before{content:'';position:absolute;inset:0 0 auto;height:1px;background:rgb(255 255 255 / .18)}
-.glint{position:absolute;top:0;width:90px;height:85%;margin-left:-45px;filter:blur(10px);pointer-events:none}
-.ripples{position:absolute;inset:-20px 0 0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none;animation:swell 7s ease-in-out infinite alternate}
-@keyframes swell{to{transform:translateY(10px)}}
-.glint{animation:shimmer 3.2s ease-in-out infinite alternate}
-@keyframes shimmer{0%{transform:scaleX(.8)}50%{transform:scaleX(1.12)}100%{transform:scaleX(.9)}}
+.pane:after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgb(4 8 20 / .55) 0%,rgb(4 8 20 / .25) 50%,rgb(4 8 20 / 0) 75%);pointer-events:none}
+.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{to{filter:brightness(.65)}}
+.sun{position:absolute;z-index:2;left:0;top:0;width:var(--sun-size);height:var(--sun-size);margin:calc(var(--sun-size) / -2) 0 0 calc(var(--sun-size) / -2);border-radius:50%;will-change:transform}
 .sun:before{content:'';position:absolute;inset:-100%;border-radius:50%;background:radial-gradient(circle,rgb(255 216 130 / .22),rgb(255 216 130 / .07) 38%,transparent 70%);animation:breathe 8s ease-in-out infinite}
 .sun:after{content:'';position:absolute;inset:-35%;border-radius:50%;background:radial-gradient(circle,rgb(255 226 168 / .22),transparent 62%);animation:breathe 5s ease-in-out infinite}
 @keyframes breathe{50%{transform:scale(1.18);opacity:.6}}
-.stars{animation:twinkle 5s ease-in-out infinite alternate}
-@keyframes twinkle{to{filter:brightness(.65)}}
+.sea{grid-area:3/1/4/2;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+.sea:before{content:'';position:absolute;z-index:1;inset:0 0 auto;height:1px;background:rgb(255 255 255 / .18)}
+.sea-pane{position:relative;overflow:hidden}
+.sea-pane+.sea-pane{box-shadow:inset 1px 0 0 rgb(255 255 255 / .07)}
+.glint{position:absolute;top:0;width:90px;height:85%;margin-left:-45px;filter:blur(10px);pointer-events:none;animation:shimmer 3.2s ease-in-out infinite alternate}
+@keyframes shimmer{0%{transform:scaleX(.8)}50%{transform:scaleX(1.12)}100%{transform:scaleX(.9)}}
+.ripples{position:absolute;inset:-20px 0 0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none;animation:swell 7s ease-in-out infinite alternate}
+@keyframes swell{to{transform:translateY(10px)}}
 
 .hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(16px,4.5svh,64px))}
 .hero-top>*{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
@@ -160,60 +162,66 @@ button{font:inherit;color:inherit}
 @media (hover:hover){.seg button:hover:not(:disabled):not([aria-pressed=true]){color:var(--ink)}}
 .seg button:disabled{opacity:.35;cursor:default}
 
-/* Simulador: relógio, fuso, régua, dia e horários do dia a dia */
-.hero-bottom{grid-area:3/1/4/2;padding-top:clamp(16px,3svh,36px);padding-bottom:max(14px,env(safe-area-inset-bottom))}
-.clocks{display:flex;align-items:flex-end;gap:12px 28px;flex-wrap:wrap}
-.big{display:flex;font-family:var(--display);font-weight:400;font-size:clamp(88px,min(30vw,19svh),260px);line-height:.78;margin-left:-.02em;white-space:nowrap}
+/* Simulador: o botão de começar fica na emenda dos dois céus; embaixo, o que cada céu mostra,
+   o relógio (um só), a régua e o dia */
+.seam{grid-area:2/1/3/2;place-self:center;z-index:3;display:flex;align-items:center;gap:10px;animation:rise 1.1s .35s cubic-bezier(.2,.7,.2,1) both}
+.play{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:13px 24px;background:var(--glow);color:#121212;font-weight:700;font-size:17px;cursor:pointer;box-shadow:0 10px 30px rgb(0 0 0 / .35);animation:play-ping 2.6s ease-out infinite;transition:background .25s,color .25s,padding .25s,transform .15s}
+.play:hover{background:#ffd54a}
+.play.quiet{background:rgb(8 9 15 / .55);color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgb(255 255 255 / .28);padding:9px 18px;font-size:15px;animation:none}
+.play.quiet:hover{background:rgb(8 9 15 / .75)}
+@keyframes play-ping{0%{box-shadow:0 10px 30px rgb(0 0 0 / .35),0 0 0 0 rgb(245 193 22 / .55)}70%,100%{box-shadow:0 10px 30px rgb(0 0 0 / .35),0 0 0 16px rgb(245 193 22 / 0)}}
+.play i{width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent currentColor}
+.play[aria-pressed=true] i{width:9px;height:12px;border:0;border-left:3px solid;border-right:3px solid}
+.hero-bottom{grid-area:3/1/4/2;padding-top:clamp(12px,2.2svh,26px);padding-bottom:max(14px,env(safe-area-inset-bottom));text-align:center}
+.sides{display:grid;grid-template-columns:1fr 1fr;gap:0 calc(2 * var(--g))}
+.side{margin:0;display:flex;flex-direction:column;gap:2px;font-size:15px;line-height:1.35;color:var(--ink);font-variant-numeric:tabular-nums;min-width:0}
+.side b{font-weight:700;letter-spacing:.01em}
+.side-0 b{color:var(--now)}
+.side-60 b{color:var(--glow)}
+.big{display:flex;justify-content:center;font-family:var(--display);font-weight:400;font-size:clamp(84px,min(24vw,15svh),200px);line-height:.78;white-space:nowrap;margin-top:clamp(10px,2svh,22px)}
 .big .d{display:inline-block;width:.37em;text-align:center}
 .big .c{display:inline-block;width:.15em;text-align:center}
-.clock-side{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding-bottom:6px;font-size:16px;color:var(--ink-2);min-width:0}
-.clock-side .state{color:var(--ink);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums}
-.clock-side .other{font-size:15px;font-variant-numeric:tabular-nums}
+.scene{display:block;min-height:1.5em;margin-top:8px;color:var(--glow);font-weight:600;font-size:15px;transition:opacity .45s ease}
+.scene.out{opacity:0}
+.scene.in{animation:scene-in .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes scene-in{from{opacity:0;transform:translateY(6px);filter:blur(4px)}}
 .seg.glass{background:rgb(8 9 15 / .3);border-color:rgb(255 255 255 / .2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .seg.glass button:not([aria-pressed=true]){color:rgb(244 241 234 / .85)}
-.zone button{padding:7px 14px;font-size:15px}
-.zone button[aria-pressed=true]{color:#0b0d16}
-.zone button[data-zone="60"][aria-pressed=true]{background:var(--glow);color:#121212}
-.ruler{position:relative;margin-top:clamp(12px,2.4svh,22px);height:72px;touch-action:none;cursor:ew-resize}
+.ruler{position:relative;margin-top:clamp(4px,1.2svh,12px);height:72px;touch-action:none;cursor:ew-resize}
 .ruler svg{display:block;width:100%;height:72px;overflow:visible}
 .ruler input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
 .ruler:has(input:focus-visible){outline:2px solid var(--glow);outline-offset:4px;border-radius:6px}
 .r-lab{font-size:12px;fill:rgb(244 241 234 / .78);font-variant-numeric:tabular-nums}
-.r-key{font-size:12px;font-weight:600;fill:rgb(244 241 234 / .7)}
-.r-key.on{fill:rgb(244 241 234 / .95)}
-.sim-foot{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;margin-top:10px}
-.play{display:inline-flex;align-items:center;gap:8px;border:1px solid rgb(255 255 255 / .28);background:rgb(8 9 15 / .3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--ink)}
+.r-key{font-size:12px;font-weight:600;fill:rgb(244 241 234 / .95)}
+.sim-foot{display:flex;align-items:center;justify-content:center;gap:10px 14px;flex-wrap:wrap;margin-top:10px}
 .sim-cta{display:inline-flex;align-items:center;gap:8px;background:var(--glow);color:#121212;text-decoration:none;font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;box-shadow:0 0 28px rgb(245 193 22 / .45);animation:cta-in .7s cubic-bezier(.2,.8,.2,1),cta-glow 3s ease-in-out .7s infinite}
 .sim-cta[hidden]{display:none}
 .sim-cta:hover{background:#ffd54a}
 @keyframes cta-in{from{opacity:0;transform:translateY(10px) scale(.9)}}
-.play{transition:border-color .25s,background .25s,transform .15s}
-.play:hover{border-color:rgb(255 255 255 / .6);background:rgb(255 255 255 / .08)}
-.play i{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
-.play[aria-pressed=true] i{width:8px;height:10px;border:0;border-left:3px solid;border-right:3px solid}
-.clock-side .scene{color:var(--glow);font-weight:600;font-size:15px;min-height:1.4em;transition:opacity .45s ease}
-.scene.out{opacity:0}
-.scene.in{animation:scene-in .6s cubic-bezier(.2,.8,.2,1)}
-@keyframes scene-in{from{opacity:0;transform:translateX(-10px);filter:blur(4px)}}
-.clock-side .state,.clock-side .other{transition:color .3s}
-.sim-foot .hint{margin-left:auto;font-size:13px;color:rgb(244 241 234 / .8)}
+.sim-foot .hint{font-size:13px;color:rgb(244 241 234 / .8)}
 .sim-foot .hint button{background:none;border:0;padding:0;color:var(--glow);font-size:13px;font-weight:600;cursor:pointer}
-@media (max-width:760px){.clock-side .state{font-size:16px}.clock-side .other{font-size:14px}}
-/* Celular: o céu é o protagonista, então ganha o espaço. Texto mais curto, relógio menor e a
-   legenda da cena vira um letreiro sobre o horizonte, em vez de ocupar uma linha. */
+/* Celular: céus estreitos lado a lado, sol menor, legendas em duas linhas */
 @media (max-width:640px){
-  .hero{--sky-gap:clamp(96px,19svh,220px)}
+  .hero{--sky-gap:clamp(120px,21svh,240px);--sun-size:46px}
   .hero-top .wide{display:none}
-  .big{font-size:clamp(76px,min(23vw,13svh),120px)}
-  .hero-bottom{position:relative;padding-top:14px}
-  .clocks{gap:10px 20px}
-  .clock-side{gap:4px}
-  .clock-side .scene{position:absolute;left:var(--g);top:-46px;min-height:0;max-width:calc(100% - 2 * var(--g));font-size:14px;padding:5px 12px;border-radius:14px;background:rgb(8 9 15 / .6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  .clock-side .scene:empty{display:none}
-  .clock-side .scene.right{left:auto;right:var(--g)}
-  .ruler{margin-top:8px}
+  .play{font-size:16px;padding:12px 20px}
+  .side{font-size:13px}
+  .side span{min-height:2.7em}
+  .big{font-size:clamp(72px,min(22vw,12svh),110px)}
+  #hint-text{display:none}
+  .sides{gap:0 16px}
+  .seam.ended .play{padding:11px 14px}
+  .seam.ended .play span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
-@media (max-width:640px){.sim-foot .hint{margin-left:0}#hint-text{display:none}.sim-foot.ended>.seg{display:none}.sim-foot.ended .play{padding:10px 13px}.sim-foot.ended .play span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
+
+/* ---------- Movimento ---------- */
+.manifesto .mov-list{list-style:none;margin:36px 0 0;padding:0;display:grid;gap:6px;font-size:clamp(22px,3.2vw,38px);font-weight:300;line-height:1.25}
+.manifesto .mov-list b{font-weight:700;color:var(--ink)}
+.manifesto .mov-list li{color:var(--ink-2)}
+.manifesto .mov-list li.reveal{transition-delay:calc(var(--i) * .09s)}
+.mov-horizon{display:block;width:100%;height:auto;margin:44px 0 0}
+.mov-right{margin:28px 0 0;font-family:var(--display);font-size:clamp(44px,6.4vw,88px);line-height:.92;color:var(--glow);max-width:12em}
+.mov-sign{margin:14px 0 0;font-size:clamp(16px,1.6vw,20px);color:var(--ink-2)}
 
 /* ---------- Seções ---------- */
 .sec{padding:120px 0 40px}
@@ -331,6 +339,11 @@ button{font:inherit;color:inherit}
 .faq summary:after{content:'';flex:none;width:14px;height:14px;background:linear-gradient(var(--ink-3),var(--ink-3)) center/14px 1.5px no-repeat,linear-gradient(var(--ink-3),var(--ink-3)) center/1.5px 14px no-repeat;transition:transform .25s}
 .faq details[open] summary:after{transform:rotate(45deg)}
 .faq summary:hover{color:var(--glow)}
+.zone-fig{position:relative;margin:-6px 0 28px;max-width:560px}
+.zone-map{cursor:pointer;touch-action:manipulation}
+.zone-map{display:block;width:100%;height:auto}
+.zone-map text{font-family:var(--f);font-variant-numeric:tabular-nums}
+.zone-fig .note{margin-top:8px}
 .faq p{margin:0 0 24px;max-width:44em;color:var(--ink-2);font-size:17px}
 
 footer{margin-top:120px;border-top:1px solid var(--line);padding:32px 0 48px;font-size:14px;color:var(--ink-3)}
@@ -342,7 +355,7 @@ footer p{margin:0}
 </head>
 <body>
 <header class="bar" id="bar" data-live="">
-  <a class="brand" href="#topo">fuso <span>nordeste</span></a>
+  <a class="brand" href="#topo">uma hora <span>para viver</span></a>
   <div class="bar-count" role="status" aria-live="off"><i class="pulse"></i><b id="bar-count">—</b><span class="of">de 20.000 apoios</span></div>
   <button class="bell" id="bell" type="button" aria-pressed="false" aria-label="Avisar quando entrar um apoio novo" title="Avisar quando entrar um apoio novo"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5a5 5 0 0 0-5 5v3.2L3.5 13.5h13L15 10.7V7.5a5 5 0 0 0-5-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   <a class="bar-cta" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Apoiar <span aria-hidden="true">↗</span></a>
@@ -353,13 +366,19 @@ footer p{margin:0}
 
 <main>
 <section class="hero" id="topo" aria-labelledby="h1">
-  <div class="sky" id="sky"><canvas class="stars" id="stars" aria-hidden="true"></canvas></div>
-  <div class="sun" id="sun" aria-hidden="true"></div>
-  <div class="sea" id="sea" aria-hidden="true"><div class="glint" id="glint"></div><div class="ripples"></div></div>
+  <div class="sky" id="sky" aria-hidden="true">
+    <div class="pane" id="pane-0"><canvas class="stars"></canvas><div class="sun"></div></div>
+    <div class="pane" id="pane-60"><canvas class="stars"></canvas><div class="sun"></div></div>
+  </div>
+  <div class="sea" aria-hidden="true">
+    <div class="sea-pane" id="sea-0"><div class="glint"></div></div>
+    <div class="sea-pane" id="sea-60"><div class="glint"></div></div>
+    <div class="ripples"></div>
+  </div>
 
   <div class="hero-top wrap">
-    <h1 id="h1">O mesmo relógio, outro céu.</h1>
-    <p>Uma ideia <span class="wide">legislativa </span>no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE<span class="wide">, com o fuso UTC−2</span>.</p>
+    <h1 id="h1">Viva seu fim de tarde com mais luz.</h1>
+    <p>Mais uma hora de sol depois do trabalho. Uma ideia <span class="wide">legislativa </span>no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE<span class="wide">, com o fuso UTC−2</span>.</p>
     <div class="finder">
       <div class="search">
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -371,19 +390,17 @@ footer p{margin:0}
     <p class="place-msg" id="place-msg" role="status"></p>
   </div>
 
+  <div class="seam"><button type="button" class="play" id="play" aria-pressed="false"><i aria-hidden="true"></i><span>Veja como seria</span></button>
+    <a class="sim-cta" id="sim-cta" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer" hidden>Apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
+  </div>
+
   <div class="hero-bottom wrap">
-    <div class="clocks">
-      <div class="big" id="clock" role="img" aria-label="--:--">--:--</div>
-      <div class="clock-side">
-        <div class="seg glass zone" role="group" aria-label="Relógio">
-          <button type="button" data-zone="0" aria-pressed="true">Hoje · UTC−3</button>
-          <button type="button" data-zone="60" aria-pressed="false">Com UTC−2</button>
-        </div>
-        <span class="scene" id="scene" aria-live="polite"></span>
-        <span class="state" id="sun-state">—</span>
-        <span class="other" id="sun-other">—</span>
-      </div>
+    <div class="sides">
+      <p class="side side-0"><b>Hoje · UTC−3</b><span id="state-0">—</span></p>
+      <p class="side side-60"><b>Com UTC−2</b><span id="state-60">—</span></p>
     </div>
+    <div class="big" id="clock" role="img" aria-label="--:--">--:--</div>
+    <span class="scene" id="scene" aria-live="polite"></span>
     <div class="ruler" id="ruler">
       <svg id="ruler-svg" aria-hidden="true"></svg>
       <input type="range" id="scrub" min="0" max="1435" step="5" value="0" aria-label="Hora no relógio">
@@ -394,10 +411,25 @@ footer p{margin:0}
         <button type="button" data-day="jun" aria-pressed="false">21 jun</button>
         <button type="button" data-day="dez" aria-pressed="false">21 dez</button>
       </div>
-      <button type="button" class="play" id="play" aria-pressed="false"><i aria-hidden="true"></i><span>Ver o dia passar</span></button>
-      <a class="sim-cta" id="sim-cta" href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer" hidden>Apoiar no e-Cidadania <span aria-hidden="true">↗</span></a>
       <span class="hint"><span id="hint-text">Arraste a régua para mudar a hora</span><button type="button" id="now-btn" hidden>Voltar para agora</button></span>
     </div>
+  </div>
+</section>
+
+<section class="sec manifesto" id="movimento" aria-labelledby="mov-title">
+  <div class="wrap">
+    <p class="kicker reveal">Movimento</p>
+    <h2 class="h-xl reveal" id="mov-title">Uma hora para viver.</h2>
+    <ul class="mov-list">
+      <li class="reveal" style="--i:0">Uma hora para <b>brincar</b>.</li>
+      <li class="reveal" style="--i:1">Uma hora para <b>pedalar</b>.</li>
+      <li class="reveal" style="--i:2">Uma hora para <b>ocupar as praças</b>.</li>
+      <li class="reveal" style="--i:3">Uma hora para <b>conviver</b>.</li>
+      <li class="reveal" style="--i:4">Uma hora para <b>estar com quem amamos</b>.</li>
+    </ul>
+    <svg class="mov-horizon reveal" viewBox="0 0 1200 70" aria-hidden="true"><defs><clipPath id="above"><rect width="1200" height="60"/></clipPath></defs><circle cx="930" cy="60" r="52" fill="#f5c116" clip-path="url(#above)"/><path d="M0 60H1200" stroke="#f2f1eb" stroke-opacity=".35" stroke-width="2"/></svg>
+    <p class="mov-right reveal">Porque o tempo também é um direito.</p>
+    <p class="mov-sign reveal">Por um Nordeste em sintonia com o sol.</p>
   </div>
 </section>
 
@@ -473,8 +505,9 @@ footer p{margin:0}
     <h2 class="h-l reveal" id="faq-title">Antes de apoiar, ou não.</h2>
     <div class="faq">
       <details><summary>A mudança já vale?</summary><p>Não. É uma ideia legislativa. Com 20 mil apoios no prazo, ela vai para a Comissão de Direitos Humanos e Legislação Participativa do Senado, que decide se vira projeto de lei. Não há aprovação automática. Pelas regras do portal, qualquer senador ou deputado também pode adotar a ideia a qualquer momento, com qualquer número de apoios. Para mudar o fuso basta uma lei federal ordinária, sem emenda à Constituição: foi assim no Acre, em 2008 e em 2013.</p></details>
-      <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p></details>
-      <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h. E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
+      <details><summary>O que se ganha?</summary><p id="gain">O fim do dia ganha uma hora de sol no relógio, o ano inteiro. E é o fuso da geografia: as cinco capitais ficam dentro da faixa teórica do UTC−2.</p></details>
+      <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p><figure class="zone-fig"><svg class="zone-map" id="zone-map" role="img"></svg><div class="tip" id="zone-tip" hidden></div><figcaption class="note" id="zone-cap"></figcaption></figure></details>
+      <details><summary>E quem perde?</summary><p>As manhãs ficam mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h. E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
       <details><summary>Por que não só antecipar os horários?</summary><p>Daria um efeito parecido: entrar às 7h e sair às 16h no relógio de hoje equivale, em relação ao sol, a entrar às 8h e sair às 17h com UTC−2. A diferença é a coordenação. Antecipar depende de cada escola, empresa e órgão, e nem todo mundo tem autonomia para isso; mudar o fuso muda o relógio de todos de uma vez, mas não garante que os horários continuariam os mesmos no relógio.</p></details>
       <details><summary>E o sono?</summary><p>A relação entre luz, horários e sono é complexa. Um <a href="https://pubmed.ncbi.nlm.nih.gov/31030116/" target="_blank" rel="noopener noreferrer">estudo nos Estados Unidos</a> (Giuntella e Mazzonna, 2019) comparou cidades dos dois lados de fronteiras de fuso: uma hora a mais de luz no fim do dia esteve associada a 19 minutos a menos de sono, em média, quando os horários de trabalho e escola são rígidos. É outro país, com outra latitude e outras rotinas; o resultado não prevê o que aconteceria aqui, mas mostra que a questão merece estudo.</p></details>
       <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. Os cinco estados já adiantaram o relógio em uma hora nos horários de verão de 1985–86 a 1989–90, de 1999–2000 e de 2001–02; Alagoas e Sergipe, também no de 1995–96 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>). Nesses verões, o relógio deles ficava em UTC−2, mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
@@ -572,11 +605,13 @@ const CAPITALS=new Set([2408102,2507507,2611606,2704302,2800308]);
 let place=byCode.get(2611606);
 
 /* ---------- Simulador ---------- */
-/* O relógio mostra uma hora "de parede". Trocar o fuso mantém o relógio e move o sol:
-   com UTC−2, a mesma hora do relógio acontece uma hora antes em relação ao sol. */
-const hero=$('.hero'),sky=$('#sky'),sea=$('#sea'),sunEl=$('#sun'),glint=$('#glint'),starsC=$('#stars'),scrub=$('#scrub');
+/* O relógio mostra uma hora "de parede", a mesma nos dois céus. À esquerda, o céu de hoje
+   (UTC−3); à direita, com UTC−2, onde a mesma hora do relógio acontece uma hora antes em
+   relação ao sol. */
+const hero=$('.hero'),scrub=$('#scrub');
 const themeMeta=document.querySelector('meta[name=theme-color]');
-let zone=0,zoneShown=0,simDay='hoje',following=true,clockMin=nowMinutes(),sun=null;
+const PANES=[0,60].map(z=>({z,el:$('#pane-'+z),stars:$('#pane-'+z+' .stars'),sun:$('#pane-'+z+' .sun'),sea:$('#sea-'+z),glint:$('#sea-'+z+' .glint'),state:$('#state-'+z)}));
+let simDay='hoje',following=true,clockMin=nowMinutes(),sun=null;
 const thisYear=()=>Number(fmt(new Date(),{year:'numeric'}));
 function dayBase(){
   if(simDay==='jun')return Date.UTC(thisYear(),5,21)-OFFSET*6e4;
@@ -591,49 +626,50 @@ const altAt=real=>SunCalc.getPosition(new Date(sun.base+real*6e4),sun.lat,sun.lo
 function sunPhrase(z){
   const real=clockMin-z,alt=altAt(real);
   if(alt>0)return'sol a '+Math.round(alt)+'° · pôr às '+hhmm(sun.set+z);
-  if(alt>-6)return'crepúsculo · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr foi às '+hhmm(sun.set+z));
-  return'noite · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr foi às '+hhmm(sun.set+z));
+  if(alt>-6)return'crepúsculo · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr às '+hhmm(sun.set+z));
+  return'noite · '+(real<sun.noon?'nascer às '+hhmm(sun.rise+z):'pôr às '+hhmm(sun.set+z));
 }
 const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);
 function drawStars(){
-  const w=sky.clientWidth,h=sky.clientHeight;
-  const x=canvasFit(starsC,w,h);let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
-  for(let i=0;i<Math.round(w*h/5200);i++){const sx=rnd()*w,sy=rnd()*h,r=rnd()<.08?1.3:.7;x.globalAlpha=(.35+rnd()*.65)*(1-sy/h*.6);x.fillStyle='#fff';x.beginPath();x.arc(sx,sy,r,0,7);x.fill()}
+  PANES.forEach((p,k)=>{
+    const w=p.el.clientWidth,h=p.el.clientHeight;if(!w||!h)return;
+    const x=canvasFit(p.stars,w,h);let seed=7+k*6;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+    for(let i=0;i<Math.round(w*h/5200);i++){const sx=rnd()*w,sy=rnd()*h,r=rnd()<.08?1.3:.7;x.globalAlpha=(.35+rnd()*.65)*(1-sy/h*.6);x.fillStyle='#fff';x.beginPath();x.arc(sx,sy,r,0,7);x.fill()}
+  });
 }
-let sunLeft=true;
+/* Pinta um dos céus e devolve a cor do topo */
+function paintPane(p,textBottom){
+  const real=clockMin-p.z,alt=altAt(real),[top,mid,hor]=skyAt(alt);
+  p.el.style.background='linear-gradient(180deg,'+top+' 0%,'+mid+' 62%,'+hor+' 100%)';
+  p.stars.style.opacity=clamp((-alt-3)/9,0,1);
+  const W=p.el.clientWidth,H=p.el.clientHeight;
+  const frac=(real-sun.rise)/(sun.set-sun.rise),x=W*(.12+.76*frac);
+  const minY=Math.min(H-50,textBottom+p.sun.offsetWidth/2+18),y=H-Math.sin(alt*Math.PI/180)*(H-minY);
+  const warm=clamp(alt/28,0,1),core=mix('#ff7a36','#fff4dc',warm);
+  p.sun.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)';
+  p.sun.style.background='radial-gradient(circle,'+core+' 0 34%,'+core+'55 46%,transparent 70%)';
+  p.sun.style.boxShadow='0 0 '+(50+40*(1-warm))+'px '+(14+18*(1-warm))+'px '+mix('#ff7a36','#ffe2a8',warm)+'66';
+  p.sun.style.opacity=alt>-2?1:0;
+  p.glint.style.left=x+'px';
+  p.glint.style.background='linear-gradient(180deg,'+core+' 0%,'+core+'00 100%)';
+  p.glint.style.opacity=(clamp((alt+1)/6,0,1)*(1-clamp((alt-35)/40,0,.6))*.55).toFixed(2);
+  p.state.textContent=cap(sunPhrase(p.z));
+  return [top,hor];
+}
 function renderHero(){
   if(!sun)return;
-  const real=clockMin-zoneShown,alt=altAt(real);
-  const [top,mid,hor]=skyAt(alt);
-  // o céu tinge a página inteira, escuro o bastante para manter o contraste do texto
-  const bg=mix(top,'#06070d',.8);
+  const textBottom=document.querySelector('.hero-top').getBoundingClientRect().bottom-hero.getBoundingClientRect().top;
+  const colors=PANES.map(p=>paintPane(p,textBottom));
+  // os dois céus tingem a página inteira, escuro o bastante para manter o contraste do texto
+  const bg=mix(mix(colors[0][0],colors[1][0],.5),'#06070d',.8);
   document.documentElement.style.setProperty('--bg',bg);
   if(themeMeta)themeMeta.content=bg;
-  sky.style.background='linear-gradient(180deg,'+top+' 0%,'+mid+' 62%,'+hor+' 100%)';
-  const seaTop=mix(mix(top,'#03101f',.62),hor,.12);
-  sea.style.background='linear-gradient(180deg,'+seaTop+' 0%,'+mix(top,'#02050c',.72)+' 45%,'+bg+' 100%)';
-  starsC.style.opacity=clamp((-alt-3)/9,0,1);
-  const W=hero.clientWidth,H=sky.clientHeight;
-  const frac=(real-sun.rise)/(sun.set-sun.rise),x=W*(.1+.8*frac);
-  const textBottom=document.querySelector('.hero-top').getBoundingClientRect().bottom-hero.getBoundingClientRect().top;
-  const minY=Math.min(H-60,textBottom+56);
-  const y=H-Math.sin(alt*Math.PI/180)*(H-minY);
-  const warm=clamp(alt/28,0,1),core=mix('#ff7a36','#fff4dc',warm);
-  sunEl.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)';
-  sunEl.style.background='radial-gradient(circle,'+core+' 0 34%,'+core+'55 46%,transparent 70%)';
-  sunEl.style.boxShadow='0 0 '+(60+40*(1-warm))+'px '+(18+20*(1-warm))+'px '+mix('#ff7a36','#ffe2a8',warm)+'66';
-  sunEl.style.opacity=alt>-2?1:0;
-  glint.style.left=x+'px';
-  sunLeft=x<W/2;
-  glint.style.background='linear-gradient(180deg,'+core+' 0%,'+core+'00 100%)';
-  glint.style.opacity=(clamp((alt+1)/6,0,1)*(1-clamp((alt-35)/40,0,.6))*.55).toFixed(2);
-  const shown=((Math.round(clockMin)%1440)+1440)%1440,state=cap(sunPhrase(zone));
+  PANES.forEach((p,k)=>{const [top,hor]=colors[k],seaTop=mix(mix(top,'#03101f',.62),hor,.12);p.sea.style.background='linear-gradient(180deg,'+seaTop+' 0%,'+mix(top,'#02050c',.72)+' 45%,'+bg+' 100%)'});
+  const shown=((Math.round(clockMin)%1440)+1440)%1440;
   const clockText=hhmm(shown),clockEl=$('#clock');
   if(clockEl.dataset.t!==clockText){clockEl.dataset.t=clockText;clockEl.setAttribute('aria-label',clockText);clockEl.replaceChildren(...[...clockText].map(ch=>{const e=document.createElement('span');e.className=ch===':'?'c':'d';e.textContent=ch;e.setAttribute('aria-hidden','true');return e}))}
-  $('#sun-state').textContent=state;
-  $('#sun-other').textContent=(zone?'Hoje, UTC−3: ':'Com UTC−2: ')+sunPhrase(60-zone);
   scrub.value=String(Math.round(shown/5)*5);
-  scrub.setAttribute('aria-valuetext',hhmm(shown)+' no relógio, '+(zone?'com UTC−2':'hoje')+'. '+state);
+  scrub.setAttribute('aria-valuetext',hhmm(shown)+' no relógio. Hoje, UTC−3: '+sunPhrase(0)+'. Com UTC−2: '+sunPhrase(60));
   drawRuler();
 }
 /* Régua: o eixo é o relógio; cada faixa mostra o período com sol em um dos fusos */
@@ -642,10 +678,9 @@ function drawRuler(){
   const pl=52,pr=8,iw=W-pl-pr,x=m=>pl+clamp(m,0,1440)/1440*iw,step=W<620?6:3;
   svg.setAttribute('viewBox','0 0 '+W+' 72');svg.replaceChildren();
   [[0,16,'#5cb3ec','UTC−3'],[60,36,'#f5c116','UTC−2']].forEach(([z,yy,color,label])=>{
-    const on=z===zone;
-    svg.append(node('text',{x:0,y:yy+4,class:'r-key'+(on?' on':'')},label));
+    svg.append(node('text',{x:0,y:yy+4,class:'r-key'},label));
     svg.append(node('line',{x1:pl,x2:pl+iw,y1:yy,y2:yy,stroke:'rgb(255 255 255 / .16)','stroke-width':2}));
-    svg.append(node('line',{x1:x(sun.rise+z),x2:x(sun.set+z),y1:yy,y2:yy,stroke:color,'stroke-width':on?6:4,'stroke-opacity':on?1:.85,'stroke-linecap':'round'}));
+    svg.append(node('line',{x1:x(sun.rise+z),x2:x(sun.set+z),y1:yy,y2:yy,stroke:color,'stroke-width':5,'stroke-linecap':'round'}));
   });
   for(let h=0;h<=24;h+=step){
     svg.append(node('line',{x1:x(h*60),x2:x(h*60),y1:46,y2:52,stroke:'rgb(255 255 255 / .4)'}));
@@ -653,10 +688,10 @@ function drawRuler(){
   }
   const cx=x(((clockMin%1440)+1440)%1440);
   svg.append(node('line',{x1:cx,x2:cx,y1:4,y2:50,stroke:'#fff','stroke-width':1.5}));
-  svg.append(node('circle',{cx,cy:zone?36:16,r:8,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':2}));
+  [16,36].forEach(cy=>svg.append(node('circle',{cx,cy,r:6.5,fill:'#fff',stroke:'rgb(0 0 0 / .35)','stroke-width':1.5})));
 }
-let clockGeneration=0,zoneGeneration=0;
-function manual(){intro=false;clearTimeout(introTimer);clockGeneration++;zoneGeneration++;zoneShown=zone;$('.sim-foot').classList.remove('ended');stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
+let clockGeneration=0;
+function manual(){clockGeneration++;stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true}
 function glideTo(to){const from=clockMin,id=++clockGeneration;tween(700,t=>{if(id===clockGeneration){clockMin=from+(to-from)*t;renderHero()}},()=>{if(id===clockGeneration){clockMin=to;renderHero()}})}
 scrub.addEventListener('input',()=>{clockMin=Number(scrub.value);manual();renderHero()});
 /* Arrastar a régua: toque ou mouse em qualquer ponto, no mesmo eixo desenhado */
@@ -664,13 +699,6 @@ const ruler=$('#ruler');
 function minFromX(cx){const r=ruler.getBoundingClientRect();return clamp(Math.round((cx-r.left-52)/(r.width-60)*1440/5)*5,0,1435)}
 ruler.addEventListener('pointerdown',e=>{if(e.button)return;ruler.setPointerCapture(e.pointerId);manual();clockMin=minFromX(e.clientX);renderHero()});
 ruler.addEventListener('pointermove',e=>{if(!ruler.hasPointerCapture(e.pointerId))return;clockMin=minFromX(e.clientX);renderHero()});
-function setZone(z,animate){
-  const id=++zoneGeneration;if(z===zone&&zoneShown===z)return;zone=z;
-  document.querySelectorAll('[data-zone]').forEach(x=>x.setAttribute('aria-pressed',String(Number(x.dataset.zone)===z)));
-  if(!animate){zoneShown=z;renderHero();return}
-  const from=zoneShown;tween(900,t=>{if(id===zoneGeneration){zoneShown=from+(z-from)*t;renderHero()}},()=>{if(id===zoneGeneration){zoneShown=z;renderHero()}});
-}
-document.querySelectorAll('[data-zone]').forEach(b=>b.addEventListener('click',()=>{manual();setZone(Number(b.dataset.zone),true)}));
 function setDay(d){
   simDay=d;
   document.querySelectorAll('[data-day]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.day===d)));
@@ -679,31 +707,30 @@ function setDay(d){
 document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{manual();setDay(b.dataset.day)}));
 $('#now-btn').addEventListener('click',()=>{
   clockGeneration++;stopStory();setDay('hoje');following=true;$('#now-btn').hidden=true;
-  let to=nowMinutes()+zone;if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;$('#hint-text').hidden=false;
+  let to=nowMinutes();if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;$('#hint-text').hidden=false;
   glideTo(to);
 });
 
 /* ---------- O dia passando ---------- */
-/* Time-lapse com UTC−2: o relógio desacelera perto de cada cena, sem parar, e termina no
-   pôr do sol. A legenda é só a cena; a comparação com o relógio de hoje vem do cálculo do sol. */
+/* Começa só quando a pessoa pede ("Veja como seria"). Time-lapse: o relógio desacelera perto
+   de cada cena, sem parar, e termina no pôr do sol com UTC−2, quando o céu de hoje já é noite. */
 const SCENES=[[360,'Saindo de casa'],[420,'Entrada na escola'],[720,'Almoço'],[1020,'Saída do trabalho']];
-const sceneEl=$('#scene'),playBtn=$('#play'),simFoot=$('.sim-foot'),simCta=$('#sim-cta');
+const sceneEl=$('#scene'),playBtn=$('#play'),seamEl=$('.seam'),simCta=$('#sim-cta');
 let story=null;
 function playLabel(t,on){playBtn.querySelector('span').textContent=t;playBtn.setAttribute('aria-pressed',String(on))}
 function setScene(text){
   if(!text){sceneEl.classList.add('out');return}
   if(sceneEl.textContent===text&&!sceneEl.classList.contains('out'))return;
-  // no celular a legenda fica do lado oposto ao sol; o lado é escolhido quando ela aparece e não muda depois
-  sceneEl.textContent=text;sceneEl.classList.toggle('right',sunLeft);sceneEl.classList.remove('out','in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
+  sceneEl.textContent=text;sceneEl.classList.remove('out','in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
 }
-function stopStory(){if(story)cancelAnimationFrame(story.raf);story=null;sceneEl.textContent='';sceneEl.classList.remove('out','in');playLabel('Ver o dia passar',false);simCta.hidden=true;simFoot.classList.remove('ended')}
+function stopStory(){if(story)cancelAnimationFrame(story.raf);story=null;sceneEl.textContent='';sceneEl.classList.remove('out','in');playLabel('Veja como seria',false);playBtn.classList.remove('quiet');simCta.hidden=true;seamEl.classList.remove('ended')}
 // minutos de relógio por segundo: devagar perto das cenas e do fim, rápido entre elas
 const smooth=t=>t*t*(3-2*t);
 function storySpeed(x,end){const d=Math.min(end-x,...SCENES.map(([m])=>Math.abs(x-m)));return 5+105*smooth(Math.min(1,d/45))}
 function finishStory(){
-  story=null;playLabel('Ver de novo',false);
-  setScene('O sol se pondo, 1 hora mais tarde que hoje.');
-  simCta.hidden=false;simFoot.classList.add('ended');
+  story=null;playLabel('Ver de novo',false);playBtn.classList.add('quiet');
+  setScene('Com UTC−2, o sol se põe 1 hora mais tarde.');
+  simCta.hidden=false;seamEl.classList.add('ended');
 }
 function runStory(){
   story.paused=false;story.last=performance.now();playLabel('Pausar',true);
@@ -719,20 +746,10 @@ function runStory(){
   };
   story.raf=requestAnimationFrame(step);
 }
-/* Abertura: enquanto a cidade não chega (a localização pode levar alguns segundos), o céu fica
-   parado na madrugada, onde a história começa; assim não há salto da hora atual para as 05:20. */
-let intro=!reduced,introTimer;
-function goNow(){clockGeneration++;stopStory();setDay('hoje');setZone(0,true);following=true;$('#now-btn').hidden=true;$('#hint-text').hidden=false;let to=nowMinutes();if(to-clockMin>720)to-=1440;else if(clockMin-to>720)to+=1440;glideTo(to)}
-function startIntro(){
-  if(!intro)return;
-  if(document.activeElement===q){introTimer=setTimeout(startIntro,500);return} // escolhendo a cidade: espera
-  intro=false;
-  if(scrollY<innerHeight/2)playStory();else goNow();
-}
 function playStory(){
-  clockGeneration++;stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true;
-  if(reduced){setZone(60,false);clockMin=sun.set+60;renderHero();finishStory();return}
-  setZone(60,true);clockMin=320;renderHero();
+  clockGeneration++;stopStory();following=false;$('#now-btn').hidden=false;$('#hint-text').hidden=true;playBtn.classList.add('quiet');
+  if(reduced){clockMin=sun.set+60;renderHero();finishStory();return}
+  clockMin=320;renderHero();
   story={from:320};runStory();
 }
 playBtn.addEventListener('click',()=>{
@@ -741,7 +758,7 @@ playBtn.addEventListener('click',()=>{
   story.paused=true;cancelAnimationFrame(story.raf);playLabel('Continuar',false);
 });
 
-setInterval(()=>{if(following){sun=solarDay();clockMin=nowMinutes()+zone;renderHero()}},15000);
+setInterval(()=>{if(following){sun=solarDay();clockMin=nowMinutes();renderHero()}},15000);
 
 /* ---------- Contagem ---------- */
 let current=null,firstLive=null,shownCount=0,dotsSeen=false;
@@ -926,6 +943,13 @@ function yearText(){
   const late=[cnt(d=>d.set>=1080),cnt(d=>d.set+60>=1080)],dark=[cnt(d=>d.rise>360),cnt(d=>d.rise+60>360)];
   $('#year-title').textContent='Em '+city+', com UTC−2, o sol se poria depois das 18h em '+phr(late[1])+'.';
   const dark7=cnt(d=>d.rise+60>420);
+  // "O que se ganha?": os números da cidade escolhida, sem promessas além do relógio
+  const sets=days.map(d=>d.set),lo=Math.min(...sets),hi=Math.max(...sets),after17=Math.floor(lo+60-1020),early=cnt(d=>d.rise<330);
+  const dur=m=>m<60?m+' minutos':Math.floor(m/60)+'h'+String(m%60).padStart(2,'0');
+  $('#gain').textContent='O fim do dia ganha uma hora de sol no relógio. Em '+city+', o sol atualmente se põe entre '+hhmm(lo)+' e '+hhmm(hi)+', conforme a época do ano; com UTC−2, entre '+hhmm(lo+60)+' e '+hhmm(hi+60)+'. '
+    +(after17>0?'Quem sai do trabalho às 17h teria pelo menos '+dur(after17)+' de sol pela frente em qualquer dia do ano. ':'')
+    +(early?'A luz também deixa de chegar tão cedo: atualmente o sol nasce antes das 5h30 em '+phr(early)+'. ':'')
+    +'E é o fuso da geografia: as cinco capitais ficam dentro da faixa teórica do UTC−2. Se isso compensa as manhãs mais escuras depende da rotina de cada um; veja em “E quem perde?”.';
   $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
   $('#year-city').textContent=city+', '+place.uf;
   const items=[
@@ -940,6 +964,68 @@ function yearText(){
     div.append(dt,dd);return div}));
 }
 
+/* ---------- Mapa das faixas de fuso ---------- */
+/* Cada sede municipal é um círculo com área proporcional à população (IBGE, Censo 2022),
+   sobre os contornos dos cinco estados. Projeção equirretangular simples, com a longitude
+   encolhida pelo cosseno da latitude média (cerca de 8° S). Ambos os dados vêm embutidos no build. */
+const POP=/*POPULACAO*/{};
+const UF_RINGS=/*ESTADOS*/[];
+const ZONE_LINE=-37.5;
+let zonePts=[],zoneHover=null;
+function drawZoneMap(){
+  const svg=$('#zone-map');if(!svg)return;
+  const k=100,cx=Math.cos(8*Math.PI/180),X=lon=>(lon+41.45)*cx*k,Y=lat=>(-4.75-lat)*k+26;
+  const W=Math.ceil(X(-34.75))+215,H=Math.ceil(Y(-11.6))+44,lx=X(ZONE_LINE);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.replaceChildren();
+  for(const ring of UF_RINGS)svg.append(node('path',{d:'M'+ring.map(([lo,la])=>X(lo).toFixed(1)+' '+Y(la).toFixed(1)).join('L')+'Z',fill:'rgb(255 255 255 / .035)',stroke:'rgb(242 241 235 / .3)','stroke-width':1.5,'stroke-linejoin':'round'}));
+  svg.append(node('line',{x1:lx,x2:lx,y1:38,y2:H-34,stroke:'rgb(242 241 235 / .65)','stroke-width':2,'stroke-dasharray':'6 6'}));
+  svg.append(node('text',{x:lx,y:26,'text-anchor':'middle','font-size':28,'font-weight':600,fill:'#f2f1eb'},'37°30′ O'));
+  // área proporcional à população: o raio cresce com a raiz; as maiores ficam por baixo
+  const r=c=>Math.max(2.4,Math.sqrt(POP[c.code]||0)*.034);
+  let east=0,eastPop=0,total=0;zonePts=[];
+  for(const c of [...cities].sort((a,b)=>(POP[b.code]||0)-(POP[a.code]||0))){
+    const e=c.lon>ZONE_LINE,n=POP[c.code]||0;total+=n;if(e){east++;eastPop+=n}
+    svg.append(node('circle',{cx:X(c.lon).toFixed(1),cy:Y(c.lat).toFixed(1),r:r(c).toFixed(1),fill:e?'#f5c116':'#5cb3ec','fill-opacity':.78,stroke:'#0b1022','stroke-width':1}));
+    zonePts.push({c,x:X(c.lon),y:Y(c.lat),r:r(c)});
+  }
+  for(const code of CAPITALS){const c=byCode.get(code);if(!c)continue;
+    svg.append(node('text',{x:X(c.lon)+r(c)+8,y:Y(c.lat)+9,'font-size':28,fill:'#f2f1eb'},c.name))}
+  if(place)svg.append(node('circle',{cx:X(place.lon),cy:Y(place.lat),r:r(place)+7,fill:'none',stroke:'#fff','stroke-width':2.5}));
+  zoneHover=node('circle',{r:0,fill:'none',stroke:'#fff','stroke-width':2,'stroke-dasharray':'4 3',opacity:0,'pointer-events':'none'});svg.append(zoneHover);
+  svg.append(node('text',{x:lx-14,y:H-8,'text-anchor':'end','font-size':28,'font-weight':600,fill:'#5cb3ec'},'← faixa do UTC−3'));
+  svg.append(node('text',{x:lx+14,y:H-8,'font-size':28,'font-weight':600,fill:'#f5c116'},'faixa do UTC−2 →'));
+  const west=cities.length-east,pct=Math.round(eastPop/total*100),mi=n=>(n/1e6).toLocaleString('pt-BR',{maximumFractionDigits:1})+' milhões';
+  svg.setAttribute('aria-label','Mapa das '+nf(cities.length)+' sedes municipais, com círculos do tamanho da população: '+nf(east)+' cidades, com '+pct+'% da população, a leste de 37°30′ O, na faixa teórica do UTC−2; '+nf(west)+' a oeste.');
+  $('#zone-cap').textContent='Cada círculo é uma sede municipal, do tamanho da sua população (IBGE, Censo 2022). '+nf(east)+' das '+nf(cities.length)+' cidades ficam a leste da linha, dentro da faixa teórica do UTC−2, e ali vivem '+pct+'% das pessoas dos cinco estados ('+mi(eastPop)+'). As outras '+nf(west)+', com '+mi(total-eastPop)+', também mudariam, porque a proposta vale para os estados inteiros.'+(place?' O anel branco marca '+place.name+'.':'');
+}
+
+/* Passar o mouse ou tocar mostra a cidade mais perto do ponteiro; clicar escolhe a cidade.
+   Vale o centro mais próximo entre os círculos ao alcance, para achar cidades pequenas
+   mesmo dentro do círculo de uma capital. */
+const zoneMap=$('#zone-map'),zoneTip=$('#zone-tip'),zoneFig=zoneMap&&zoneMap.parentElement;
+function zoneAt(e){
+  const rect=zoneMap.getBoundingClientRect(),vb=zoneMap.viewBox.baseVal;if(!rect.width||!vb.width)return null;
+  const s=vb.width/rect.width,x=(e.clientX-rect.left)*s,y=(e.clientY-rect.top)*s,tol=(e.pointerType==='mouse'?6:14)*s;
+  let best=null,bd=Infinity;
+  for(const p of zonePts){const d=Math.hypot(p.x-x,p.y-y);if(d<=p.r+tol&&d<bd){bd=d;best=p}}
+  return best&&{...best,px:best.x/s,py:best.y/s};
+}
+function zoneShow(p){
+  if(!p){zoneTip.hidden=true;if(zoneHover)zoneHover.setAttribute('opacity',0);return}
+  const c=p.c,t=SunCalc.getTimes(new Date(todayBase()+12*36e5),c.lat,c.lon),set=toLocal(t.sunset);
+  zoneHover.setAttribute('cx',p.x);zoneHover.setAttribute('cy',p.y);zoneHover.setAttribute('r',p.r+5);zoneHover.setAttribute('opacity',1);
+  const b=document.createElement('b'),l1=document.createElement('div'),l2=document.createElement('div');
+  b.textContent=c.name+', '+c.uf;l1.textContent=nf(POP[c.code]||0)+' pessoas · '+(c.lon>ZONE_LINE?'faixa do UTC−2':'faixa do UTC−3');
+  l2.textContent='Pôr do sol hoje: '+hhmm(set)+'; com UTC−2, '+hhmm(set+60);
+  zoneTip.replaceChildren(b,l1,l2);placeTip(zoneTip,zoneFig,p.px,p.py-p.r/2);
+}
+if(zoneMap){
+  zoneMap.addEventListener('pointermove',e=>zoneShow(zoneAt(e)));
+  zoneMap.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')zoneShow(null)});
+  zoneMap.addEventListener('click',e=>{const p=zoneAt(e);if(!p)return;select(p.c.code,true);zoneShow(zoneAt(e))});
+  document.addEventListener('pointerdown',e=>{if(!zoneMap.contains(e.target))zoneShow(null)});
+}
+
 /* ---------- Escolha da cidade ---------- */
 const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
 let geoRequest=0,geoTimer=null,cityReady=false;
@@ -948,13 +1034,12 @@ function show(c){
   place=c;
   try{
     sun=solarDay();renderHero();
-    year=solarYear();yearText();drawYear();
-  }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
+    year=solarYear();yearText();drawYear();drawZoneMap();
+  }catch(e){$('#state-0').textContent='Não foi possível calcular o sol neste navegador.'}
 }
 function select(code,remember){
   const c=byCode.get(Number(code));if(!c)return;
   cancelGeo();q.placeholder='Busque sua cidade';q.value=c.name+', '+c.uf;show(c);
-  if(intro){clearTimeout(introTimer);introTimer=setTimeout(startIntro,Math.max(0,1200-performance.now()))}
   if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
   cityReady=true;
 }
@@ -1058,7 +1143,6 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(year
 let frame;
 new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();drawYear()})}).observe(document.body);
 const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
-if(intro){following=false;clockMin=320;setZone(60,false)}
 if(byCode.has(fromLink))select(fromLink,false);else{show(place);locate(true)}
 drawStars();
 update();

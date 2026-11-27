@@ -1,11 +1,11 @@
-# Fuso Nordeste
+# Uma hora para viver
 
 Painel independente para acompanhar a ideia legislativa de UTC−2 em RN, PB, PE, AL e SE. Os apoios são consultados na [página oficial do Senado](https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092).
 
 ## Como funciona
 
 - Os horários do sol valem para qualquer uma das 751 sedes municipais de RN, PB, PE, AL e SE (Fernando de Noronha fica de fora porque já usa UTC−2). A pessoa escolhe a cidade pela busca (as capitais aparecem como sugestão) ou pelo botão de localização. A posição é comparada com as cidades no próprio navegador e não é enviada a nenhum serviço. O endereço `?cidade=<código IBGE>` abre a página direto numa cidade.
-- A abertura é um simulador: desenha o céu da cidade a partir da altura real do sol, calculada com [SunCalc](https://github.com/mourner/suncalc), e começa na hora atual. A régua muda a hora do relógio; o botão de fuso mantém o relógio e move o sol (com UTC−2, a mesma hora acontece uma hora antes em relação ao sol). Também dá para escolher hoje, 21 de junho ou 21 de dezembro. Logo depois de abrir (exceto para quem pede menos movimento), o relógio corre sozinho com UTC−2 e para em cenas do dia a dia (06:00, 07:00, 17:00, 18:00 e 18:30); a comparação de cada cena com o relógio de hoje vem do cálculo do sol. A régua aceita arrastar por toque ou mouse em qualquer ponto, e setas pelo teclado. A cor do céu tinge o fundo da página inteira.
+- A abertura é um simulador com dois céus lado a lado sob o mesmo relógio: à esquerda o de hoje (UTC−3), à direita o com UTC−2, onde a mesma hora do relógio acontece uma hora antes em relação ao sol. Cada céu é desenhado a partir da altura real do sol, calculada com [SunCalc](https://github.com/mourner/suncalc). Começa na hora atual; a régua muda a hora nos dois céus e aceita arrastar por toque ou mouse em qualquer ponto, e setas pelo teclado. Dá para escolher hoje, 21 de junho ou 21 de dezembro. O dia só passa quando a pessoa toca em “Veja como seria”: um time-lapse que desacelera nas cenas do dia a dia e termina no pôr do sol com UTC−2, quando aparece o botão de apoio. A cor dos céus tinge o fundo da página inteira.
 - O mapa de luz do ano calcula, dia a dia no ano corrente, noite, crepúsculo, nascer, dia e pôr do sol na cidade escolhida. O título e os números ao lado são gerados a partir desses cálculos.
 - A seção de apoios compara esta ideia com sete ideias parecidas já encerradas no e-Cidadania (114844, 183008, 184030, 194272, 202987, 204281 e 215847), cujos apoios foram conferidos nas páginas oficiais em 27/11/2026.
 - A grade de 20.000 pontos acende um ponto por apoio confirmado e se ajusta para não passar de cerca de 360 px de altura.
@@ -23,7 +23,7 @@ node scripts/update-history.mjs
 node scripts/build-pages.mjs
 ```
 
-Sirva a pasta `public/` usando um servidor HTTP local. `worker/page.html` contém a página editável. `data/cidades.json` vem da base Localidades do Brasil 2022 do IBGE. Para gerá-lo de novo, baixe `Localidades_Brasil_shp.zip` em <https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/>, extraia e rode `node scripts/build-cities.mjs caminho/BR_localidades_2022.dbf`. O script confere o número de municípios de cada estado. `data/history.json` é gerenciado pela automação: cada ponto contém o total confirmado pelo Senado e o horário de leitura, não o momento individual de cada apoio. Não substitua dados reais por estimativas sem sinalizá-las.
+Sirva a pasta `public/` usando um servidor HTTP local. `worker/page.html` contém a página editável. `data/cidades.json` vem da base Localidades do Brasil 2022 do IBGE. Para gerá-lo de novo, baixe `Localidades_Brasil_shp.zip` em <https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/>, extraia e rode `node scripts/build-cities.mjs caminho/BR_localidades_2022.dbf`. A população de cada município (Censo 2022) e os contornos dos estados vêm da API do IBGE: `node scripts/build-population.mjs` grava `data/populacao.json` e `data/estados.json`. O script confere o número de municípios de cada estado. `data/history.json` é gerenciado pela automação: cada ponto contém o total confirmado pelo Senado e o horário de leitura, não o momento individual de cada apoio. Não substitua dados reais por estimativas sem sinalizá-las.
 
 ## Fontes e licenças
 
