@@ -31,6 +31,12 @@
       "count": 253,
       "observed_at": 1795739564,
       "source": "senado"
+    },
+    {
+      "bucket": 29929175,
+      "count": 266,
+      "observed_at": 1795750522,
+      "source": "senado"
     }
   ]
 }
