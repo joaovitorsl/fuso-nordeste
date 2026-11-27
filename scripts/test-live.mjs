@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
 const page = await readFile('worker/page.html', 'utf8');
-const match = page.match(/async function readCurrent\(\)\{[\s\S]*?\n\}\n(?=let timer,)/);
+const match = page.match(/async function readCurrent\(\)\{[\s\S]*?\r?\n\}\r?\n(?=let timer,)/);
 assert.ok(match, 'Função de consulta não encontrada na página.');
 
 function reader(fetch) {

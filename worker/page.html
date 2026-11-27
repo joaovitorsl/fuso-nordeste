@@ -137,6 +137,51 @@ button{font:inherit;color:inherit}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
 
+/* Relógio × sol */
+.noon{margin:48px 0 0;padding:0}
+.noon-cap{font-size:14px;color:var(--ink-3);margin-bottom:6px}
+.noon svg{display:block;width:100%;overflow:visible}
+.n-tick{fill:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums}
+.n-noon{fill:var(--ink);font-size:13px;font-weight:600}
+.n-lab{font-size:14px;font-weight:600;fill:var(--ink)}
+.n-sub{font-size:13px;fill:var(--ink-2);font-variant-numeric:tabular-nums}
+.n-ref{font-size:12px;fill:var(--ink-3)}
+.fact{margin:40px 0 0;font-size:clamp(18px,2vw,22px);line-height:1.4;max-width:34em;padding-left:18px;border-left:2px solid var(--glow);color:var(--ink-2)}
+.fact b{color:var(--ink);font-weight:600}
+.fact:empty{display:none}
+
+/* Rotina */
+.moments{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.moment{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.m-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.m-time{font-weight:300;font-stretch:75%;font-size:40px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.m-label{font-size:15px;color:var(--ink-2)}
+.m-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-sky{position:relative;height:96px;margin:0;border-radius:10px;overflow:hidden}
+.m-sky.night:after{content:'';position:absolute;inset:0 0 28% 0;background:radial-gradient(1px 1px at 18% 22%,#fff,transparent),radial-gradient(1px 1px at 62% 14%,#fff,transparent),radial-gradient(1px 1px at 80% 40%,#fff,transparent),radial-gradient(1px 1px at 36% 50%,#fff,transparent),radial-gradient(1px 1px at 90% 12%,#fff,transparent);opacity:.8}
+.m-sun{position:absolute;width:16px;height:16px;margin-left:-8px;border-radius:50%}
+.m-tag{position:absolute;left:8px;bottom:4px;font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgb(0 0 0 / .5)}
+.m-tag.new{color:var(--glow)}
+.m-state{display:block;margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+@media (max-width:900px){.moments{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.moment{padding:12px}.m-time{font-size:32px}.m-head{flex-direction:column;gap:2px}.m-sky{height:80px}.m-state{font-size:13px}}
+
+/* Ideias anteriores */
+.before{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 56px;margin-top:72px;padding-top:40px;border-top:1px solid var(--line)}
+.before h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.before p{margin:8px 0 0;color:var(--ink-2);font-size:16px}
+.before .note{grid-column:1/-1;margin:0}
+.ideas{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.ideas li{display:grid;grid-template-columns:minmax(0,1fr) 56px;grid-template-areas:'t n' 's n' 'b b';gap:2px 12px;align-items:baseline}
+.ideas a{grid-area:t;font-size:16px;text-decoration:none;color:var(--ink-2)}
+.ideas a:hover{text-decoration:underline;color:var(--ink)}
+.ideas small{grid-area:s;font-size:13px;color:var(--ink-3)}
+.ideas b{grid-area:n;text-align:right;font-size:20px;font-weight:600;align-self:center}
+.ideas .track{grid-area:b;display:block;height:8px;margin-top:6px;border-radius:4px;background:var(--dim)}
+.ideas .track i{display:block;height:100%;width:0;border-radius:4px;background:var(--ink-3);transition:width .9s ease}
+.ideas .this a{color:var(--ink);font-weight:600}
+.ideas .this .track i{background:var(--glow);box-shadow:0 0 8px rgb(255 179 71 / .6)}
+@media (max-width:860px){.before{grid-template-columns:1fr;margin-top:56px}}
+
 /* Pontos */
 .dots{margin-top:48px;position:relative}
 .dots canvas{display:block;width:100%}
@@ -282,6 +327,39 @@ footer p{margin:0}
   </div>
 </section>
 
+<section class="sec" id="relogio" aria-labelledby="noon-title">
+  <div class="wrap">
+    <p class="kicker reveal">Relógio × sol</p>
+    <h2 class="h-l reveal" id="noon-title">—</h2>
+    <p class="lead reveal" id="noon-lead"></p>
+    <figure class="noon reveal" id="noon">
+      <figcaption class="noon-cap">A que horas o sol fica no ponto mais alto, em média</figcaption>
+      <svg id="noon-svg" role="img"></svg>
+    </figure>
+    <p class="note" id="noon-note"></p>
+    <p class="fact reveal" id="noon-fact"></p>
+  </div>
+</section>
+
+<section class="sec" id="rotina" aria-labelledby="routine-title">
+  <div class="wrap">
+    <p class="kicker reveal">Sua rotina</p>
+    <div class="year-head">
+      <div>
+        <h2 class="h-l reveal" id="routine-title">O mesmo horário no relógio, outro sol.</h2>
+        <p class="lead reveal">Os compromissos continuam na mesma hora do relógio. Com UTC−2, eles acontecem uma hora mais cedo em relação ao sol: manhãs mais escuras, fim de tarde mais claro.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Dia">
+        <button type="button" data-day="hoje" aria-pressed="true">Hoje</button>
+        <button type="button" data-day="jun" aria-pressed="false">21 de junho</button>
+        <button type="button" data-day="dez" aria-pressed="false">21 de dezembro</button>
+      </div>
+    </div>
+    <ol class="moments reveal" id="moments"></ol>
+    <p class="note" id="routine-note"></p>
+  </div>
+</section>
+
 <section class="sec" id="apoios" aria-labelledby="apoios-title">
   <div class="wrap">
     <p class="kicker reveal">Apoios no e-Cidadania</p>
@@ -319,6 +397,24 @@ footer p{margin:0}
         <details class="table"><summary>Ver registros e fontes em tabela</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Data ou leitura</th><th scope="col">Apoios</th><th scope="col">Fonte</th></tr></thead><tbody id="hist-rows"></tbody></table></div></details>
       </div>
     </div>
+
+    <div class="before" aria-labelledby="before-title">
+      <div>
+        <h3 id="before-title">Ideias parecidas no e-Cidadania</h3>
+        <p id="before-lead">Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios.</p>
+      </div>
+      <ol class="ideas" id="ideas">
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=114844" target="_blank" rel="noopener noreferrer">Fuso UTC−2 para AL, PE, PB e RN</a><small>nov. 2018–mar. 2019 · encerrada</small><span class="track"><i data-n="13"></i></span><b class="num">13</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=183008" target="_blank" rel="noopener noreferrer">Adiantar PE, PB, RN, AL e SE em uma hora</a><small>fev.–jun. 2024 · encerrada</small><span class="track"><i data-n="6"></i></span><b class="num">6</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=184030" target="_blank" rel="noopener noreferrer">RN, PB, PE, AL e SE no fuso de Fernando de Noronha</a><small>mar.–jul. 2024 · encerrada</small><span class="track"><i data-n="2"></i></span><b class="num">2</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=194272" target="_blank" rel="noopener noreferrer">Estados do Nordeste em GMT−2</a><small>set. 2024–jan. 2025 · encerrada</small><span class="track"><i data-n="26"></i></span><b class="num">26</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=202987" target="_blank" rel="noopener noreferrer">Horário de verão permanente no Nordeste</a><small>jun.–out. 2025 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=204281" target="_blank" rel="noopener noreferrer">Plebiscito sobre UTC−2 nos cinco estados</a><small>jul.–out. 2025 · encerrada</small><span class="track"><i data-n="1"></i></span><b class="num">1</b></li>
+        <li><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=215847" target="_blank" rel="noopener noreferrer">Adiantar o fuso permanentemente e definir horário de trabalho nacional</a><small>mar.–jul. 2026 · encerrada</small><span class="track"><i data-n="0"></i></span><b class="num">0</b></li>
+        <li class="this"><a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">Esta ideia: UTC−2 permanente nos cinco estados</a><small>desde nov. 2026 · aberta</small><span class="track"><i id="idea-now"></i></span><b class="num" id="idea-now-n">—</b></li>
+      </ol>
+      <p class="note">Apoios confirmados nas páginas oficiais em 27/11/2026. As sete anteriores estão encerradas e não recebem mais apoios.</p>
+    </div>
   </div>
 </section>
 
@@ -352,9 +448,14 @@ footer p{margin:0}
     <p class="kicker reveal">Perguntas</p>
     <h2 class="h-l reveal" id="faq-title">Antes de apoiar, ou não.</h2>
     <div class="faq">
-      <details><summary>A mudança já vale?</summary><p>Não. É uma ideia legislativa. Com 20 mil apoios no prazo, ela vai para a Comissão de Direitos Humanos e Legislação Participativa do Senado, que decide se vira projeto de lei. Não há aprovação automática.</p></details>
+      <details><summary>A mudança já vale?</summary><p>Não. É uma ideia legislativa. Com 20 mil apoios no prazo, ela vai para a Comissão de Direitos Humanos e Legislação Participativa do Senado, que decide se vira projeto de lei. Não há aprovação automática. Pelas regras do portal, qualquer senador ou deputado também pode adotar a ideia a qualquer momento, com qualquer número de apoios. Para mudar o fuso basta uma lei federal ordinária, sem emenda à Constituição: foi assim no Acre, em 2008 e em 2013.</p></details>
       <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p></details>
-      <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. Impactos em transporte, voos, bancos e no contato com outros estados não são calculados aqui.</p></details>
+      <details><summary>Quem perde e quem ganha?</summary><p>O fim da tarde fica mais claro no relógio; as manhãs, mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o relógio ficaria mais longe do sol do que hoje (veja Relógio × sol). E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
+      <details><summary>Por que não só antecipar os horários?</summary><p>Daria um efeito parecido: entrar às 7h e sair às 16h no relógio de hoje equivale, em relação ao sol, a entrar às 8h e sair às 17h com UTC−2. A diferença é a coordenação. Antecipar depende de cada escola, empresa e órgão, e nem todo mundo tem autonomia para isso; mudar o fuso muda o relógio de todos de uma vez, mas não garante que os horários continuariam os mesmos no relógio.</p></details>
+      <details><summary>E o sono?</summary><p>A relação entre luz, horários e sono é complexa. Um <a href="https://pubmed.ncbi.nlm.nih.gov/31030116/" target="_blank" rel="noopener noreferrer">estudo nos Estados Unidos</a> (Giuntella e Mazzonna, 2019) comparou cidades dos dois lados de fronteiras de fuso: uma hora a mais de luz no fim do dia esteve associada a 19 minutos a menos de sono, em média, quando os horários de trabalho e escola são rígidos. É outro país, com outra latitude e outras rotinas; o resultado não prevê o que aconteceria aqui, mas mostra que a questão merece estudo.</p></details>
+      <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. A Paraíba já adiantou o relógio em uma hora nos horários de verão de 1988–89, 1989–90, 1999–2000 e 2001–02 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>), mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
+      <details><summary>Alguém já estudou isso?</summary><p>Sim. Em 2005, um <a href="https://www12.senado.leg.br/publicacoes/estudos-legislativos/tipos-de-estudos/textos-para-discussao/td-19-o-setor-eletrico-e-o-horario-de-verao" target="_blank" rel="noopener noreferrer">estudo da Consultoria Legislativa do Senado</a> (Edmundo Montalvão, Texto para Discussão nº 19) concluiu que RN, PB, PE, AL e SE “podem ser mudados para GMT−2 sem transtornos para a população”, como alternativa ao horário de verão. O critério do autor era que o sol continuasse nascendo antes das 7h, e a análise usou as capitais. O texto é de responsabilidade do autor e não é uma posição do Senado.</p></details>
+      <details><summary>Economizaria energia?</summary><p>Não há estudo sobre esta proposta. A experiência mais parecida é o horário de verão, que também adiantava o relógio em uma hora. Ele foi extinto em 2019 (<a href="https://planalto.gov.br/ccivil_03/_ato2019-2022/2019/decreto/d9772.htm" target="_blank" rel="noopener noreferrer">Decreto nº 9.772</a>) porque, segundo o Ministério de Minas e Energia, a economia tinha deixado de ser relevante: com o ar-condicionado, o pico de consumo saiu do começo da noite para o meio da tarde (<a href="https://www.camara.leg.br/noticias/603108-deputados-comemoram-fim-do-horario-de-verao" target="_blank" rel="noopener noreferrer">Agência Câmara</a>). Em 2024, uma nota técnica do ONS voltou a estimar ganhos: até 2,9% menos demanda no pico e cerca de R$ 400 milhões de economia em cinco meses (<a href="https://agenciabrasil.ebc.com.br/economia/noticia/2024-09/economia-com-horario-de-verao-pode-beirar-r-400-milhoes" target="_blank" rel="noopener noreferrer">Agência Brasil</a>). Nada disso se transfere automaticamente para um UTC−2 permanente.</p></details>
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
       <details><summary>Por que a minha cidade dá horários diferentes da capital?</summary><p>O sol nasce mais tarde quanto mais a oeste. Entre Recife e Petrolina, a diferença passa de 20 minutos. A página calcula cada uma das 751 sedes municipais dos cinco estados, com as coordenadas da base de localidades do IBGE (2022). O horário é o da sede; em outras partes do município ele pode variar alguns minutos.</p></details>
       <details><summary>De onde vem a contagem?</summary><p>Da página pública da ideia no Senado. Com esta página aberta, o navegador lê a contagem a cada minuto pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP e a URL consultada; nenhuma credencial é enviada. Se a leitura falhar, aparece o último registro salvo, sinalizado. A contagem é nacional, não por estado. Se você usar o botão de localização, a posição é comparada com as cidades aqui mesmo, no navegador, e não é enviada a nenhum serviço.</p></details>
@@ -455,7 +556,7 @@ function drawStars(){
 }
 function solarToday(){
   const {lat,lon}=place,base=todayBase(),s=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
-  return{base,lat,lon,rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk)};
+  return{base,lat,lon,rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk),noon:toLocal(s.solarNoon)};
 }
 function renderHero(){
   if(!today)return;
@@ -552,7 +653,15 @@ function renderCount(){
   else lead.append('São necessários 20.000 até 11 de março de 2027. Faltam ',b(nf(left)),' — ',b(p.toLocaleString('pt-BR',{maximumFractionDigits:p<10?1:0})+'%'),' do caminho foi feito.');
   $('#need').textContent=!left||ms<=0?'—':nf(Math.ceil(left/Math.max(days,1)))+' por dia';
   $('#days-left').textContent=ms<=0?'Encerrado':calendarDays===0?'Último dia':calendarDays===1?'1 dia':nf(calendarDays)+' dias';
+  drawIdeas(n);
   if(dotsSeen)animateCount(n);
+}
+/* Barras das ideias parecidas, na mesma escala da ideia atual (contagem ao vivo) */
+function drawIdeas(n){
+  const bars=[...document.querySelectorAll('#ideas .track i')],max=Math.max(n,...bars.map(i=>Number(i.dataset.n)||0));
+  bars.forEach(i=>{const v=i.id==='idea-now'?n:Number(i.dataset.n);i.style.width=v?Math.max(.6,v/max*100)+'%':'0'});
+  $('#idea-now-n').textContent=nf(n);
+  $('#before-lead').textContent='Sete ideias parecidas passaram pelo portal desde 2018. Somadas, tiveram 48 apoios; a maior, 26. Esta tem '+nf(n)+'.';
 }
 function setLive(kind,text){$('#bar').dataset.live=kind;$('#live-line').textContent=text}
 
@@ -750,7 +859,8 @@ function yearText(){
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
     ['Dias com o sol nascendo depois das 6h',nf(dark[0]),nf(dark[1]),'dias'],
     ['Pôr do sol mais tarde do ano',hhmm(s[1]),hhmm(s[1]+60),''],
-    ['Nascer do sol mais tarde do ano',hhmm(r[1]),hhmm(r[1]+60),'']];
+    ['Nascer do sol mais tarde do ano',hhmm(r[1]),hhmm(r[1]+60),''],
+    ['Dias com o sol nascendo depois das 7h, limite usado no estudo do Senado de 2005',nf(cnt(d=>d.rise>420)),nf(dark7),'dias']];
   $('#versus').replaceChildren(...items.map(([label,a,b,u])=>{
     const div=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;
     const sp=(c,t)=>{const e=document.createElement('span');e.className=c;e.textContent=t;return e};
@@ -760,6 +870,96 @@ function yearText(){
   rowsInto($('#sun-rows'),days.filter(d=>d.date.getUTCDate()===1||d.date.getUTCDate()===15).map(d=>[fmt(d.date,{day:'2-digit',month:'2-digit'}),hhmm(d.rise),hhmm(d.rise+60),hhmm(d.set),hhmm(d.set+60)]));
 }
 
+/* ---------- Relógio × sol ---------- */
+// Referências do IBGE (Localidades do Brasil 2022): sedes de São Paulo e Brasília
+const SAO_PAULO=[-23.5548,-46.5790],BRASILIA=[-15.7843,-47.9081];
+// Meio-dia solar médio no relógio UTC−3: o fuso é acertado pelo meridiano de 45° O, e cada grau vale 4 minutos
+const meanNoon=lon=>720+(-45-lon)*4;
+let noonProgress=0,noonSeen=false;
+function minutesPhrase(d){const m=Math.round(Math.abs(d));return(m===1?'1 minuto':m+' minutos')+(d<0?' antes':' depois')}
+function noonText(){
+  const now=meanNoon(place.lon),d=now-720,p=d+60,dist=Math.round(Math.abs(place.lon+45)*111.32*Math.cos(place.lat*Math.PI/180)/10)*10;
+  const noons=year.days.map(x=>x.noon);
+  $('#noon-title').textContent='Hoje, em '+place.name+', o sol chega ao ponto mais alto às '+hhmm(today.noon)+'.';
+  $('#noon-lead').textContent='O horário de Brasília é acertado pelo meridiano de 45° O, a cerca de '+nf(dist)+' km a oeste. Por isso, em média, o sol chega ao topo '+minutesPhrase(d)+' do meio-dia do relógio. Com UTC−2, chegaria '+minutesPhrase(p)+(Math.abs(p)>Math.abs(d)?', mais longe do meio-dia do relógio do que hoje.':'.');
+  $('#noon-note').textContent='Média do ano, pela longitude. No dia a dia o horário varia entre '+hhmm(Math.min(...noons))+' e '+hhmm(Math.max(...noons))+' com o relógio de hoje, porque a órbita da Terra não é um círculo perfeito.';
+  const decLatest=(lat,lon)=>{let m=0;for(let dd=1;dd<=31;dd++)m=Math.max(m,toLocal(SunCalc.getTimes(new Date(Date.UTC(year.y,11,dd,15)),lat,lon).sunset));return m};
+  const here=decLatest(place.lat,place.lon),sp=decLatest(...SAO_PAULO);
+  const f=$('#noon-fact');f.replaceChildren();const b=t=>{const e=document.createElement('b');e.textContent=t;return e};
+  f.append('Mesmo relógio, outro sol: em dezembro, o sol se põe no máximo às ',b(hhmm(here)),' em '+place.name+' e às ',b(hhmm(sp)),' em São Paulo.');
+}
+function drawNoon(){
+  const svg=$('#noon-svg'),W=svg.clientWidth;if(!W||!today)return;
+  const narrow=W<560,pad=narrow?26:40,lo=660,hi=780,x=v=>pad+(clamp(v,lo,hi)-lo)/(hi-lo)*(W-2*pad),H=128,ay=86;
+  const now=meanNoon(place.lon),prop=now+60,cur=now+60*noonProgress,br=meanNoon(BRASILIA[1]);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);svg.setAttribute('height',H);svg.replaceChildren();
+  svg.append(node('line',{x1:x(lo),x2:x(hi),y1:ay,y2:ay,stroke:'var(--line)','stroke-width':2}));
+  for(let v=lo;v<=hi;v+=narrow?30:15){
+    const noon=v===720;
+    svg.append(node('line',{x1:x(v),x2:x(v),y1:ay-(noon?10:5),y2:ay+(noon?10:5),stroke:noon?'var(--ink)':'var(--ink-3)','stroke-width':noon?1.5:1}));
+    svg.append(node('text',{x:x(v),y:ay+28,'text-anchor':'middle',class:noon?'n-noon':'n-tick'},hhmm(v)));
+  }
+  svg.append(node('line',{x1:x(br),x2:x(br),y1:12,y2:ay,stroke:'var(--ink-3)','stroke-width':1}));
+  svg.append(node('text',{x:x(br),y:8,'text-anchor':'middle',class:'n-ref'},'Brasília'));
+  if(noonProgress>0)svg.append(node('line',{x1:x(now),x2:x(cur),y1:ay,y2:ay,stroke:'var(--sun)','stroke-width':3,'stroke-linecap':'round'}));
+  const label=(v,t1,t2,anchor)=>{const lx=x(v)+(anchor==='end'?6:-6);svg.append(node('text',{x:lx,y:36,'text-anchor':anchor,class:'n-lab'},t1),node('text',{x:lx,y:54,'text-anchor':anchor,class:'n-sub'},t2))};
+  svg.append(node('circle',{cx:x(now),cy:ay,r:8,fill:'var(--now)',stroke:'var(--bg)','stroke-width':3}));
+  label(now,'Hoje',hhmm(now),'end');
+  if(noonProgress>0){svg.append(node('circle',{cx:x(cur),cy:ay,r:8,fill:'var(--sun)',stroke:'var(--bg)','stroke-width':3}));if(noonProgress>.35)label(cur,'Com UTC−2',hhmm(prop),x(cur)>W-100?'end':'start')}
+  svg.setAttribute('aria-label','Em '+place.name+', o sol fica no ponto mais alto, em média, às '+hhmm(now)+' no relógio de hoje e às '+hhmm(prop)+' com UTC−2. Em Brasília, às '+hhmm(br)+'.');
+}
+function revealNoon(){if(noonSeen)return;noonSeen=true;setTimeout(()=>tween(1100,t=>{noonProgress=t;drawNoon()}),300)}
+
+/* ---------- Rotina ---------- */
+// Horários de exemplo do dia a dia; ficam iguais no relógio, o sol é que muda de lugar
+const MOMENTS=[[360,'Sair de casa'],[420,'Início das aulas'],[570,'Recreio'],[720,'Almoço'],[1080,'Saída do trabalho'],[1110,'Caminhada']];
+let routineDay='hoje';
+function routineBase(){
+  if(routineDay==='jun')return Date.UTC(year.y,5,21)-OFFSET*6e4;
+  if(routineDay==='dez')return Date.UTC(year.y,11,21)-OFFSET*6e4;
+  return todayBase();
+}
+function drawRoutine(){
+  const base=routineBase(),{lat,lon}=place,t=SunCalc.getTimes(new Date(base+12*36e5),lat,lon);
+  const riseAt=t.sunrise.getTime(),setAt=t.sunset.getTime(),rise=toLocal(t.sunrise),set=toLocal(t.sunset),noon=toLocal(t.solarNoon);
+  const items=MOMENTS.map(([m,label])=>{
+    const li=document.createElement('li');li.className='moment';
+    const head=document.createElement('div');head.className='m-head';
+    const tm=document.createElement('span');tm.className='m-time';tm.textContent=hhmm(m);
+    const lb=document.createElement('span');lb.className='m-label';lb.textContent=label;
+    head.append(tm,lb);
+    const pair=document.createElement('div');pair.className='m-pair';
+    [['hoje',0],['UTC−2',60]].forEach(([tag,off])=>{
+      const real=m-off,at=base+real*6e4,alt=SunCalc.getPosition(new Date(at),lat,lon).altitude*180/Math.PI;
+      const [top,mid,hor]=skyAt(alt),seaTop=mix(mix(top,'#03101f',.45),hor,.25);
+      const wrap=document.createElement('div');
+      const fig=document.createElement('figure');fig.className='m-sky'+(alt<-8?' night':'');
+      fig.style.background='linear-gradient(180deg,'+top+' 0%,'+mid+' 46%,'+hor+' 72%,'+seaTop+' 72%,#02040a 100%)';
+      if(alt>-1){
+        const sun=document.createElement('span'),warm=clamp(alt/28,0,1),core=mix('#ff7a36','#fff4dc',warm);
+        sun.className='m-sun';sun.style.background=core;sun.style.boxShadow='0 0 14px 4px '+core+'88';
+        sun.style.left=(12+76*clamp((at-riseAt)/(setAt-riseAt),0,1))+'%';
+        sun.style.top='calc('+(72-clamp(alt,0,90)/90*62)+'% - 16px)';
+        fig.append(sun);
+      }
+      const tg=document.createElement('span');tg.className='m-tag'+(off?' new':'');tg.textContent=tag;fig.append(tg);
+      const st=document.createElement('span');st.className='m-state';
+      st.textContent=alt>=0?'sol a '+Math.round(alt)+'°':real<noon?'nasce '+hhmm(rise+off):'pôr '+hhmm(set+off);
+      fig.setAttribute('aria-label',(off?'Com UTC−2':'Hoje')+', às '+hhmm(m)+': '+st.textContent);fig.setAttribute('role','img');
+      wrap.append(fig,st);pair.append(wrap);
+    });
+    li.append(head,pair);return li;
+  });
+  $('#moments').replaceChildren(...items);
+  const when=routineDay==='jun'?'em 21 de junho':routineDay==='dez'?'em 21 de dezembro':'hoje';
+  $('#routine-note').textContent='Horários de exemplo. Céu calculado para '+place.name+', '+place.uf+', '+when+'. O "sol a" é a altura do sol sobre o horizonte: quanto maior, mais forte.';
+}
+document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{
+  routineDay=b.dataset.day;
+  document.querySelectorAll('[data-day]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  drawRoutine();
+}));
+
 /* ---------- Escolha da cidade ---------- */
 const q=$('#city-q'),list=$('#city-list'),placeMsg=$('#place-msg');
 function select(code,remember){
@@ -768,7 +968,7 @@ function select(code,remember){
   q.value=CAPITALS.has(c.code)?'':c.name+', '+c.uf;
   try{
     today=solarToday();renderHero();
-    year=solarYear();yearText();drawYear();
+    year=solarYear();yearText();drawYear();noonText();drawNoon();drawRoutine();
     $('#ruler-hint').textContent='Arraste para mudar a hora · céu de '+c.name+', '+c.uf;
   }catch(e){$('#sun-state').textContent='Não foi possível calcular o sol neste navegador.'}
   if(remember){try{const u=new URL(location.href);u.searchParams.set('cidade',c.code);history.replaceState(null,'',u)}catch(e){}}
@@ -842,14 +1042,15 @@ const io=new IntersectionObserver(entries=>entries.forEach(e=>{
   if(!e.isIntersecting)return;
   e.target.classList.add('in');
   if(e.target===countTitle&&!dotsSeen){dotsSeen=true;if(current)animateCount(current.apoios)}
+  if(e.target===noonFig)revealNoon();
   if(e.target===yearPlot&&!yearShown){yearShown=true;setTimeout(()=>setOffset(60,true),500)}
   io.unobserve(e.target);
 }),{threshold:.15});
-const countTitle=$('#apoios-title');
+const countTitle=$('#apoios-title'),noonFig=$('#noon');
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));io.observe(yearPlot);
 
 let frame;
-new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawHistory();drawYear()})}).observe(document.body);
+new ResizeObserver(()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{drawStars();renderHero();dotGeo=null;drawDots(shownCount);drawHistory();drawYear();drawNoon()})}).observe(document.body);
 const fromLink=Number(new URLSearchParams(location.search).get('cidade'));
 select(byCode.has(fromLink)?fromLink:2611606,false);drawStars();drawDots(0);
 update();
