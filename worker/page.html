@@ -205,7 +205,7 @@ button{font:inherit;color:inherit}
   .hero-bottom{position:relative;padding-top:14px}
   .clocks{gap:10px 20px}
   .clock-side{gap:4px}
-  .clock-side .scene{position:absolute;left:var(--g);top:-46px;min-height:0;padding:5px 12px;border-radius:999px;background:rgb(8 9 15 / .6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .clock-side .scene{position:absolute;left:var(--g);top:-46px;min-height:0;max-width:calc(100% - 2 * var(--g));font-size:14px;padding:5px 12px;border-radius:14px;background:rgb(8 9 15 / .6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   .clock-side .scene:empty{display:none}
   .clock-side .scene.right{left:auto;right:var(--g)}
   .ruler{margin-top:8px}
@@ -597,6 +597,7 @@ function drawStars(){
   const x=canvasFit(starsC,w,h);let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   for(let i=0;i<Math.round(w*h/5200);i++){const sx=rnd()*w,sy=rnd()*h,r=rnd()<.08?1.3:.7;x.globalAlpha=(.35+rnd()*.65)*(1-sy/h*.6);x.fillStyle='#fff';x.beginPath();x.arc(sx,sy,r,0,7);x.fill()}
 }
+let sunLeft=true;
 function renderHero(){
   if(!sun)return;
   const real=clockMin-zoneShown,alt=altAt(real);
@@ -620,7 +621,7 @@ function renderHero(){
   sunEl.style.boxShadow='0 0 '+(60+40*(1-warm))+'px '+(18+20*(1-warm))+'px '+mix('#ff7a36','#ffe2a8',warm)+'66';
   sunEl.style.opacity=alt>-2?1:0;
   glint.style.left=x+'px';
-  sceneEl.classList.toggle('right',x<W/2); // no celular a legenda fica no lado oposto ao sol
+  sunLeft=x<W/2;
   glint.style.background='linear-gradient(180deg,'+core+' 0%,'+core+'00 100%)';
   glint.style.opacity=(clamp((alt+1)/6,0,1)*(1-clamp((alt-35)/40,0,.6))*.55).toFixed(2);
   const shown=((Math.round(clockMin)%1440)+1440)%1440,state=cap(sunPhrase(zone));
@@ -689,7 +690,8 @@ function playLabel(t,on){playBtn.querySelector('span').textContent=t;playBtn.set
 function setScene(text){
   if(!text){sceneEl.classList.add('out');return}
   if(sceneEl.textContent===text&&!sceneEl.classList.contains('out'))return;
-  sceneEl.textContent=text;sceneEl.classList.remove('out','in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
+  // no celular a legenda fica do lado oposto ao sol; o lado é escolhido quando ela aparece e não muda depois
+  sceneEl.textContent=text;sceneEl.classList.toggle('right',sunLeft);sceneEl.classList.remove('out','in');void sceneEl.offsetWidth;sceneEl.classList.add('in');
 }
 function stopStory(){if(story)cancelAnimationFrame(story.raf);story=null;sceneEl.textContent='';sceneEl.classList.remove('out','in');playLabel('Ver o dia passar',false);simCta.hidden=true;simFoot.classList.remove('ended')}
 // minutos de relógio por segundo: devagar perto das cenas e do fim, rápido entre elas
@@ -697,7 +699,7 @@ const smooth=t=>t*t*(3-2*t);
 function storySpeed(x,end){const d=Math.min(end-x,...SCENES.map(([m])=>Math.abs(x-m)));return 5+105*smooth(Math.min(1,d/45))}
 function finishStory(){
   story=null;playLabel('Ver de novo',false);
-  setScene('O sol se pondo, uma hora mais tarde que hoje.');
+  setScene('O sol se pondo, 1 hora mais tarde que hoje.');
   simCta.hidden=false;simFoot.classList.add('ended');
 }
 function runStory(){
