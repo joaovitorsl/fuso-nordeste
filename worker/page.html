@@ -196,6 +196,20 @@ button{font:inherit;color:inherit}
 .sim-foot .hint{margin-left:auto;font-size:13px;color:rgb(244 241 234 / .8)}
 .sim-foot .hint button{background:none;border:0;padding:0;color:var(--glow);font-size:13px;font-weight:600;cursor:pointer}
 @media (max-width:760px){.clock-side .state{font-size:16px}.clock-side .other{font-size:14px}}
+/* Celular: o céu é o protagonista, então ganha o espaço. Texto mais curto, relógio menor e a
+   legenda da cena vira um letreiro sobre o horizonte, em vez de ocupar uma linha. */
+@media (max-width:640px){
+  .hero{--sky-gap:clamp(96px,19svh,220px)}
+  .hero-top .wide{display:none}
+  .big{font-size:clamp(76px,min(23vw,13svh),120px)}
+  .hero-bottom{position:relative;padding-top:14px}
+  .clocks{gap:10px 20px}
+  .clock-side{gap:4px}
+  .clock-side .scene{position:absolute;left:var(--g);top:-46px;min-height:0;padding:5px 12px;border-radius:999px;background:rgb(8 9 15 / .6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .clock-side .scene:empty{display:none}
+  .clock-side .scene.right{left:auto;right:var(--g)}
+  .ruler{margin-top:8px}
+}
 @media (max-width:640px){.sim-foot .hint{margin-left:0}#hint-text{display:none}.sim-foot.ended>.seg{display:none}.sim-foot.ended .play{padding:10px 13px}.sim-foot.ended .play span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 
 /* ---------- Seções ---------- */
@@ -342,7 +356,7 @@ footer p{margin:0}
 
   <div class="hero-top wrap">
     <h1 id="h1">O mesmo relógio, outro céu.</h1>
-    <p>Uma ideia legislativa no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE, com o fuso UTC−2.</p>
+    <p>Uma ideia <span class="wide">legislativa </span>no Senado propõe adiantar em uma hora o relógio de RN, PB, PE, AL e SE<span class="wide">, com o fuso UTC−2</span>.</p>
     <div class="finder">
       <div class="search">
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -606,6 +620,7 @@ function renderHero(){
   sunEl.style.boxShadow='0 0 '+(60+40*(1-warm))+'px '+(18+20*(1-warm))+'px '+mix('#ff7a36','#ffe2a8',warm)+'66';
   sunEl.style.opacity=alt>-2?1:0;
   glint.style.left=x+'px';
+  sceneEl.classList.toggle('right',x<W/2); // no celular a legenda fica no lado oposto ao sol
   glint.style.background='linear-gradient(180deg,'+core+' 0%,'+core+'00 100%)';
   glint.style.opacity=(clamp((alt+1)/6,0,1)*(1-clamp((alt-35)/40,0,.6))*.55).toFixed(2);
   const shown=((Math.round(clockMin)%1440)+1440)%1440,state=cap(sunPhrase(zone));
