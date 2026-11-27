@@ -271,13 +271,34 @@ button{font:inherit;color:inherit}
 .tip td+td{padding-left:14px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
 .tip tr:first-child td{color:var(--ink-3);font-size:12px}
 .note{font-size:14px;color:var(--ink-3);margin:14px 0 0;max-width:60em}
-details.table{margin-top:14px;font-size:14px;color:var(--ink-2)}
-details.table summary{cursor:pointer;width:max-content}
-details.table .scroll{overflow-x:auto;margin-top:12px;max-height:360px}
-table.data{border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
-table.data th,table.data td{padding:6px 18px 6px 0;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-table.data th:first-child,table.data td:first-child{text-align:left}
-table.data thead th{font-weight:500;color:var(--ink-3);font-size:13px;position:sticky;top:0;background:var(--bg)}
+/* Consulta de horários: painel independente, sem rolagem dentro da página */
+.table-open{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:11px 16px;color:var(--ink);background:rgb(255 255 255 / .06);border:1px solid rgb(255 255 255 / .3);border-radius:8px;font-weight:600;cursor:pointer}
+.table-open:hover{background:rgb(255 255 255 / .12);border-color:var(--glow)}
+.table-open:disabled{opacity:.5;cursor:wait}
+body.drawer-open{overflow:hidden}
+.sun-drawer{position:fixed;inset:0 0 0 auto;margin:0;padding:0;width:min(620px,100%);max-width:none;height:100vh;height:100dvh;max-height:none;border:0;border-left:1px solid rgb(255 255 255 / .15);background:#101a30;color:#f2f1eb;box-shadow:-20px 0 70px rgb(0 0 0 / .4);overflow-y:auto;overscroll-behavior:contain}
+.sun-drawer::backdrop{background:rgb(4 8 18 / .72)}
+.drawer-head{position:sticky;top:0;z-index:2;padding:22px 26px 20px;background:#101a30;border-bottom:1px solid rgb(255 255 255 / .13)}
+.drawer-top{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.drawer-label{margin:0;color:#ffd329;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.drawer-close{display:grid;place-items:center;flex:none;width:40px;height:40px;border:1px solid rgb(255 255 255 / .3);border-radius:50%;background:transparent;color:#fff;font-size:27px;line-height:1;cursor:pointer}
+.drawer-close:hover{background:rgb(255 255 255 / .1)}
+.drawer-head h3{font-family:var(--display);font-size:clamp(38px,6vw,54px);font-weight:400;line-height:1;margin:12px 0 8px}
+.drawer-head p:not(.drawer-label){margin:0;color:#c5ccdc;font-size:14px;line-height:1.5}
+.drawer-body{padding:18px 26px 36px}
+.drawer-city{margin:0 0 16px;font-size:15px;font-weight:600;color:#fff}
+.table-wrap{overflow-x:auto}
+table.data{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+table.data th,table.data td{padding:12px 6px;text-align:right;border-bottom:1px solid rgb(255 255 255 / .11);white-space:nowrap}
+table.data tbody th,table.data thead th[rowspan]{text-align:left}
+table.data thead th[colspan]{text-align:center}
+table.data thead th{font-size:12px;font-weight:600;color:#c5ccdc}
+table.data thead tr:first-child th{padding-bottom:5px;color:#fff;font-size:14px}
+table.data thead tr:nth-child(2) th{padding-top:3px}
+table.data tbody th{font-weight:500;color:#c5ccdc}
+table.data tbody td:nth-child(3),table.data tbody td:nth-child(5){color:#ffdc54;font-weight:600}
+.drawer-note{margin:18px 0 0;color:#aebbd1;font-size:13px;line-height:1.5}
+@media(max-width:600px){.sun-drawer{inset:auto 0 0;width:100%;height:86vh;height:86dvh;border:0;border-radius:18px 18px 0 0}.drawer-head{padding:18px 18px 16px}.drawer-body{padding:16px 18px 32px}table.data th,table.data td{padding-left:3px;padding-right:3px}}
 
 /* Ano */
 .year-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
@@ -392,12 +413,25 @@ footer p{margin:0}
         <div class="plot" id="year-plot" tabindex="0" aria-describedby="year-title"><canvas id="year-canvas" role="img"></canvas><div class="tip" id="year-tip" hidden></div></div>
         <div class="legend-sky"><span><i style="background:#0b1022"></i>Noite</span><span><i style="background:#4b3f7a"></i>Crepúsculo</span><span><i style="background:#f09a58"></i>Nascer e pôr</span><span><i style="background:#6f9fd6"></i>Dia</span></div>
         <p class="note">Calculado dia a dia para a sede municipal de <span id="year-city">Recife</span>, com coordenadas do <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> e <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
-        <details class="table"><summary>Ver tabela por mês</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Dia</th><th scope="col">Nascer hoje</th><th scope="col">Nascer proposta</th><th scope="col">Pôr hoje</th><th scope="col">Pôr proposta</th></tr></thead><tbody id="sun-rows"></tbody></table></div></details>
+        <button class="table-open" id="table-open" type="button" aria-haspopup="dialog" disabled>Ver horários do ano <span aria-hidden="true">☼</span></button>
       </div>
       <dl class="versus" id="versus"></dl>
     </div>
   </div>
 </section>
+
+<dialog class="sun-drawer" id="sun-drawer" aria-labelledby="drawer-title" aria-describedby="drawer-description">
+  <div class="drawer-head">
+    <div class="drawer-top"><p class="drawer-label">O ano inteiro</p><button class="drawer-close" id="drawer-close" type="button" aria-label="Fechar horários">×</button></div>
+    <h3 id="drawer-title">O sol ao longo do ano.</h3>
+    <p id="drawer-description">Compare o relógio de hoje com a proposta nos dias 1 e 15 de cada mês.</p>
+  </div>
+  <div class="drawer-body">
+    <p class="drawer-city" id="drawer-city"></p>
+    <div class="table-wrap"><table class="data"><colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup><thead><tr><th scope="col" rowspan="2">Dia</th><th scope="colgroup" colspan="2">Nascer</th><th scope="colgroup" colspan="2">Pôr</th></tr><tr><th scope="col">Hoje</th><th scope="col">UTC−2</th><th scope="col">Hoje</th><th scope="col">UTC−2</th></tr></thead><tbody id="sun-rows"></tbody></table></div>
+    <p class="drawer-note">Hoje: UTC−3. Proposta: UTC−2. Horários calculados para a sede municipal, sem considerar o relevo.</p>
+  </div>
+</dialog>
 
 <section class="sec" id="apoios" aria-labelledby="apoios-title">
   <div class="wrap">
@@ -785,7 +819,12 @@ bell.addEventListener('click',async()=>{
   showToast(['Pronto: você recebe um aviso a cada apoio novo enquanto esta página estiver aberta.']);
 });
 
-function rowsInto(tbody,rows){tbody.replaceChildren(...rows.map(r=>{const tr=document.createElement('tr');r.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});return tr}))}
+function rowsInto(tbody,rows){tbody.replaceChildren(...rows.map(r=>{const tr=document.createElement('tr');r.forEach((v,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=v;tr.append(cell)});return tr}))}
+const drawer=$('#sun-drawer'),tableOpen=$('#table-open');
+tableOpen.addEventListener('click',()=>{if(typeof drawer.showModal==='function')drawer.showModal();else drawer.setAttribute('open','');document.body.classList.add('drawer-open');$('#drawer-close').focus()});
+function closeDrawer(){if(typeof drawer.close==='function')drawer.close();else{drawer.removeAttribute('open');document.body.classList.remove('drawer-open');tableOpen.focus()}}
+$('#drawer-close').addEventListener('click',closeDrawer);
+drawer.addEventListener('close',()=>{document.body.classList.remove('drawer-open');tableOpen.focus()});
 
 /* ---------- O ano ---------- */
 const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -859,6 +898,7 @@ function yearText(){
   const dark7=cnt(d=>d.rise+60>420);
   $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
   $('#year-city').textContent=city+', '+place.uf;
+  $('#drawer-city').textContent=city+', '+place.uf+' · '+thisYear();
   const items=[
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
     ['Dias com o sol nascendo depois das 6h',nf(dark[0]),nf(dark[1]),'dias'],
@@ -870,6 +910,7 @@ function yearText(){
     dd.setAttribute('aria-label','hoje '+a+', com a proposta '+b+(u?' '+u:''));
     div.append(dt,dd);return div}));
   rowsInto($('#sun-rows'),days.filter(d=>d.date.getUTCDate()===1||d.date.getUTCDate()===15).map(d=>[fmt(d.date,{day:'2-digit',month:'2-digit'}),hhmm(d.rise),hhmm(d.rise+60),hhmm(d.set),hhmm(d.set+60)]));
+  tableOpen.disabled=false;
 }
 
 /* ---------- Escolha da cidade ---------- */
