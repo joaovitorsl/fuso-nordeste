@@ -223,6 +223,13 @@ button{font:inherit;color:inherit}
 .mov-right{margin:28px 0 0;font-family:var(--display);font-size:clamp(44px,6.4vw,88px);line-height:.92;color:var(--glow);max-width:12em}
 .mov-sign{margin:14px 0 0;font-size:clamp(16px,1.6vw,20px);color:var(--ink-2)}
 
+/* ---------- Vozes: vídeos do Instagram ---------- */
+/* O cartão corta a barra de comentário do fim da incorporação; a altura segue a proporção 4:5
+   do vídeo mais o cabeçalho e as curtidas. No celular, a fileira rola de lado. */
+.videos{--w:min(300px,78vw);display:flex;gap:16px;margin:36px calc(-1 * var(--g)) 0;padding:0 var(--g) 10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.video{flex:none;width:var(--w);height:calc(var(--w) * 1.25 + 158px);border-radius:14px;overflow:hidden;background:#fff;scroll-snap-align:start;box-shadow:0 14px 40px rgb(0 0 0 / .35)}
+.video iframe{display:block;width:100%;height:calc(var(--w) * 1.25 + 220px);border:0}
+
 /* ---------- Seções ---------- */
 .sec{padding:120px 0 40px}
 /* etiqueta azul inclinada, como faixa de cartaz */
@@ -433,6 +440,14 @@ footer p{margin:0}
   </div>
 </section>
 
+<section class="sec vozes" id="vozes" aria-labelledby="vozes-title" hidden>
+  <div class="wrap">
+    <p class="kicker reveal">Vozes</p>
+    <h2 class="h-l reveal" id="vozes-title">Já tem gente falando disso.</h2>
+    <div class="videos" id="videos"></div>
+  </div>
+</section>
+
 <section class="sec" id="ano" aria-labelledby="year-title">
   <div class="wrap">
     <p class="kicker reveal">O ano inteiro, hora a hora</p>
@@ -522,7 +537,7 @@ footer p{margin:0}
 </main>
 
 <footer><div class="wrap">
-  <p>Projeto independente, sem vínculo com o Senado Federal. A contagem é lida da página pública da ideia pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP.</p>
+  <p>Projeto independente, sem vínculo com o Senado Federal. A contagem é lida da página pública da ideia pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP. Os vídeos da seção Vozes são carregados do Instagram, que também recebe o seu endereço IP.</p>
   <p>Usamos o <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">GoatCounter</a> para medir visitas e cliques em apoiar, sem cookies de rastreamento. O serviço recebe dados técnicos, incluindo o endereço IP.</p>
   <p>Fontes: <a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">e-Cidadania</a> · <a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil" target="_blank" rel="noopener noreferrer">Observatório Nacional</a> · <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> · <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a></p>
 </div></footer>
@@ -963,6 +978,17 @@ function yearText(){
     dd.append(sp('a',a),sp('arrow','→'),sp('b',b));if(u)dd.append(sp('u',u));
     dd.setAttribute('aria-label','hoje '+a+', com a proposta '+b+(u?' '+u:''));
     div.append(dt,dd);return div}));
+}
+
+/* ---------- Vozes ---------- */
+/* A lista vem de data/videos.json, embutida no build. As incorporações só carregam perto da tela. */
+const VIDEOS=/*VIDEOS*/[];
+if(VIDEOS.length){
+  $('#videos').replaceChildren(...VIDEOS.map(v=>{
+    const box=document.createElement('div'),f=document.createElement('iframe');box.className='video';
+    f.src=v.url+'embed/';f.loading='lazy';f.title='Vídeo de '+v.autor+' no Instagram';f.setAttribute('scrolling','no');f.allow='encrypted-media; picture-in-picture';
+    box.append(f);return box}));
+  $('#vozes').hidden=false;
 }
 
 /* ---------- Mapa das faixas de fuso ---------- */

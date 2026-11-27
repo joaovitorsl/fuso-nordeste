@@ -10,6 +10,9 @@ const populacao=JSON.parse(await readFile('data/populacao.json','utf8')),estados
 if(Object.keys(populacao.populacao).length!==cidades.cidades.length)throw new Error('População não cobre todas as cidades.');
 change('/*POPULACAO*/{}',JSON.stringify(populacao.populacao));
 change('/*ESTADOS*/[]',JSON.stringify(estados.aneis));
+const videos=JSON.parse(await readFile('data/videos.json','utf8')).videos;
+for(const v of videos)if(!/^https:\/\/www\.instagram\.com\/(reel|p)\/[\w-]+\/?$/.test(v.url)||!/^@[\w.]+$/.test(v.autor))throw new Error('Vídeo inválido em data/videos.json: '+JSON.stringify(v));
+change('/*VIDEOS*/[]',JSON.stringify(videos.map(v=>({url:v.url.replace(/\/?$/,'/'),autor:v.autor}))));
 const history=JSON.parse(await readFile('data/history.json','utf8'));
 if(!Array.isArray(history.pontos)||!history.pontos.length)throw new Error('Não há medições verificadas para publicar.');
 const latest=history.pontos.at(-1);
