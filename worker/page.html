@@ -151,6 +151,7 @@ button{font:inherit;color:inherit}
 
 /* Ritmo */
 .pace{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:24px 56px;margin-top:96px;padding-top:40px;border-top:1px solid var(--line)}
+.pace>div{min-width:0}
 .pace h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.02em}
 .pace p{margin:8px 0 0;color:var(--ink-2);font-size:16px}
 .stat{margin-top:24px}
@@ -305,7 +306,7 @@ footer p{margin:0}
       </div>
       <div>
         <div class="chart-head">
-          <span>Total de apoios por leitura</span>
+          <span>Total de apoios por registro</span>
           <div class="seg" role="group" aria-label="Período">
             <button type="button" data-range="24" aria-pressed="false">24 h</button>
             <button type="button" data-range="168" aria-pressed="false">7 dias</button>
@@ -313,8 +314,9 @@ footer p{margin:0}
           </div>
         </div>
         <div class="plot" id="hist-plot" tabindex="0" aria-describedby="hist-summary"><svg id="hist-svg" role="img" aria-label="Gráfico do total de apoios ao longo do tempo"></svg><div class="empty" id="hist-empty"></div><div class="tip" id="hist-tip" hidden></div></div>
-        <p class="note">Cada ponto é o total publicado pelo Senado no momento da leitura, não o horário de cada apoio. O eixo vertical não começa em zero.</p>
-        <details class="table"><summary>Ver medições em tabela</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Leitura</th><th scope="col">Apoios</th><th scope="col">Variação</th></tr></thead><tbody id="hist-rows"></tbody></table></div></details>
+        <p class="note">● Leituras do Senado · ◇ Marcos relatados na conversa. Os marcos antigos vieram de um resumo não verificado; quando só se conhece a data, são posicionados no início do dia, sem afirmar o horário. A linha tracejada liga registros separados por mais de 10 minutos ou relatados: não sabemos o percurso entre eles. O eixo vertical não começa em zero.</p>
+        <p class="note">Os 32 apoios mencionados na conversa e os 237 do print não entram no gráfico porque não recuperamos datas confiáveis para eles.</p>
+        <details class="table"><summary>Ver registros e fontes em tabela</summary><div class="scroll"><table class="data"><thead><tr><th scope="col">Data ou leitura</th><th scope="col">Apoios</th><th scope="col">Fonte</th></tr></thead><tbody id="hist-rows"></tbody></table></div></details>
       </div>
     </div>
   </div>
@@ -356,7 +358,7 @@ footer p{margin:0}
       <details><summary>E Fernando de Noronha?</summary><p>O arquipélago, que pertence a Pernambuco, já usa UTC−2. Os horários desta página se referem ao continente.</p></details>
       <details><summary>Por que a minha cidade dá horários diferentes da capital?</summary><p>O sol nasce mais tarde quanto mais a oeste. Entre Recife e Petrolina, a diferença passa de 20 minutos. A página calcula cada uma das 751 sedes municipais dos cinco estados, com as coordenadas da base de localidades do IBGE (2022). O horário é o da sede; em outras partes do município ele pode variar alguns minutos.</p></details>
       <details><summary>De onde vem a contagem?</summary><p>Da página pública da ideia no Senado. Com esta página aberta, o navegador lê a contagem a cada minuto pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP e a URL consultada; nenhuma credencial é enviada. Se a leitura falhar, aparece o último registro salvo, sinalizado. A contagem é nacional, não por estado. Se você usar o botão de localização, a posição é comparada com as cidades aqui mesmo, no navegador, e não é enviada a nenhum serviço.</p></details>
-      <details><summary>Como o histórico é gravado?</summary><p>Uma automação no GitHub lê o Senado a cada 10 minutos, aproximadamente, e grava quando o total muda ou, sem mudança, uma vez por hora. O registro começa em 26/11/2026 e pode ficar alguns minutos atrás da contagem ao vivo. Nenhum apoiador é identificado.</p></details>
+      <details><summary>Como o histórico é gravado?</summary><p>Uma automação no GitHub lê o Senado a cada 10 minutos, aproximadamente, e grava quando o total muda ou, sem mudança, uma vez por hora. As medições automáticas começam em 26/11/2026 e podem atrasar. O gráfico também mostra marcos anteriores relatados na conversa, identificados por fonte e precisão. Nenhum apoiador é identificado.</p></details>
     </div>
   </div>
 </section>
@@ -596,6 +598,11 @@ $('#refresh').addEventListener('click',update);
 
 /* ---------- Histórico ---------- */
 let historyRange='all',hist={pts:[]};
+const milestones=/*MARCOS*/[];
+const conversationPoints=milestones.map(p=>({...p,observed_at:p.precision==='day'?Date.parse(p.date+'T00:00:00-03:00')/1000:p.observed_at,reported:true})).filter(p=>Number.isSafeInteger(p.count)&&Number.isSafeInteger(p.observed_at));
+const historyLabel=p=>p.precision==='day'?fmt(new Date(p.observed_at*1000),{day:'2-digit',month:'2-digit',year:'numeric'})+' · horário desconhecido':when(new Date(p.observed_at*1000))+(p.precision==='message'?' · horário da mensagem':'');
+const historySource=p=>p.reported?p.source:'Leitura do Senado';
+const allHistory=()=>[...historyPoints,...conversationPoints].sort((a,b)=>a.observed_at-b.observed_at);
 const histPlot=$('#hist-plot'),histSvg=$('#hist-svg'),histTip=$('#hist-tip');
 function niceStep(span,target){const raw=span/target,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return(f<=1?1:f<=2?2:f<=5?5:10)*p}
 function histSummary(){
@@ -609,11 +616,11 @@ function histSummary(){
   else{const f=historyPoints[0];el.textContent=sign(total-f.count)+' apoios desde o início do registro, em '+when(new Date(f.observed_at*1000))+'.'}
 }
 function drawHistory(){
-  const now=Date.now()/1000,first=historyPoints[0],span=first?now-first.observed_at:0;
+  const all=allHistory(),now=Date.now()/1000,first=all[0],span=first?now-first.observed_at:0;
   document.querySelectorAll('[data-range]').forEach(b=>{if(b.dataset.range!=='all')b.disabled=span<=Number(b.dataset.range)*3600});
   if(historyRange!=='all'&&span<=Number(historyRange)*3600)historyRange='all';
   document.querySelectorAll('[data-range]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.range===historyRange)));
-  const since=historyRange==='all'?0:now-Number(historyRange)*3600,pts=historyPoints.filter(p=>p.observed_at>=since);
+  const since=historyRange==='all'?0:now-Number(historyRange)*3600,pts=all.filter(p=>p.observed_at>=since);
   hist.pts=pts;
   const W=histPlot.clientWidth,H=W<560?210:260,m={l:52,r:52,t:14,b:28},iw=W-m.l-m.r,ih=H-m.t-m.b;
   histSvg.setAttribute('viewBox','0 0 '+W+' '+H);histSvg.setAttribute('height',H);histSvg.replaceChildren();
@@ -631,16 +638,14 @@ function drawHistory(){
     const label=tstep>=86400||midnight?fmt(new Date(t*1000),{day:'2-digit',month:'2-digit'}):fmt(new Date(t*1000),{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
     histSvg.append(node('text',{x:x(t),y:H-8,'text-anchor':'middle',class:'g-tick'},label));
   }
-  const d=pts.map((p,i)=>(i?'L':'M')+x(p.observed_at).toFixed(1)+','+y(p.count).toFixed(1)).join('');
-  histSvg.append(node('path',{d:d+'L'+x(pts.at(-1).observed_at).toFixed(1)+','+(m.t+ih)+'L'+x(pts[0].observed_at).toFixed(1)+','+(m.t+ih)+'Z',fill:'var(--sun)','fill-opacity':.1}));
-  histSvg.append(node('path',{d,stroke:'var(--sun)',class:'g-line'}));
-  if(pts.length<=24)pts.forEach(p=>histSvg.append(node('circle',{cx:x(p.observed_at),cy:y(p.count),r:4,fill:'var(--sun)',class:'g-dot'})));
+  pts.slice(1).forEach((p,i)=>{const prev=pts[i],uncertain=p.reported||prev.reported||p.observed_at-prev.observed_at>600;histSvg.append(node('line',{x1:x(prev.observed_at),y1:y(prev.count),x2:x(p.observed_at),y2:y(p.count),stroke:'var(--sun)',class:'g-line',...(uncertain?{'stroke-dasharray':'5 5'}:{})}))});
+  pts.forEach(p=>{if(p.reported){const px=x(p.observed_at),py=y(p.count);histSvg.append(node('path',{d:`M${px},${py-6} L${px+6},${py} L${px},${py+6} L${px-6},${py} Z`,fill:'var(--bg)',stroke:'var(--sun)','stroke-width':2}))}else if(pts.length<=100)histSvg.append(node('circle',{cx:x(p.observed_at),cy:y(p.count),r:4,fill:'var(--sun)',class:'g-dot'}))});
   const last=pts.at(-1);
   histSvg.append(node('text',{x:x(last.observed_at)+10,y:y(last.count)+4,class:'g-end'},nf(last.count)));
   hist.cross=node('line',{class:'g-cross',y1:m.t,y2:m.t+ih,visibility:'hidden'});
   hist.mark=node('circle',{r:5,fill:'var(--sun)',class:'g-dot',visibility:'hidden'});
   histSvg.append(hist.cross,hist.mark);
-  histSvg.setAttribute('aria-label','Total de apoios: '+nf(pts[0].count)+' em '+when(new Date(pts[0].observed_at*1000))+' e '+nf(last.count)+' em '+when(new Date(last.observed_at*1000))+'. Tabela disponível abaixo.');
+  histSvg.setAttribute('aria-label','Total de apoios: '+nf(pts[0].count)+' em '+historyLabel(pts[0])+' e '+nf(last.count)+' em '+historyLabel(last)+'. Marcos da conversa e leituras do Senado; fontes na tabela abaixo.');
   histInteraction.refresh();
 }
 const histInteraction=interactive(histPlot,{
@@ -651,7 +656,7 @@ const histInteraction=interactive(histPlot,{
     hist.cross.setAttribute('x1',px);hist.cross.setAttribute('x2',px);hist.cross.setAttribute('visibility','visible');
     hist.mark.setAttribute('cx',px);hist.mark.setAttribute('cy',py);hist.mark.setAttribute('visibility','visible');
     histTip.replaceChildren();const b=document.createElement('b');b.textContent=nf(p.count)+' apoios';
-    histTip.append(b,document.createElement('br'),when(new Date(p.observed_at*1000))+(prev?' · '+(p.count-prev.count>=0?'+':'')+nf(p.count-prev.count):''));
+    histTip.append(b,document.createElement('br'),historyLabel(p),document.createElement('br'),historySource(p));
     placeTip(histTip,histPlot,px,py);
   },
   blur(){histTip.hidden=true;hist.cross?.setAttribute('visibility','hidden');hist.mark?.setAttribute('visibility','hidden')}
@@ -663,7 +668,7 @@ async function loadHistory(){
     const d=await r.json();if(!Array.isArray(d.pontos))throw Error();
     historyPoints=d.pontos.filter(p=>Number.isSafeInteger(p.count)&&Number.isSafeInteger(p.observed_at));
     drawHistory();histSummary();
-    rowsInto($('#hist-rows'),historyPoints.slice().reverse().map((p,i,a)=>[when(new Date(p.observed_at*1000)),nf(p.count),a[i+1]?(p.count-a[i+1].count>=0?'+':'')+nf(p.count-a[i+1].count):'—']));
+    rowsInto($('#hist-rows'),allHistory().reverse().map(p=>[historyLabel(p),nf(p.count),historySource(p)]));
   }catch(e){if(!historyPoints.length){$('#hist-empty').textContent='Histórico indisponível no momento.';$('#hist-summary').textContent='Não foi possível carregar os registros.'}}
 }
 document.querySelectorAll('[data-range]').forEach(b=>b.addEventListener('click',()=>{historyRange=b.dataset.range;drawHistory()}));

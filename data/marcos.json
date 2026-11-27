@@ -1,0 +1,9 @@
+{
+  "marcos": [
+    {"count": 5, "date": "2026-11-11", "precision": "day", "source": "Resumo da conversa; não verificado no Senado"},
+    {"count": 13, "date": "2026-11-12", "precision": "day", "source": "Resumo da conversa; não verificado no Senado"},
+    {"count": 22, "date": "2026-11-25", "precision": "day", "source": "Resumo da conversa; não verificado no Senado"},
+    {"count": 100, "date": "2026-11-26", "precision": "day", "source": "Resumo da conversa; mencionado como pela manhã, sem horário confirmado"},
+    {"count": 194, "observed_at": 1795719103, "precision": "message", "source": "Informado pelo autor na conversa; horário da mensagem"}
+  ]
+}
