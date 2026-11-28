@@ -121,7 +121,7 @@ button{font:inherit;color:inherit}
 .ripples{position:absolute;inset:-20px 0 0;background:repeating-linear-gradient(180deg,transparent 0 9px,rgb(255 255 255 / .025) 9px 10px);pointer-events:none;animation:swell 7s ease-in-out infinite alternate}
 @keyframes swell{to{transform:translateY(10px)}}
 
-.hero-top{grid-area:1/1/2/2;z-index:3!important;padding-top:calc(56px + clamp(16px,4.5svh,64px))}
+.hero-top{grid-area:1/1/2/2;z-index:4!important;padding-top:calc(56px + clamp(16px,4.5svh,64px))}
 .hero-top>*{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
 .hero-top>:nth-child(2){animation-delay:.12s}
 .hero-top>:nth-child(3){animation-delay:.24s}
@@ -352,6 +352,7 @@ button{font:inherit;color:inherit}
 .zone-map text{font-family:var(--f);font-variant-numeric:tabular-nums}
 .zone-fig .note{margin-top:8px}
 .faq p{margin:0 0 24px;max-width:44em;color:var(--ink-2);font-size:17px}
+.faq p:not(:last-child){margin-bottom:12px}
 
 footer{margin-top:120px;border-top:1px solid var(--line);padding:32px 0 48px;font-size:14px;color:var(--ink-3)}
 footer .wrap{display:flex;justify-content:space-between;gap:12px 32px;flex-wrap:wrap}
@@ -465,7 +466,7 @@ footer p{margin:0}
       <div>
         <div class="plot" id="year-plot" tabindex="0" aria-describedby="year-title"><canvas id="year-canvas" role="img"></canvas><div class="tip" id="year-tip" hidden></div></div>
         <div class="legend-sky"><span><i style="background:#0b1022"></i>Noite</span><span><i style="background:#4b3f7a"></i>Crepúsculo</span><span><i style="background:#f09a58"></i>Nascer e pôr</span><span><i style="background:#6f9fd6"></i>Dia</span></div>
-        <p class="note">Calculado dia a dia para a sede municipal de <span id="year-city">Recife</span>, com coordenadas do <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> e <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
+        <p class="note">Calculado dia a dia em <span id="year-ref"></span> para a sede municipal de <span id="year-city">Recife</span>, com coordenadas do <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> e <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>, sem relevo. As linhas marcam 6h e 18h.</p>
       </div>
       <dl class="versus" id="versus"></dl>
     </div>
@@ -520,9 +521,10 @@ footer p{margin:0}
     <h2 class="h-l reveal" id="faq-title">Antes de apoiar, ou não.</h2>
     <div class="faq">
       <details><summary>A mudança já vale?</summary><p>Não. É uma ideia legislativa. Com 20 mil apoios no prazo, ela vai para a Comissão de Direitos Humanos e Legislação Participativa do Senado, que decide se vira projeto de lei. Não há aprovação automática. Pelas regras do portal, qualquer senador ou deputado também pode adotar a ideia a qualquer momento, com qualquer número de apoios. Para mudar o fuso basta uma lei federal ordinária, sem emenda à Constituição: foi assim no Acre, em 2008 e em 2013.</p></details>
-      <details><summary>O que se ganha?</summary><p id="gain">O fim do dia ganha uma hora de sol no relógio, o ano inteiro. E é o fuso da geografia: as cinco capitais ficam dentro da faixa teórica do UTC−2.</p></details>
+      <details><summary>O que se ganha?</summary><p>Com os mesmos horários de trabalho e estudo, teríamos mais luz no fim da tarde para correr, brincar, descansar ou voltar para casa. O dia não fica mais longo: o relógio passa a marcar uma hora a mais quando o sol nasce e quando ele se põe.</p><p id="gain">A simulação mostra os horários da sua cidade ao longo do ano.</p></details>
       <details><summary>Por que UTC−2?</summary><p>Os fusos teóricos têm 15° de largura. O do UTC−2 é centrado em 30° O e começa em 37°30′ O; as cinco capitais ficam a leste dessa linha. Hoje elas seguem o horário de Brasília (UTC−3). A proposta vale para os estados inteiros, inclusive o interior a oeste da linha.</p><figure class="zone-fig"><svg class="zone-map" id="zone-map" role="img"></svg><div class="tip" id="zone-tip" hidden></div><figcaption class="note" id="zone-cap"></figcaption></figure></details>
-      <details><summary>E quem perde?</summary><p>As manhãs ficam mais escuras. Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano. No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h. E os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará: Petrolina (PE) e Juazeiro (BA), separadas só pelo rio São Francisco, teriam horários diferentes, embora formem uma região integrada criada por lei federal (<a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">Lei Complementar 113/2001</a>). Impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
+      <details><summary>Em outros lugares o sol se põe mais tarde?</summary><p>Sim. Em 21 de dezembro de 2027, o pôr do sol está previsto para as 18h52 em São Paulo, segundo o <a href="https://www.iag.usp.br/cultext/materiais/efemerides?language_content_entity=pt-br" target="_blank" rel="noopener noreferrer">IAG-USP</a>, e por volta das 17h36 no Recife, segundo o cálculo com <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a>. Em 21 de junho de 2027, os horários previstos são 17h29 em São Paulo e 17h12 no Recife. As duas cidades usam o horário de Brasília.</p><p>A diferença depende da longitude, da latitude e da época do ano. São Paulo está mais a oeste e, no verão, também tem dias mais longos que o Recife.</p></details>
+      <details><summary>E o que se perde?</summary><p><strong>Manhãs mais escuras.</strong> Quem sai cedo para a escola ou o trabalho pode sair antes de o sol nascer em parte do ano.</p><p id="loss">A simulação mostra os horários da sua cidade ao longo do ano.</p><p>No sertão, o sol já chega ao ponto mais alto perto do meio-dia do relógio de hoje; com UTC−2, chegaria perto das 13h.</p><p><strong>Uma nova fronteira de horário.</strong> Os cinco estados ficariam uma hora à frente de vizinhos como Bahia e Ceará. Petrolina (PE) e Juazeiro (BA) teriam horários diferentes, embora formem uma região integrada criada por <a href="https://planalto.gov.br/ccivil_03/leis/LCP/Lcp113.htm" target="_blank" rel="noopener noreferrer">lei federal</a>.</p><p>Os impactos em transporte, voos, bancos, provas nacionais e sistemas não são calculados aqui.</p></details>
       <details><summary>Por que não só antecipar os horários?</summary><p>Daria um efeito parecido: entrar às 7h e sair às 16h no relógio de hoje equivale, em relação ao sol, a entrar às 8h e sair às 17h com UTC−2. A diferença é a coordenação. Antecipar depende de cada escola, empresa e órgão, e nem todo mundo tem autonomia para isso; mudar o fuso muda o relógio de todos de uma vez, mas não garante que os horários continuariam os mesmos no relógio.</p></details>
       <details><summary>E o sono?</summary><p>A relação entre luz, horários e sono é complexa. Um <a href="https://pubmed.ncbi.nlm.nih.gov/31030116/" target="_blank" rel="noopener noreferrer">estudo nos Estados Unidos</a> (Giuntella e Mazzonna, 2019) comparou cidades dos dois lados de fronteiras de fuso: uma hora a mais de luz no fim do dia esteve associada a 19 minutos a menos de sono, em média, quando os horários de trabalho e escola são rígidos. É outro país, com outra latitude e outras rotinas; o resultado não prevê o que aconteceria aqui, mas mostra que a questão merece estudo.</p></details>
       <details><summary>O fuso já mudou alguma vez?</summary><p>Os fusos brasileiros vêm do <a href="https://www2.camara.leg.br/legin/fed/decret/1910-1919/decreto-2784-18-junho-1913-553768-publicacaooriginal-71928-pl.html" target="_blank" rel="noopener noreferrer">Decreto nº 2.784, de 1913</a>, em vigor desde 1914; antes, cada cidade acertava o relógio pela própria hora do sol. Em 2008, o Acre passou de UTC−5 para UTC−4 (<a href="https://planalto.gov.br/ccivil_03/_Ato2007-2010/2008/Lei/L11662.htm" target="_blank" rel="noopener noreferrer">Lei 11.662</a>). Um referendo em 2010 pediu a volta, que veio com a <a href="https://www2.camara.leg.br/legin/fed/lei/2013/lei-12876-30-outubro-2013-777336-publicacaooriginal-141612-pl.html" target="_blank" rel="noopener noreferrer">Lei 12.876</a>, em novembro de 2013. Os cinco estados já adiantaram o relógio em uma hora nos horários de verão de 1985–86 a 1989–90, de 1999–2000 e de 2001–02; Alagoas e Sergipe, também no de 1995–96 (<a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/decretos-sobre-o-horario-de-verao-no-brasil" target="_blank" rel="noopener noreferrer">decretos no Observatório Nacional</a>). Nesses verões, o relógio deles ficava em UTC−2, mas era uma mudança sazonal, e Brasília também adiantava.</p></details>
@@ -537,8 +539,8 @@ footer p{margin:0}
 </main>
 
 <footer><div class="wrap">
-  <p>Projeto independente, sem vínculo com o Senado Federal. A contagem é lida da página pública da ideia pelo serviço <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a>, que recebe o seu endereço IP. Os vídeos da seção Vozes são carregados do Instagram, que também recebe o seu endereço IP.</p>
-  <p>Usamos o <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">GoatCounter</a> para medir visitas e cliques em apoiar, sem cookies de rastreamento. O serviço recebe dados técnicos, incluindo o endereço IP.</p>
+  <p>Projeto independente, sem vínculo com o Senado Federal.</p>
+  <p>Serviços externos recebem seu endereço IP: <a href="https://cors.dev/docs" target="_blank" rel="noopener noreferrer">cors.dev</a> para consultar a contagem do Senado; Instagram para os vídeos; e <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">GoatCounter</a> para medir visitas e cliques em apoiar, sem cookies de rastreamento.</p>
   <p>Fontes: <a href="https://www12.senado.leg.br/ecidadania/visualizacaoideia?id=258092" target="_blank" rel="noopener noreferrer">e-Cidadania</a> · <a href="https://www.gov.br/observatorio/pt-br/assuntos/areas-de-atuacao/tempo-e-frequencia/brasil" target="_blank" rel="noopener noreferrer">Observatório Nacional</a> · <a href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades.html" target="_blank" rel="noopener noreferrer">IBGE</a> · <a href="https://github.com/mourner/suncalc" target="_blank" rel="noopener noreferrer">SunCalc</a></p>
 </div></footer>
 
@@ -894,8 +896,8 @@ const MONTHS=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov',
 const MONTHS_LONG=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 const yearPlot=$('#year-plot'),yearC=$('#year-canvas'),yearTip=$('#year-tip');
 let year={days:[]},yearOffset=0,yearShown=false;
-function solarYear(){
-  const {lat,lon}=place,y=Number(fmt(new Date(),{year:'numeric'})),days=[];
+function solarYear(y=Number(fmt(new Date(),{year:'numeric'}))){
+  const {lat,lon}=place,days=[];
   for(let t=Date.UTC(y,0,1,15);new Date(t).getUTCFullYear()===y;t+=864e5){
     const s=SunCalc.getTimes(new Date(t),lat,lon);
     days.push({date:new Date(t),rise:toLocal(s.sunrise),set:toLocal(s.sunset),dawn:toLocal(s.dawn),dusk:toLocal(s.dusk),ndawn:toLocal(s.nauticalDawn),ndusk:toLocal(s.nauticalDusk),noon:toLocal(s.solarNoon)});
@@ -959,15 +961,19 @@ function yearText(){
   const late=[cnt(d=>d.set>=1080),cnt(d=>d.set+60>=1080)],dark=[cnt(d=>d.rise>360),cnt(d=>d.rise+60>360)];
   $('#year-title').textContent='Em '+city+', com UTC−2, o sol se poria depois das 18h em '+phr(late[1])+'.';
   const dark7=cnt(d=>d.rise+60>420);
-  // "O que se ganha?": os números da cidade escolhida, sem promessas além do relógio
-  const sets=days.map(d=>d.set),lo=Math.min(...sets),hi=Math.max(...sets),after17=Math.floor(lo+60-1020),early=cnt(d=>d.rise<330);
+  // FAQ: ano da campanha, independentemente do ano corrente no gráfico.
+  const faqYear=2027,faqDays=year.y===faqYear?days:solarYear(faqYear).days,faqN=faqDays.length;
+  const faqCnt=f=>faqDays.filter(f).length,faqPhr=k=>k===faqN?'todos os dias':k===0?'nenhum dia':nf(k)+(k===1?' dia':' dias');
+  const sets=faqDays.map(d=>d.set),lo=Math.min(...sets),hi=Math.max(...sets),after17=Math.floor(lo+60-1020),early=faqCnt(d=>d.rise<330),faqDark6=faqCnt(d=>d.rise+60>360),faqDark7=faqCnt(d=>d.rise+60>420);
   const dur=m=>m<60?m+' minutos':Math.floor(m/60)+'h'+String(m%60).padStart(2,'0');
-  $('#gain').textContent='O fim do dia ganha uma hora de sol no relógio. Em '+city+', o sol atualmente se põe entre '+hhmm(lo)+' e '+hhmm(hi)+', conforme a época do ano; com UTC−2, entre '+hhmm(lo+60)+' e '+hhmm(hi+60)+'. '
-    +(after17>0?'Quem sai do trabalho às 17h teria pelo menos '+dur(after17)+' de sol pela frente em qualquer dia do ano. ':'')
-    +(early?'A luz também deixa de chegar tão cedo: atualmente o sol nasce antes das 5h30 em '+phr(early)+'. ':'')
-    +'E é o fuso da geografia: as cinco capitais ficam dentro da faixa teórica do UTC−2. Se isso compensa as manhãs mais escuras depende da rotina de cada um; veja em “E quem perde?”.';
+  const hora=m=>hhmm(m).replace(':','h');
+  $('#gain').textContent='Em '+city+', no cálculo para '+faqYear+', o sol se põe entre '+hora(lo)+' e '+hora(hi)+' no horário atual, conforme a época do ano; com UTC−2, entre '+hora(lo+60)+' e '+hora(hi+60)+'. '
+    +(after17>0?'Quem sai do trabalho às 17h teria pelo menos '+dur(after17)+' até o pôr do sol em qualquer dia do ano. ':'')
+    +(early?'No horário atual, o sol nasce antes das 5h30 em '+faqPhr(early)+'.':'');
+  $('#loss').textContent='Em '+city+', com UTC−2, o sol nasceria depois das 6h em '+faqPhr(faqDark6)+' de '+faqYear+(faqDark7===0?', mas nunca depois das 7h.':', e depois das 7h em '+faqPhr(faqDark7)+'.');
   $('#year-lead').textContent=!dark[1]?'E continuaria nascendo antes das 6h o ano todo.':dark[1]<n?'Em troca, nasceria depois das 6h em '+phr(dark[1])+'.':'Em troca, nasceria depois das 6h o ano todo'+(dark7?', e depois das 7h em '+phr(dark7):'')+'.';
   $('#year-city').textContent=city+', '+place.uf;
+  $('#year-ref').textContent=year.y;
   const items=[
     ['Dias com pôr do sol depois das 18h',nf(late[0]),nf(late[1]),'dias'],
     ['Dias com o sol nascendo depois das 6h',nf(dark[0]),nf(dark[1]),'dias'],
@@ -1111,7 +1117,7 @@ function leaveSearch(){closeList();q.value=cityReady?place.name+', '+place.uf:''
 /* No iPhone o campo pode perder o foco no meio do toque; a lista só fecha depois do click,
    que é o último evento do toque, então nada atravessa para o que está atrás dela. */
 let picking=false;
-list.addEventListener('pointerdown',e=>{e.preventDefault();picking=true});
+list.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')e.preventDefault();picking=true});
 list.addEventListener('pointercancel',()=>{picking=false;if(document.activeElement!==q)leaveSearch()});
 list.addEventListener('click',e=>{
   picking=false;
@@ -1141,7 +1147,7 @@ function locate(initial=false){
     placeMsg.textContent='Escolha sua cidade.'; // sem permissão, sem localização ou fora dos cinco estados: só o convite
   };
   if(!('geolocation' in navigator)){fail('Este navegador não informa a localização.');return}
-  btn.setAttribute('aria-busy','true');if(initial&&!cityReady){q.value='';q.placeholder='Procurando sua cidade…'}else placeMsg.textContent='Procurando a cidade mais perto…';
+  btn.setAttribute('aria-busy','true');if(initial&&!cityReady){q.value='';q.placeholder='Buscando cidade…'}else placeMsg.textContent='Procurando a cidade mais perto…';
   // Alguns navegadores deixam o pedido de permissão pendente sem disparar timeout.
   geoTimer=setTimeout(()=>fail('Não foi possível obter a localização agora.'),12000);
   navigator.geolocation.getCurrentPosition(p=>{
